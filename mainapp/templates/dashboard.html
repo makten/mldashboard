@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %} Home {% endblock %}</title>
+</head>
+<body>
+
+	{% block navbar %}
+	
+	<header-section user="{{user.pk}}"></header-section>
+
+	{% endblock %}
+	
+	{% block pagecontent %}
+	<sidebar user="{{user.pk}}"></sidebar>
+
+	<div class="main-content" ref="contentwrapper">
+
+		<div id="content">
+			
+			<dashboard-component user="{{user.pk}}"></home-component>
+
+			</div>
+			
+		</div>
+
+		{% endblock %}
+
+	</body>
+	</html>
+
+

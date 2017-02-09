@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <!-- Material Design fonts -->
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+  <!-- Bootstrap Material Design -->  
+  <link rel="stylesheet" href="{% static 'css/vendor/material-design.min.css' %}"><link rel="stylesheet" href="{% static 'css/vendor/ripples.min.css' %}">
+
+  <link href="https://unpkg.com/animate.css@3.5.1/animate.min.css" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/HADashboard.css' %}">  
+  
+
+  <link href="{% static 'css/stats.css' %}" rel="stylesheet">
+  <link href="{% static 'css/selectize.default.css' %}" rel="stylesheet">
+
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+
+  <script type="text/javascript" src='{% static 'js/js.cookie.js' %}'></script>
+  
+  <title>Stats</title>
+</head>
+
+
+
+<body>
+
+
+  <div class="charts-container cf">
+
+
+    <div class="chart" id="graph-1-container">
+      <h2 class="title">Server 1</h2>
+      <div class="chart-svg">       
+
+        <h3 class="valueX">time</h3>
+      </div>
+
+
+      <div class="chart-values">
+        <p class="h-value">1689h</p>
+        <p class="percentage-value">11223</p>
+        <p class="total-gain">125</p>
+        <h1>West S</h4>        
+      </div>
+
+
+
+      <div class="triangle green"></div>
+    </div>
+
+
+
+    <div class="chart" id="graph-2-container">
+      <h2 class="title">Server 2</h2>
+      <div class="chart-svg">
+
+        <h3 class="valueX">time</h3>
+      </div>
+      <div class="chart-values">
+        <p class="h-value">322h</p>
+        <p class="percentage-value">3343</p>
+        <p class="total-gain"></p>
+      </div>
+      <div class="triangle red"></div>
+    </div>
+
+
+
+    <div class="chart circle" id="circle-1">
+      <h2 class="title">Server 3</h2>
+      <div class="chart-svg align-center">
+        <h2 class="circle-percentage"></h2>
+        
+      </div>
+      <div class="triangle green"></div>
+    </div>
+
+
+    <div class="chart circle" id="circle-2">
+      <h2 class="title">Server 4</h2>
+      <div class="chart-svg align-center">
+        <h2 class="circle-percentage"></h2>
+        
+      </div>
+      <div class="triangle red"></div>
+    </div>
+
+
+  </div>
+
+</body>
+</html>

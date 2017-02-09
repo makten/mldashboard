@@ -1,0 +1,23 @@
+.DS_Store
+#Windows
+Thumbs.db
+#Python
+
+*.pyo
+
+.node_modules
+node_modules
+
+*.pyc
+#UI test automation generated files
+
+test/unit-test/bin/Debug
+
+test/unit-test/obj/Debug
+test/ml-cond-test.v12.suo
+
+#Splunk app local fils
+.splunkrc
+local
+
+local.meta

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+<!-- Material Design fonts -->
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+	<!-- Bootstrap Material Design -->  
+	<!-- <link rel="stylesheet" href="/static/css/vendor/material-design.min.css"><link rel="stylesheet" href="/static/css/vendor/ripples.min.css"> -->
+
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+<link rel="stylesheet" type="text/css" href="/static/admin/css/login.css" />
+
+
+{% endblock %}
+
+{% block pagecontent %}
+<div class="login" data-admin-utc-offset="3600">
+
+	<!-- Container -->
+	<div id="container">
+
+
+		<!-- Header -->
+		<div id="header" style="background: #1BC10A;">
+			<div id="branding" >
+
+				<h1 id="site-name"><a href="/login/">Dashboard Login</a></h1>
+
+			</div>
+
+
+		</div>
+		<!-- END Header -->
+
+		<!-- Content -->
+		<div id="content" class="colM">
+
+
+			<div id="content-main">
+
+				<h2>Login</h2>
+
+				<form method="post" class="form-horizontal">
+
+					{% csrf_token %}
+
+					<div class="form-group label-static">
+
+						<label for="id_username" class="control-label">Username:</label>
+						<input autofocus="" type="text" class="form-control" id="id_username" placeholder="Username" maxlength="254" name="username" type="text" required>
+
+					</div>
+
+					<div class="form-group label-static">
+						<label for="id_password" class="control-label">Password:</label>
+						<input autofocus="" type="password" class="form-control" id="id_password" placeholder="Password" maxlength="254" name="password" type="text" required>
+						
+					</div>
+
+								
+
+					<button type="submit" class="button btn-info  btn-sm">Login</button>
+
+					
+					<!-- {{ form.as_p }} -->
+					
+				</form>
+
+
+			</div>
+
+
+			<br class="clear" />
+		</div>
+		<!-- END Content -->
+
+		<div id="footer"></div>
+	</div>
+	<!-- END Container -->
+
+</div>
+
+{% endblock %}
+

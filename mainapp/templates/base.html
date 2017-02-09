@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+	{% block head %}
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	
+	<!-- Material Design fonts -->
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+	<!-- Bootstrap Material Design -->  
+	<link rel="stylesheet" href="{% static 'css/vendor/material-design.min.css' %}"><link rel="stylesheet" href="{% static 'css/vendor/ripples.min.css' %}">
+
+	<link href="https://unpkg.com/animate.css@3.5.1/animate.min.css" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="{% static 'css/main.css' %}">
+	<link rel="stylesheet" href="{% static 'css/HADashboard.css' %}">  
+	
+
+	<link href="{% static 'css/selectize.css' %}" rel="stylesheet">
+	<link href="{% static 'css/selectize.default.css' %}" rel="stylesheet">
+
+	<link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'js/jquery.csvToTable.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/papaparse.js' %}"></script>
+
+	<script type="text/javascript" src='{% static 'js/js.cookie.js' %}'></script>
+
+	<!--[if lt IE 9]><script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.0.8/es5-shim.min.js"></script><![endif]-->
+
+
+	<title>
+		
+		ML App ToBe - {% block title %}{% endblock %}
+
+	</title>
+
+	{% endblock %}
+
+</head>
+
+<body>
+
+	<script type="text/javascript">
+		window.csrfToken = Cookies.get('csrftoken');
+
+	</script>
+
+	<div id="app">
+	<div id="CSVTable"></div>
+
+
+
+		{% block navbar %}
+
+		
+		
+		{% endblock %}
+
+
+		{% block pagecontent %} 
+
+		{% endblock %}		
+
+
+	</div>
+	
+	<script type="text/javascript" src="{% static 'js/vendor.js' %}"></script>				
+	<script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+
+
+</body>
+</html>
