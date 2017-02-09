@@ -18,6 +18,7 @@
 				modifiedFeatures: [],
 				rowCount: 0,
 				syncedVal: '',
+				chartLine: null,
 				
 				deliveries: [
 				{name:"Normal Levering", value: 0}, 
@@ -54,12 +55,160 @@
 
 				monthsBag: [],
 
+				forecasted: [
+				{y: 12,	x: '2017-01-02T00:00:00'},
+				{y: 3, x: '2017-01-03T00:00:00'}, 
+				{y: 2, x: '2017-01-04T00:00:00'},
+				{y: 18, x: '2017-01-05T00:00:00'}, 
+				{y: 19, x: '2017-01-06T00:00:00'}, 
+				{y: 13, x: '2017-01-07T00:00:00'}, 
+				{y: 5, x: '2017-01-08T00:00:00'}, 
+				{y: 23, x: '2017-01-09T00:00:00'}, 
+				{y: 51, x: '2017-01-10T00:00:00'}, 
+				{y: 5, x: '2017-01-11T00:00:00'}, 
+				{y: 6, x: '2017-01-12T00:00:00'}, 
+				{y: 2, x: '2017-01-13T00:00:00'}, 
+				{y: 12, x: '2017-01-14T00:00:00'}, 
+				{y: 3, x: '2017-01-15T00:00:00'}, 
+				{y: -24, x: '2017-01-16T00:00:00'}, 
+				{y: 10, x: '2017-01-17T00:00:00'}, 
+				{y: 9, x: '2017-01-18T00:00:00'}, 
+				{y: 11, x: '2017-01-19T00:00:00'}, 
+				{y: 12, x: '2017-01-20T00:00:00'}, 
+				{y: 2, x: '2017-01-21T00:00:00'}, 
+				{y: 16, x: '2017-01-22T00:00:00'}, 
+				{y: 12, x: '2017-01-23T00:00:00'}, 
+				{y: 3, x: '2017-01-24T00:00:00'}, 
+				{y: 12, x: '2017-01-25T00:00:00'}, 
+				{y: 7, x: '2017-01-26T00:00:00'}, 
+				{y: 12, x: '2017-01-27T00:00:00'}, 
+				{y: 7, x: '2017-01-28T00:00:00'}, 
+				{y: 9, x: '2017-01-29T00:00:00'}, 
+				{y: 1, x: '2017-01-30T00:00:00'}, 
+				{y: 10, x: '2017-01-31T00:00:00'}, 
+				{y: 7, x: '2017-02-01T00:00:00'}
+				]
+
 			}
 		},
 
 		mounted () {
 
 			this.$nextTick( function(){
+
+				var ctx = $("#myChart");
+
+
+
+				var myChart = new Chartjs(ctx, {
+					type: 'line',
+					data: {
+						datasets: [{
+							label: "Forecasted",
+							fillColor: "rgba(220,220,220,0.5)",
+							strokeColor: "rgba(220,220,220,0.8)",
+							highlightFill: "rgba(220,220,220,0.75)",
+							highlightStroke: "rgba(220,220,220,1)",
+							borderColor: "#43ABFB",
+
+							data: this.forecasted
+						}, 
+						{
+							label: "Actual",
+							fillColor: "rgba(220,220,220,0.5)",
+							strokeColor: "rgba(220,220,220,0.8)",
+							highlightFill: "rgba(220,220,220,0.75)",
+							highlightStroke: "rgba(220,220,220,1)",
+							borderColor: "#14B214",
+							data: [
+							{y: 5,	x: '2017-01-02T00:00:00'},
+							{y: 3, x: '2017-01-03T00:00:00'}, 
+							{y: 2, x: '2017-01-04T00:00:00'},
+							{y: 18, x: '2017-01-05T00:00:00'}, 
+							{y: 5, x: '2017-01-06T00:00:00'}, 
+							{y: 30, x: '2017-01-07T00:00:00'}, 
+							{y: 5, x: '2017-01-08T00:00:00'}, 
+							{y: 23, x: '2017-01-09T00:00:00'}, 
+							{y: 18, x: '2017-01-10T00:00:00'}, 
+							{y: 5, x: '2017-01-11T00:00:00'}, 
+							{y: 6, x: '2017-01-12T00:00:00'}, 
+							{y: 2, x: '2017-01-13T00:00:00'}, 
+							{y: -12, x: '2017-01-14T00:00:00'}, 
+							{y: 3, x: '2017-01-15T00:00:00'}, 
+							{y: 24, x: '2017-01-16T00:00:00'}, 
+							{y: 5, x: '2017-01-17T00:00:00'}, 
+							{y: 9, x: '2017-01-18T00:00:00'}, 
+							{y: 6, x: '2017-01-19T00:00:00'}, 
+							{y: 12, x: '2017-01-20T00:00:00'}, 
+							{y: 2, x: '2017-01-21T00:00:00'}, 
+							{y: 16, x: '2017-01-22T00:00:00'}, 
+							{y: 24, x: '2017-01-23T00:00:00'}, 
+							{y: 3, x: '2017-01-24T00:00:00'}, 
+							{y: 12, x: '2017-01-25T00:00:00'}, 
+							{y: 7, x: '2017-01-26T00:00:00'}, 
+							{y: -10, x: '2017-01-27T00:00:00'}, 
+							{y: 7, x: '2017-01-28T00:00:00'}, 
+							{y: 12, x: '2017-01-29T00:00:00'}, 
+							{y: 1, x: '2017-01-30T00:00:00'}, 
+							{y: 10, x: '2017-01-31T00:00:00'}, 
+							{y: 7, x: '2017-02-01T00:00:00'}
+							]
+						}, 
+						{
+							label: "Baseline",
+							fillColor: "rgba(151,187,205,0.5)",
+							strokeColor: "rgba(151,187,205,0.8)",
+							highlightFill: "rgba(151,187,205,0.75)",
+							highlightStroke: "rgba(151,187,205,1)",
+					    	// backgroundColor: "red",
+					    	borderColor: "#FF3535",
+					    	data: [
+					    	{y: 5,	x: '2017-01-02T00:00:00'},
+					    	{y: 6, x: '2017-01-03T00:00:00'}, 
+					    	{y: 2, x: '2017-01-04T00:00:00'},
+					    	{y: 9, x: '2017-01-05T00:00:00'}, 
+					    	{y: 19, x: '2017-01-06T00:00:00'}, 
+					    	{y: 50, x: '2017-01-07T00:00:00'}, 
+					    	{y: 5, x: '2017-01-08T00:00:00'}, 
+					    	{y: 10, x: '2017-01-09T00:00:00'}, 
+					    	{y: 18, x: '2017-01-10T00:00:00'}, 
+					    	{y: 5, x: '2017-01-11T00:00:00'}, 
+					    	{y: 6, x: '2017-01-12T00:00:00'}, 
+					    	{y: 2, x: '2017-01-13T00:00:00'}, 
+					    	{y: 43, x: '2017-01-14T00:00:00'}, 
+					    	{y: 3, x: '2017-01-15T00:00:00'}, 
+					    	{y: 24, x: '2017-01-16T00:00:00'}, 
+					    	{y: 2, x: '2017-01-17T00:00:00'}, 
+					    	{y: 9, x: '2017-01-18T00:00:00'}, 
+					    	{y: 11, x: '2017-01-19T00:00:00'}, 
+					    	{y: 10, x: '2017-01-20T00:00:00'}, 
+					    	{y: 2, x: '2017-01-21T00:00:00'}, 
+					    	{y: 2, x: '2017-01-22T00:00:00'}, 
+					    	{y: 24, x: '2017-01-23T00:00:00'}, 
+					    	{y: 3, x: '2017-01-24T00:00:00'}, 
+					    	{y: 13, x: '2017-01-25T00:00:00'}, 
+					    	{y: 7, x: '2017-01-26T00:00:00'}, 
+					    	{y: 10, x: '2017-01-27T00:00:00'}, 
+					    	{y: 7, x: '2017-01-28T00:00:00'}, 
+					    	{y: 6, x: '2017-01-29T00:00:00'}, 
+					    	{y: 1, x: '2017-01-30T00:00:00'}, 
+					    	{y: 9, x: '2017-01-31T00:00:00'}, 
+					    	{y: 10, x: '2017-02-01T00:00:00'}
+					    	]
+					    }],
+
+					},
+					options: {
+						scales: {
+							xAxes: [{
+								type: 'time',
+								position: 'bottom'
+							}]
+						}
+					}
+				});
+
+				this.chartLine = myChart;
 
 				
 				// this.getSavedSearches();
@@ -74,43 +223,43 @@
 
 
 
-		},
+},
 
-		methods: {
+methods: {
 
-			createFeatures(val){
-				this.modifiedFeatures = _.reject(this.features, function(f){return f == val})
-				this.form.features = _.reject(this.form.features, function(f){return f == val})
-			},
+	createFeatures(val){
+		this.modifiedFeatures = _.reject(this.features, function(f){return f == val})
+		this.form.features = _.reject(this.form.features, function(f){return f == val})
+	},
 
-			createFeatureTypes() {
-				
-				for(let i = 0; i < this.features.length; i++)
-				{					
-					let x = this.tableData[i][i]
-					console.log(x)
-					this.coltypes.push({'feature': this.features[i], 'type': x})
-				}
-				
-			},
+	createFeatureTypes() {
 
-			getSavedSearches () {
+		for(let i = 0; i < this.features.length; i++)
+		{					
+			let x = this.tableData[i][i]
+			console.log(x)
+			this.coltypes.push({'feature': this.features[i], 'type': x})
+		}
 
-				axios.post('api/getSavedSearches')
-				.then(response => {
+	},
 
-					this.savedSearches = response.data
-					console.log(response.data)
+	getSavedSearches () {
+
+		axios.post('api/getSavedSearches')
+		.then(response => {
+
+			this.savedSearches = response.data
+			console.log(response.data)
 
 				//this.onSuccess(response);
 
 			})
-				.catch(errors => {})
-			},
+		.catch(errors => {})
+	},
 
-			onSubmit() {
-
-				console.log(this.form)
+	onSubmit() {
+		this.chartLine.update()
+		console.log(this.form)
 
 				// axios.get('/api/departments/add', this.form)
 				// .then( response => {	
@@ -421,7 +570,17 @@
 
 		<div class="chart" >
 
-			<form method="POST" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
+			<input type="text" name="forecasted" v-model="forecasted[0].y">
+			<input type="text" name="forecasted" v-model="forecasted[1].y">
+			<input type="text" name="forecasted" v-model="forecasted[2].y">
+			<input type="text" name="forecasted" v-model="forecasted[30].x">
+
+			{{forecasted[0].y}}
+
+			<canvas id="myChart" width="400" height="200"></canvas>
+
+
+			<!-- <form method="POST" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
 
 				<div class="control">
 
@@ -440,7 +599,7 @@
 
 				<button type="submit" >Predict</button>
 
-			</form>
+			</form> -->
 
 			<table class="table table-striped table-bordered">
 				<thead>

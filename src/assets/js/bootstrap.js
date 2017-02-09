@@ -15,6 +15,8 @@ require('vue-resource');
 import Form from '../core/Form.js';
 import Errors from '../core/Errors.js';
 import Moment from 'moment';
+import ChartJs from 'chart.js'
+window.Chartjs = ChartJs;
 
 
 window.Form = Form;

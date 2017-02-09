@@ -17,6 +17,8 @@ test/unit-test/obj/Debug
 test/ml-cond-test.v12.suo
 
 #Splunk app local fils
+.splunk
+./splunk
 .splunkrc
 local
 
