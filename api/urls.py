@@ -10,6 +10,7 @@ urlpatterns = {
 	url(r'^mlmodel/(?P<pk>[0-9]+)/$', DetailsView.as_view(), name='details'),
 	url(r'^api/users/$', views.UserProfile.as_view()),
 	url(r'^api/user/(?P<pk>[0-9]+)/$', views.UserDetailsView.as_view()),
+	url(r'^api/get_blades/$', views.BladeDetails.as_view()),
 }
 
 urlpatterns = format_suffix_patterns(urlpatterns)

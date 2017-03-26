@@ -11,6 +11,8 @@
 
             return {
 
+                blades: [],
+
                 savedSearches: '',
 
                 tableData: {},
@@ -360,37 +362,36 @@
 
         mounted() {
 
-            this.$nextTick(function() {
+            this.$nextTick(function () {
+
+                this.getBlades();
 
                 var ctx = $("#myChart");
 
-                this.plotChart(ctx)
+                // this.plotChart(ctx);
 
 
-                setInterval(function() {
+                // setInterval(function() {
 
-                    let a = Math.floor((Math.random() * 50) + 1)
+                //     let a = Math.floor((Math.random() * 50) + 1)
 
-                    let i = Moment().format()
-                    console.log(i)
-                        // add(Math.floor((Math.random() * 6) + 1), 'days').
+                //     let i = Moment().format()
+                //     console.log(i)
+                //         // add(Math.floor((Math.random() * 6) + 1), 'days').
 
-                    // this.forecasted = _.drop(this.forecasted, 1)				
-
-
-                    this.forecasted.push({
-                        y: a,
-                        x: i
-                    })
-
-                    this.plotChart(ctx)
-
-                    // this.chartLine.update()
-
-                }.bind(this), 3000);
+                //     // this.forecasted = _.drop(this.forecasted, 1)				
 
 
+                //     this.forecasted.push({
+                //         y: a,
+                //         x: i
+                //     })
 
+                //     this.plotChart(ctx)
+
+                //     // this.chartLine.update()
+
+                // }.bind(this), 3000);
 
 
                 // this.getSavedSearches();
@@ -454,10 +455,10 @@
             },
 
             createFeatures(val) {
-                this.modifiedFeatures = _.reject(this.features, function(f) {
+                this.modifiedFeatures = _.reject(this.features, function (f) {
                     return f == val
                 })
-                this.form.features = _.reject(this.form.features, function(f) {
+                this.form.features = _.reject(this.form.features, function (f) {
                     return f == val
                 })
             },
@@ -475,6 +476,18 @@
 
             },
 
+
+            getBlades() {
+                axios.get('/api/get_blades')
+                    .then(response => {
+
+                        this.blades = []
+                        this.blades = JSON.parse(response.data)
+
+                    })
+                    .catch(errors => { })
+            },
+
             getSavedSearches() {
 
                 axios.post('api/getSavedSearches')
@@ -486,7 +499,7 @@
                         //this.onSuccess(response);
 
                     })
-                    .catch(errors => {})
+                    .catch(errors => { })
             },
 
             onSubmit() {
@@ -592,7 +605,7 @@
                     // header: true,
                     dynamicTyping: true,
 
-                    complete: function(results) {
+                    complete: function (results) {
                         vm.tableData = _.drop(results.data, 1)
 
                         if (typeof results.data[0][0] == 'number') {
@@ -642,7 +655,7 @@
 
             },
 
-            removeImage: function(e) {
+            removeImage: function (e) {
                 this.uploadedFile = '';
             },
 
@@ -661,7 +674,7 @@
 
         },
 
-        beforeDestroy: function() {
+        beforeDestroy: function () {
             clearInterval(this.interval);
         }
 
@@ -673,226 +686,162 @@
 <template>
 
 
-	<div class="main">	
+    <div class="main">
 
-		<div class="widget">
 
-			<div class="title">Campaign Prediction</div>
+        <div class="widget">
 
-			<div class="chart">
+            <div class="title">Campaign Prediction</div>
 
-				<div id="csvtable"></div>
+            <div class="chart">
 
+                <div id="csvtable"></div>
 
-				<form class="bs-customizer" role="form" method="POST" @submit.prevent="onSubmit" 
-				@keydown="form.errors.clear($event.target.name)">
 
+                <form class="bs-customizer" role="form" method="POST" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
 
-				<fieldset>
 
-					<!-- <legend>Enter Campaign Details</legend> -->
+                    <fieldset>
+                        <div class="row">
 
-					<div class="row">
 
+                            <div class="col-md-6">
+                                <span class="label-success">{{ rowCount }}</span>
 
-						<div class="col-md-6">
-							<span class="label-success">{{ rowCount }}</span>
 
+                                <div class="form-group">
+                                    <label for="uploadCsv" class="col-md-2 control-label">File</label>
 
-							<div class="form-group">
-								<label for="uploadCsv" class="col-md-2 control-label">File</label>
+                                    <div class="col-md-10">
+                                        <input type="text" readonly="" class="form-control" placeholder="Browse...">
+                                        <input type="file" id="uploadCsv" multiple="False" @change="onFileChange">
+                                    </div>
+                                </div>
+                            </div>
 
-								<div class="col-md-10">
-									<input type="text" readonly="" class="form-control" placeholder="Browse...">
-									<input type="file" id="uploadCsv" multiple="False" @change="onFileChange">
-								</div>
-							</div>
-						</div>
-						
 
-					</div>
+                        </div>
 
-					<div class="row">
+                        <div class="row">
 
 
-						<div class="col-md-4">						
-							
-							<div class="form-group">
-								<label for="search" class="col-md-12 control-label">Target</label>
+                            <div class="col-md-4">
 
-								<v-select :on-change="createFeatures" v-model="form.target" :options="features"></v-select>
-								
+                                <div class="form-group">
+                                    <label for="search" class="col-md-12 control-label">Target</label>
 
-								<span class="help is-danger" v-if="form.errors.has('search')" v-text="form.errors.get('search')"></span>
-								
-							</div>
+                                    <v-select :on-change="createFeatures" v-model="form.target" :options="features"></v-select>
 
-						</div>
 
+                                    <span class="help is-danger" v-if="form.errors.has('search')" v-text="form.errors.get('search')"></span>
 
-						<div class="col-md-6">
-							<div class="form-group" v-if='modifiedFeatures.length > 0'>
-								<label for="search" class="col-md-12 control-label">Saved Searches</label>
+                                </div>
 
-								<v-select multiple v-model="form.features" :options="modifiedFeatures" transition='expand'></v-select>
+                            </div>
 
-								<span class="help is-danger" v-if="form.errors.has('search')" v-text="form.errors.get('search')"></span>
-								
-							</div>
-						</div>
 
+                            <div class="col-md-6">
+                                <div class="form-group" v-if='modifiedFeatures.length > 0'>
+                                    <label for="search" class="col-md-12 control-label">Saved Searches</label>
 
-					</div>
+                                    <v-select multiple v-model="form.features" :options="modifiedFeatures" transition='expand'></v-select>
 
-					
-					<div class="form-group">		
-						<table class="table table-bordered table-hover">
-							<tr >
-								<th v-for="head in coltypes">
-									{{ head.feature }} {{ typeof head.type}}
-								</th>						
-							</tr>
+                                    <span class="help is-danger" v-if="form.errors.has('search')" v-text="form.errors.get('search')"></span>
 
-						</table>			
-						<!-- <label for="usr">Query</label> -->
-						<!-- <input type="text" class="form-control" id="usr" v-model="form.month.search"> -->
-					</div>
-					
+                                </div>
+                            </div>
 
 
+                        </div>
 
-					<div class="form-group">
 
-						{{tableData }}
-						<div class="col-md-8 col-md-offset-4">
-							<button type="button" class="btn btn-default btn-xs">Reset</button>
-							<button type="submit" class="btn btn-primary btn-xs">Predict</button>
-						</div>
-					</div>
+                        <div class="form-group">
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <th v-for="head in coltypes">
+                                        {{ head.feature }} {{ typeof head.type}}
+                                    </th>
+                                </tr>
 
-				</fieldset>
-			</form>	
+                            </table>
+                        </div>
 
+                        <div class="form-group">
 
+                            {{tableData }}
+                            <div class="col-md-8 col-md-offset-4">
+                                <button type="button" class="btn btn-default btn-xs">Reset</button>
+                                <button type="submit" class="btn btn-primary btn-xs">Predict</button>
+                            </div>
+                        </div>
 
+                    </fieldset>
+                </form>
 
-			<div class="col-md-8 col-md-offset-2" v-if="predicted.length > 0">
-				<span class="text-success" style="font-weight: bolder; font-size: 18px;">{{ Math.ceil(predicted[0][0]) * 1000 }}</span>
-			</div>
+            </div>
 
+        </div>
 
+        <div class="widget">
+            <div class="title">Departments Table</div>
 
-			<ul class="list-group list-inline" v-for="prediction in predictions">
+            <div class="chart">
 
-				<li class="list-group-item">
+                <canvas id="myChart" width="400" height="200"></canvas>
 
-					{{ Math.ceil(prediction[0]) }}
 
-				</li>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="15%"> Name </th>
+                            <th width="40%"> Description </th>
+                            <th width="15%"> Employee Count </th>
+                            <th width="15%"> Edit </th>
+                            <th width="15%"> Delete </th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-			</ul>
+                        <tr v-for="blade in blades">
+                            <td>
+                                {{ blade.name}}
+                            </td>
 
+                            <td>
+                                {{ blade.rn}}
+                            </td>
 
-		</div>
+                            <td>
+                                {{ blade.name}}
+                            </td>
 
-	</div>
+                            <td>
+                                {{ blade.dn }}
+                            </td>
 
-	<div class="widget">
-		<div class="title">Departments Table</div>
+                            <td>
+                                <a href="#">
+                                    <i class="fa fa-pencil"></i> Edit
+                                </a>
+                            </td>
 
-		<div class="chart" >
-<!-- 
-			<input type="text" name="forecasted" v-model="forecasted[0].y">
-			<input type="text" name="forecasted" v-model="forecasted[1].y">
-			<input type="text" name="forecasted" v-model="forecasted[2].y">
-			<input type="text" name="forecasted" v-model="forecasted[30].x"> -->
+                            <td>
+                                <a href="#">
+                                    <i class="fa fa-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
 
-			<canvas id="myChart" width="400" height="200"></canvas>
+                    </tbody>
+                </table>
 
+            </div>
+        </div>
 
-			<!-- <form method="POST" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
 
-				<div class="control">
+    </div>
 
-					<label for="name" class="label">Name</label>
 
-					<input type="text" class="input" name="name" v-model="form.name" >
-					<span class="help is-danger" v-if="form.errors.has('name')" v-text="form.errors.get('name')"></span>
-
-
-					<input type="text" class="input" name="description" v-model="form.description" >
-					<span class="help is-danger" v-if="form.errors.has('description')" v-text="form.errors.get('description')"></span>					
-
-
-
-				</div>
-
-				<button type="submit" >Predict</button>
-
-			</form> -->
-
-			<table class="table table-striped table-bordered">
-				<thead>
-					<tr>
-						<th width="15%"> Name </th>
-						<th width="40%"> Description </th>
-						<th width="15%"> Employee Count </th>
-						<th width="15%"> Edit </th>
-						<th width="15%"> Delete </th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- {% for department in departments %} -->
-					<tr v-for="department in departments">
-						<td>
-
-							{{ department.name }} 
-
-						</td>
-						<td>
-
-							{{ department.description }} 
-
-						</td>
-
-						<td>
-							<!-- {{department.employees.length}} -->
-
-						</td>
-						<td>
-							<a href="#">
-								<i class="fa fa-pencil"></i> Edit 
-							</a>
-						</td>
-						<td>
-							<a href="#">
-								<i class="fa fa-trash"></i> Delete 
-							</a>
-						</td>
-					</tr>
-					<!-- {% endfor %} -->
-				</tbody>
-			</table>
-
-			<!-- <h2 v-if="departments.length > 0">{{ api_response[0][0] }}</h2> -->
-				<!-- <ul class="list-group" v-for="item in departments">
-					<li class="list-item">
-						{{ item.name }}
-					</li>
-				</ul> -->
-
-
-				
-				
-
-			</div>
-		</div>	
-
-		
-
-	</div>
-
-	
 </template>
 
 <style>

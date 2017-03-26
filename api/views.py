@@ -10,6 +10,16 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from django.core import serializers
 from rest_framework import viewsets
+from api import ucs_manager as ucs
+import json
+
+from ucsmsdk.ucshandle import UcsHandle
+
+# Connection
+handle = UcsHandle("192.168.202.141", "ucspe", "ucspe")
+
+#Login
+handle.login()
 
 
 # Create your views here.
@@ -40,6 +50,49 @@ class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
 	queryset = User.objects.all()	
 	serializer_class = UserSerializer	
 	# return Response(serializer.data)
+
+
+
+class BladeDetails(TemplateView):
+
+	def get(self, request, **kwargs):
+
+		context = {
+			'data': [
+				{
+                    'name': 'Celeb 1',
+                    'worth': '3567892'
+                },
+                {
+                    'name': 'Celeb 2',
+                    'worth': '23000000'
+                },
+                {
+                    'name': 'Celeb 3',
+                    'worth': '1000007'
+                },
+                {
+                    'name': 'Celeb 4',
+                    'worth': '456789'
+                }
+			]
+		}
+
+		blades = json.dumps(ucs.get_blades(handle), ensure_ascii=False)
+		
+
+		# blades = ucs.domain_serials(handle)
+
+		# x = json.dumps(blades)
+		
+
+		return JsonResponse(blades, safe=False)
+
+# class BladeDetails(generics.RetrieveAPIView):
+    	
+# 		def get():
+    			
+# 				return JsonResponse({'hello': 'world'})
 		
 		
 		

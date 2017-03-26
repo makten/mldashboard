@@ -135,7 +135,7 @@
 
 						<span v-html="item.icon"></span>
 
-						<span> {{ item.title }}
+						<span> {{ item.title }} </span>
 
 						</a>
 
@@ -151,7 +151,7 @@
 
 							<span v-html="adminlinks.icon"></span>
 
-							<span> {{ adminlinks.title }}
+							<span> {{ adminlinks.title }} </span>
 
 							</a>
 
