@@ -16,7 +16,7 @@ import json
 from ucsmsdk.ucshandle import UcsHandle
 
 # Connection
-handle = UcsHandle("192.168.202.141", "ucspe", "ucspe")
+handle = UcsHandle("192.168.202.147", "ucspe", "ucspe")
 
 #Login
 handle.login()

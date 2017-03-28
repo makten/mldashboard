@@ -362,7 +362,7 @@
 
         mounted() {
 
-            this.$nextTick(function () {
+            this.$nextTick(function() {
 
                 this.getBlades();
 
@@ -402,9 +402,6 @@
                 // 	this.departments = JSON.parse(response.data)
                 // })
             });
-
-
-
 
         },
 
@@ -455,10 +452,10 @@
             },
 
             createFeatures(val) {
-                this.modifiedFeatures = _.reject(this.features, function (f) {
+                this.modifiedFeatures = _.reject(this.features, function(f) {
                     return f == val
                 })
-                this.form.features = _.reject(this.form.features, function (f) {
+                this.form.features = _.reject(this.form.features, function(f) {
                     return f == val
                 })
             },
@@ -485,7 +482,7 @@
                         this.blades = JSON.parse(response.data)
 
                     })
-                    .catch(errors => { })
+                    .catch(errors => {})
             },
 
             getSavedSearches() {
@@ -499,7 +496,7 @@
                         //this.onSuccess(response);
 
                     })
-                    .catch(errors => { })
+                    .catch(errors => {})
             },
 
             onSubmit() {
@@ -549,8 +546,6 @@
                 // }
             },
 
-
-
             onFileChange(e) {
 
                 var files = e.target.files || e.dataTransfer.files;
@@ -589,6 +584,7 @@
                 console.log()
             },
 
+
             createCSV(files) {
 
                 this.features = [];
@@ -605,7 +601,7 @@
                     // header: true,
                     dynamicTyping: true,
 
-                    complete: function (results) {
+                    complete: function(results) {
                         vm.tableData = _.drop(results.data, 1)
 
                         if (typeof results.data[0][0] == 'number') {
@@ -655,7 +651,7 @@
 
             },
 
-            removeImage: function (e) {
+            removeImage: function(e) {
                 this.uploadedFile = '';
             },
 
@@ -674,7 +670,7 @@
 
         },
 
-        beforeDestroy: function () {
+        beforeDestroy: function() {
             clearInterval(this.interval);
         }
 
@@ -687,155 +683,213 @@
 
 
     <div class="main">
+        {{ blades[0] }}
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="widget">
+
+                        <div class="title">Campaign Prediction</div>
+
+                        <div class="chart">
+
+                            <div id="csvtable"></div>
 
 
-        <div class="widget">
+                            <form class="bs-customizer" role="form" method="POST" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
 
-            <div class="title">Campaign Prediction</div>
-
-            <div class="chart">
-
-                <div id="csvtable"></div>
+                                <fieldset>
+                                    <div class="row">
 
 
-                <form class="bs-customizer" role="form" method="POST" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
+                                        <div class="col-md-6">
+                                            <span class="label-success">{{ rowCount }}</span>
 
 
-                    <fieldset>
-                        <div class="row">
+                                            <div class="form-group">
+                                                <label for="uploadCsv" class="col-md-2 control-label">File</label>
+
+                                                <div class="col-md-10">
+                                                    <input type="text" readonly="" class="form-control" placeholder="Browse...">
+                                                    <input type="file" id="uploadCsv" multiple="False" @change="onFileChange">
+                                                </div>
+                                            </div>
+                                        </div>
 
 
-                            <div class="col-md-6">
-                                <span class="label-success">{{ rowCount }}</span>
-
-
-                                <div class="form-group">
-                                    <label for="uploadCsv" class="col-md-2 control-label">File</label>
-
-                                    <div class="col-md-10">
-                                        <input type="text" readonly="" class="form-control" placeholder="Browse...">
-                                        <input type="file" id="uploadCsv" multiple="False" @change="onFileChange">
                                     </div>
-                                </div>
-                            </div>
 
+                                    <div class="row">
+
+
+                                        <div class="col-md-4">
+
+                                            <div class="form-group">
+                                                <label for="search" class="col-md-12 control-label">Target</label>
+
+                                                <v-select :on-change="createFeatures" v-model="form.target" :options="features"></v-select>
+
+
+                                                <span class="help is-danger" v-if="form.errors.has('search')" v-text="form.errors.get('search')"></span>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="col-md-6">
+                                            <div class="form-group" v-if='modifiedFeatures.length > 0'>
+                                                <label for="search" class="col-md-12 control-label">Saved Searches</label>
+
+                                                <v-select multiple v-model="form.features" :options="modifiedFeatures" transition='expand'></v-select>
+
+                                                <span class="help is-danger" v-if="form.errors.has('search')" v-text="form.errors.get('search')"></span>
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <table class="table table-bordered table-hover">
+                                            <tr>
+                                                <th v-for="head in coltypes">
+                                                    {{ head.feature }} {{ typeof head.type}}
+                                                </th>
+                                            </tr>
+
+                                        </table>
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        {{tableData }}
+                                        <div class="col-md-8 col-md-offset-4">
+                                            <button type="button" class="btn btn-default btn-xs">Reset</button>
+                                            <button type="submit" class="btn btn-primary btn-xs">Predict</button>
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                            </form>
 
                         </div>
 
-                        <div class="row">
+                    </div>
+                </div>
+            
+            
+                <div class="col-md-4">
+                    <div class="widget">
+                        <div class="title">Departments Table</div>
+
+                        <div class="chart">
+
+                            <canvas id="myChart" width="400" height="200"></canvas>
 
 
-                            <div class="col-md-4">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th width="15%"> Name </th>
+                                        <th width="40%"> Description </th>
+                                        <th width="15%"> Employee Count </th>
+                                        <th width="15%"> Edit </th>
+                                        <th width="15%"> Delete </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                <div class="form-group">
-                                    <label for="search" class="col-md-12 control-label">Target</label>
+                                    <tr v-for="blade in blades">
+                                        <td>
+                                            {{ blade.name}}
+                                        </td>
 
-                                    <v-select :on-change="createFeatures" v-model="form.target" :options="features"></v-select>
+                                        <td>
+                                            {{ blade.rn}}
+                                        </td>
 
+                                        <td>
+                                            {{ blade.name}}
+                                        </td>
 
-                                    <span class="help is-danger" v-if="form.errors.has('search')" v-text="form.errors.get('search')"></span>
+                                        <td>
+                                            {{ blade.dn }}
+                                        </td>
 
-                                </div>
+                                        <td>
+                                            <a href="#">
+                                                <i class="fa fa-pencil"></i> Edit
+                                            </a>
+                                        </td>
 
-                            </div>
+                                        <td>
+                                            <a href="#">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </a>
+                                        </td>
+                                    </tr>
 
-
-                            <div class="col-md-6">
-                                <div class="form-group" v-if='modifiedFeatures.length > 0'>
-                                    <label for="search" class="col-md-12 control-label">Saved Searches</label>
-
-                                    <v-select multiple v-model="form.features" :options="modifiedFeatures" transition='expand'></v-select>
-
-                                    <span class="help is-danger" v-if="form.errors.has('search')" v-text="form.errors.get('search')"></span>
-
-                                </div>
-                            </div>
-
-
-                        </div>
-
-
-                        <div class="form-group">
-                            <table class="table table-bordered table-hover">
-                                <tr>
-                                    <th v-for="head in coltypes">
-                                        {{ head.feature }} {{ typeof head.type}}
-                                    </th>
-                                </tr>
-
+                                </tbody>
                             </table>
+
                         </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="widget">
+                <div class="title">Departments Table</div>
+                
 
-                        <div class="form-group">
+                <div class="chart">
 
-                            {{tableData }}
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="button" class="btn btn-default btn-xs">Reset</button>
-                                <button type="submit" class="btn btn-primary btn-xs">Predict</button>
-                            </div>
-                        </div>
+                    <canvas id="myChart" width="400" height="200"></canvas>
 
-                    </fieldset>
-                </form>
 
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="15%"> Dn </th>
+                                <th width="40%"> Serial </th>                                
+                                <th width="15%"> Operability </th>
+                                <th width="15%"> Model </th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr v-for="blade in blades">
+                                <td>
+                                    <a href="#">
+                                        <i class="fa fa-pencil"></i> {{ blade.dn}}
+                                    </a>
+                                    
+                                </td>
+
+                                <td>
+                                    {{ blade.serial}}
+                                </td>                           
+
+                                <td>
+                                    {{ blade.operability }}
+                                </td>
+                                <td>
+                                    {{ blade.model }}
+                                </td>
+                               
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
 
-        </div>
-
-        <div class="widget">
-            <div class="title">Departments Table</div>
-
-            <div class="chart">
-
-                <canvas id="myChart" width="400" height="200"></canvas>
-
-
-                <table class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th width="15%"> Name </th>
-                            <th width="40%"> Description </th>
-                            <th width="15%"> Employee Count </th>
-                            <th width="15%"> Edit </th>
-                            <th width="15%"> Delete </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr v-for="blade in blades">
-                            <td>
-                                {{ blade.name}}
-                            </td>
-
-                            <td>
-                                {{ blade.rn}}
-                            </td>
-
-                            <td>
-                                {{ blade.name}}
-                            </td>
-
-                            <td>
-                                {{ blade.dn }}
-                            </td>
-
-                            <td>
-                                <a href="#">
-                                    <i class="fa fa-pencil"></i> Edit
-                                </a>
-                            </td>
-
-                            <td>
-                                <a href="#">
-                                    <i class="fa fa-trash"></i> Delete
-                                </a>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-            </div>
         </div>
 
 

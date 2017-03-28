@@ -10,11 +10,14 @@ from ucsmsdk.mometa.equipment import EquipmentChassisStats
 import json
 
 # Connection
-handle = UcsHandle("192.168.202.141", "ucspe", "ucspe")
+handle = UcsHandle("192.168.202.144", "ucspe", "ucspe")
 
-# handle.logout()
+handle.logout()
 #Login
-handle.login()
+# handle.login()
+
+
+# ucs_gui_launch(handle)
 
 
 
@@ -34,10 +37,31 @@ handle.login()
 fault = handle.query_dn("sys/switch-A/fault-F1465")
 event = handle.query_dn("sys/switch-A")
 
+
+chassis = handle.query_classid(class_id="EquipmentChassisStats")
+
+print(chassis)
+
+# chasses = []
+
+# for chas in chassis:    
+#     x = dict(chas.__dict__)
+#     # print(x['config_state'])
+#     chasses.append(x)
+
+#     # print(s)
+
+#     # i = {
+#     #     "dn": chas.dn,
+#     #     ""
+#     # }
+
+# print([0])
+
 compute_blade = handle.query_classid(class_id="computeBlade")
 x = []
 for blade in compute_blade:  
-    print(blade)  
+    # print(blade)  
     i = {      
             "admin_power": blade.admin_power,
             "admin_state": blade.admin_state,
@@ -82,10 +106,35 @@ for blade in compute_blade:
     x.append(i)
 
 
-print(json.dumps(x[0]))
+# print(json.dumps(x[0]))
 # print(fault)
 # print(event)
 
+# flt_str = '(dn, "sys/chassis-3/blade-1") and (severity, "minor")'
+flt_str = '(dn, "sys/chassis-3/blade-1")'
+
+fs = handle.query_classid(class_id="faultInst", filter_str=flt_str)
+e = handle.query_classid(class_id="processorEnvStats", filter_str=flt_str)
+# f = handle.query_classid(class_id="faultInst", filter_str=flt_str)
+
+
+# for i, fl in enumerate(e):
+#     x = json.dumps(fl[i])
+#     print(x)
+#     print(fl)
+
+
+# for flt in fs:
+#     print(flt)
+
+# for b in x[0].faultInst:
+#     print(b)
+
+
+
+
+# for blade_child_object in blade_by_dn_children:
+#        print(blade_child_object)
 
 handle.logout()
 
