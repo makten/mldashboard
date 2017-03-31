@@ -12,14 +12,11 @@ from django.core import serializers
 from rest_framework import viewsets
 from api import ucs_manager as ucs
 import json
+from ucs_manager.connection import ucs_login, ucs_logout
 
 from ucsmsdk.ucshandle import UcsHandle
 
-# Connection
-handle = UcsHandle("192.168.202.147", "ucspe", "ucspe")
-
-#Login
-handle.login()
+handle = None
 
 
 # Create your views here.
@@ -54,45 +51,59 @@ class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class BladeDetails(TemplateView):
-
+    
 	def get(self, request, **kwargs):
+    	
+		try:
+			global handle
+			global blades
+			handle = ucs_login()
 
-		context = {
-			'data': [
-				{
-                    'name': 'Celeb 1',
-                    'worth': '3567892'
-                },
-                {
-                    'name': 'Celeb 2',
-                    'worth': '23000000'
-                },
-                {
-                    'name': 'Celeb 3',
-                    'worth': '1000007'
-                },
-                {
-                    'name': 'Celeb 4',
-                    'worth': '456789'
-                }
-			]
-		}
+			blades = json.dumps(ucs.get_blades(handle), ensure_ascii=False)
 
-		blades = json.dumps(ucs.get_blades(handle), ensure_ascii=False)
+			ucs_logout(handle)
 		
-
-		# blades = ucs.domain_serials(handle)
-
-		# x = json.dumps(blades)
-		
+		except:
+			ucs_logout(handle)
+			raise
 
 		return JsonResponse(blades, safe=False)
 
-# class BladeDetails(generics.RetrieveAPIView):
+
+
+class ChassisDetails(TemplateView):
+
+	def get(self, request, **kwargs):
     	
-# 		def get():
-    			
-# 				return JsonResponse({'hello': 'world'})
+		try:
+			global handle
+			global chassis
+			handle = ucs_login()
+
+			chassis = json.dumps(ucs.get_chassis(handle), ensure_ascii=False)
+
+			ucs_logout(handle)
 		
+		except:
+			ucs_logout(handle)
+			raise
+
+		return JsonResponse(chassis, safe=False)
+
+
+class BladeFaults(TemplateView):
+	def get(self, request, chs, bld, **kwargs):
 		
+		try:
+			global handle
+			global chassis
+			handle = ucs_login()
+
+			faults = json.dumps(ucs.get_bladefaults(handle, chs, bld), ensure_ascii=False)
+
+			ucs_logout(handle)
 		
+		except:
+			ucs_logout(handle)
+			raise
+		return JsonResponse(faults, safe=False)

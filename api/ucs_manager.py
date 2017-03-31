@@ -5,73 +5,200 @@ from ucsmsdk.ucscoreutils import get_meta_info
 from ucsmsdk.utils.ucsguilaunch import ucs_gui_launch
 from ucsmsdk.mometa.comm.CommDateTime import CommDateTime
 from ucsmsdk.utils.ucsbackup import backup_ucs, import_ucs_backup
-
-# Connection
-# handle = UcsHandle("192.168.202.137", "ucspe", "ucspe")
+import json
 
 
-#Login
-# handle.login()
 
+handle = None
+
+
+def get_chassis(handle):
+    # Get all EquipmentChassis
+
+    chassis = handle.query_classid(class_id="EquipmentChassis")
+
+    chasses = []
+    for chas in chassis:
+        x = {
+            "dn": chas.dn,
+            "rn": chas.rn,
+            "power": chas.power,
+            "oper_state": chas.oper_state,
+            "operability": chas.operability,
+            "id": chas.id,
+            "serial": chas.serial,
+            "part_number": chas.part_number
+
+        }
+        chasses.append(x) 
+
+    handle.logout()
+    return chasses
+    
 
 def get_blades(handle):
-    ## Get all blades from UCS
+    ## Get all blades from UCS    
+
     compute_blade = handle.query_classid(class_id="computeBlade")
     blades = []
 
     blades = []
-    for blade in compute_blade:  
-        print(blade)  
-        i = {      
-                "admin_power": blade.admin_power,
-                "admin_state": blade.admin_state,
-                "availability": blade.availability,
-                "available_memory": blade.available_memory,
-                "chassis_id": blade.chassis_id,
-                "check_point": blade.check_point,
-                "child_action": blade.child_action,
-                "conn_path": blade.conn_path,
-                "conn_status": blade.conn_status,
-                "descr": blade.descr,
-                "dn": blade.dn,
-                "int_id": blade.int_id,
-                "memory_speed": blade.memory_speed,
-                "model": blade.model,
-                "name": blade.name,
-                "num_of_adaptors": blade.num_of_adaptors,
-                "num_of_cores": blade.num_of_cores,
-                "num_of_cores_enabled": blade.num_of_cores_enabled,
-                "num_of_cpus": blade.num_of_cpus,
-                "num_of_eth_host_ifs": blade.num_of_eth_host_ifs,
-                "num_of_fc_host_ifs": blade.num_of_fc_host_ifs,
-                "num_of_threads": blade.num_of_threads,
-                "oper_power": blade.oper_power,
-                "oper_state": blade.oper_state,
-                "operability": blade.operability,
-                "original_uuid": blade.original_uuid,
-                "part_number": blade.part_number,
-                "policy_level": blade.policy_level,
-                "policy_owner": blade.policy_owner,
-                "presence": blade.presence,
-                "rn": blade.rn,
-                "serial": blade.serial,
-                "server_id": blade.server_id,
-                "slot_id": blade.slot_id,
-                "status": blade.status,
-                "total_memory": blade.total_memory,
-                "uuid": blade.uuid,
-                "vendor": blade.vendor,
-                "vid": blade.vid
+    for bid, blade in enumerate(compute_blade):  
+        flt_str = '(dn, "'+ str(blade.dn) +'/.*")'
+        for cpu in handle.query_classid(class_id="ProcessorEnvStats", filter_str=flt_str):            
+            cpu_stats = []
+            cp = {
+                "child_action": cpu.child_action,
+                "dn": cpu.dn,
+                "input_current": cpu.input_current,
+                "input_current_avg": cpu.input_current_avg,
+                "input_current_max": cpu.input_current,
+                "input_current_min": cpu.input_current,
+                "intervals": cpu.intervals,
+                "rn": cpu.rn,
+                "sacl": cpu.sacl,
+                "suspect": cpu.suspect,
+                "temperature": cpu.temperature,
+                "temperature_avg": cpu.temperature_avg,
+                "temperature_max": cpu.temperature_max,
+                "temperature_min": cpu.temperature_min,
+                "thresholded": cpu.thresholded,
+                "time_collected": cpu.time_collected,
+                "update": cpu.update,
+                
             }
-        blades.append(i)
+            cpu_stats.append(cp)
 
+                     
+            i = {   "cpu_stats": cpu_stats,              
+                    "admin_power": blade.admin_power,
+                    "admin_state": blade.admin_state,
+                    "availability": blade.availability,
+                    "available_memory": blade.available_memory,
+                    "chassis_id": blade.chassis_id,
+                    "check_point": blade.check_point,
+                    "child_action": blade.child_action,
+                    "conn_path": blade.conn_path,
+                    "conn_status": blade.conn_status,
+                    "descr": blade.descr,
+                    "dn": blade.dn,
+                    "int_id": blade.int_id,
+                    "memory_speed": blade.memory_speed,
+                    "model": blade.model,
+                    "name": blade.name,
+                    "num_of_adaptors": blade.num_of_adaptors,
+                    "num_of_cores": blade.num_of_cores,
+                    "num_of_cores_enabled": blade.num_of_cores_enabled,
+                    "num_of_cpus": blade.num_of_cpus,
+                    "num_of_eth_host_ifs": blade.num_of_eth_host_ifs,
+                    "num_of_fc_host_ifs": blade.num_of_fc_host_ifs,
+                    "num_of_threads": blade.num_of_threads,
+                    "oper_power": blade.oper_power,
+                    "oper_state": blade.oper_state,
+                    "operability": blade.operability,
+                    "original_uuid": blade.original_uuid,
+                    "part_number": blade.part_number,
+                    "policy_level": blade.policy_level,
+                    "policy_owner": blade.policy_owner,
+                    "presence": blade.presence,
+                    "rn": blade.rn,
+                    "serial": blade.serial,
+                    "server_id": blade.server_id,
+                    "slot_id": blade.slot_id,
+                    "status": blade.status,
+                    "total_memory": blade.total_memory,
+                    "uuid": blade.uuid,
+                    "vendor": blade.vendor,
+                    "vid": blade.vid
+                }
+
+            blades.append(i)
+    
     
     handle.logout()
     
     return blades
 
 
+def get_bladestats(handle, dn):
+    # Get all EquipmentChassis
 
+    stats = handle.query_classid(class_id="EquipmentChassisSt")
+
+    chasses = []
+    for chas in stats:
+        x = {
+            "dn": chas.dn,
+            "rn": chas.rn,
+            "power": chas.power,
+            "oper_state": chas.oper_state,
+            "operability": chas.operability,
+            "id": chas.id,
+            "serial": chas.serial,
+            "part_number": chas.part_number
+
+        }
+        chasses.append(x) 
+
+    handle.logout()
+    return chasses
+
+
+
+
+
+def get_bladefaults(handle, chs, bld):
+    # Get all EquipmentChassis
+    
+    flt_str = '(dn, "sys/chassis-3/' + bld + '/fault-.*")'    
+    flts = fs = handle.query_classid(class_id="faultInst", filter_str=flt_str)
+
+    faults = []
+    for fl in flts:        
+        x = {
+            'code': fl.code,
+            'cause': fl.cause,
+            'created': fl.created,
+            'descr': fl.descr,
+            'severity': fl.severity,
+            'rule': fl.rule,
+            'status': fl.status,
+            'type': fl.type
+        }
+
+        faults.append(x) 
+
+    handle.logout()
+    return faults
+
+
+def get_cpustats(handle, chs, bld):   
+    flt_str = '(dn, "sys/chassis-3/' + bld + '/fault-.*")' 
+    fs = handle.query_classid(class_id="faultInst", filter_str=flt_str)
+    stats = handle.query_classid(class_id="processorEnvStats", filter_str=flt_str)
+    envs = []
+    for stat in stats:
+        x = {
+            "dn" : stat.dn,
+            "input_current": stat.input_current,
+            "input_current_avg": stat.input_current_avg,
+            "input_current_max": stat.input_current_max,
+            "input_current_min": stat.input_current_min,
+            "intervals": stat.intervals,
+            "rn": stat.rn,
+            "status": stat.status,
+            "suspect": stat.suspect,
+            "temperature": stat.temperature,
+            "temperature_avg": stat.temperature_avg,
+            "temperature_max": stat.temperature_max,
+            "temperature_min": stat.temperature_min,
+            "thresholded": stat.thresholded,
+            "time_collected": stat.time_collected,
+            "update": stat.update
+        }
+    envs.append(x)
+    
+    return envs
 
 def domain_serials(handle):
     """
@@ -111,3 +238,24 @@ def domain_serials(handle):
 
     return query_dict
 
+
+
+# flt_str = '(dn, "sys/chassis-3/blade-1") and (severity, "minor")'
+# flt_str = '(dn, "sys/chassis-3/blade-1")'
+
+# fs = handle.query_classid(class_id="faultInst", filter_str=flt_str)
+# e = handle.query_classid(class_id="processorEnvStats", filter_str=flt_str)
+# f = handle.query_classid(class_id="faultInst", filter_str=flt_str)
+
+
+# for i, fl in enumerate(e):
+#     x = json.dumps(fl[i])
+#     print(x)
+#     print(fl)
+
+
+# for flt in fs:
+#     print(flt)
+
+# for b in x[0].faultInst:
+#     print(b)

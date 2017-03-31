@@ -1,0 +1,11 @@
+ 
+<faultInst ack="no" cause="link-missing" changeSet="" 
+childAction="deleteNonPresent" 
+code="F0775" created="2017-03-29T04:47:25.887" 
+descr="Connection to Adapter 1 eth interface 1 in server 3 missing" 
+dn="sys/rack-unit-3/adaptor-1/ext-eth-1/fault-F0775" 
+highestSeverity="warning" id="65630" 
+lastTransition="2017-03-29T04:47:25.887" 
+lc="" occur="1" origSeverity="warning" 
+prevSeverity="warning" rule="adaptor-ext-eth-if-missing" 
+severity="warning" tags="server" type="network"/> 

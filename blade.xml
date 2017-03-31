@@ -54,6 +54,7 @@
             <mgmtControllerFsm childAction="deleteNonPresent" completionTime="" currentFsm="nop" descr="" fsmStatus="nop" instanceId="0" progress="100" rmtErrCode="none" rmtErrDescr="" rmtRslt="" rn="fsm"/>
         </mgmtController>
     </adaptorUnit>
+
     <adaptorUnit adminPowerState="none" baseMac="00:00:29:72:77:01" bladeId="1" cartridgeId="0" chassisId="3" childAction="deleteNonPresent" connPath="A,B" connStatus="A,B" discoveryStatus="" fltAggr="0" id="1" integrated="no" locationDn="" managingInst="B" mfgTime="not-applicable" model="UCSB-MLOM-40G-03" operQualifierReason="N/A" operState="operable" operability="operable" partNumber="" pciAddr="" pciSlot="N/A" perf="not-supported" power="off" presence="equipped" reachability="A,B" revision="0" rn="adaptor-1" serial="SRVADAP77" thermal="unknown" vendor="Cisco Systems Inc" vid="" voltage="not-supported">
         <adaptorHostPort childAction="deleteNonPresent" fltAggr="0" id="2" locationDn="" model="" operQualifierReason="N/A" operState="unknown" operability="unknown" perf="unknown" power="unknown" presence="unknown" revision="0" rn="host-port-2" serial="" thermal="unknown" vendor="" voltage="unknown"/>
         <adaptorHostPort childAction="deleteNonPresent" fltAggr="0" id="1" locationDn="" model="" operQualifierReason="N/A" operState="unknown" operability="unknown" perf="unknown" power="unknown" presence="unknown" revision="0" rn="host-port-1" serial="" thermal="unknown" vendor="" voltage="unknown"/>
@@ -69,6 +70,8 @@
         <adaptorExtEthIf adapterId="1" adminState="enabled" aggrPortId="0" chassisId="3" childAction="deleteNonPresent" discovery="absent" epDn="sys/chassis-3/blade-1/fabric-A/pc-1286" fsmDescr="" fsmPrev="nop" fsmProgr="100" fsmRmtInvErrCode="none" fsmRmtInvErrDescr="" fsmRmtInvRslt="" fsmStageDescr="" fsmStamp="never" fsmStatus="nop" fsmTry="0" id="1" ifRole="unknown" ifType="physical" linkState="up" lldpMac="00:00:00:00:00:00" locale="" mac="00:00:29:72:77:01" macAddrType="operational" name="" operState="admin-down" operStateDesc="" peerAggrPortId="0" peerChassisId="N/A" peerDn="sys/chassis-3/slot-1/host/port-1" peerPortId="1" peerSlotId="1" physEpDn="" portId="1" purpose="general" rn="ext-eth-1" side="left" slotId="1" switchId="A" transport="" type="">
             <adaptorExtEthIfFsm childAction="deleteNonPresent" completionTime="" currentFsm="nop" descr="" fsmStatus="nop" instanceId="0" progress="100" rmtErrCode="none" rmtErrDescr="" rmtRslt="" rn="fsm"/>
         </adaptorExtEthIf>
+
+
         <dcxNs allocStatus="available" childAction="deleteNonPresent" rn="dcxns-B" side="right" size="116" switchId="B" used="0"/>
         <dcxNs allocStatus="available" childAction="deleteNonPresent" rn="dcxns-A" side="left" size="116" switchId="A" used="0"/>
         <mgmtController childAction="deleteNonPresent" desiredMaintenanceMode="normal" dimmBlacklistingOperState="unknown" diskZoningState="unknown" fsmDescr="" fsmFlags="" fsmPrev="nop" fsmProgr="100" fsmRmtInvErrCode="none" fsmRmtInvErrDescr="" fsmRmtInvRslt="" fsmStageDescr="" fsmStamp="never" fsmStatus="nop" fsmTry="0" guid="" id="A" lastRebootReason="unknown" model="UCSB-MLOM-40G-03" operConn="" powerFanSpeedPolicySupported="no" revision="0" rn="mgmt" serial="SRVADAP77" storageOobConfigSupported="no" storageOobInterfaceSupported="no" storageSubsystemState="unknown" subject="adaptor" supportedCapability="" vendor="Cisco Systems Inc">
@@ -87,6 +90,8 @@
             <mgmtControllerFsm childAction="deleteNonPresent" completionTime="" currentFsm="nop" descr="" fsmStatus="nop" instanceId="0" progress="100" rmtErrCode="none" rmtErrDescr="" rmtRslt="" rn="fsm"/>
         </mgmtController>
     </adaptorUnit>
+
+
     <fabricLocale cType="mux-to-host" chassisId="3" childAction="deleteNonPresent" evacState="fill" locale="server" name="" rn="fabric-B" side="right" slotId="1" switchId="B" transport="ether" type="lan">
         <adaptorExtEthIfPc childAction="deleteNonPresent" epDn="" fltAggr="0" ifRole="server" ifType="aggregation" locale="external" mac="00:00:00:00:00:00" name="" operSpeed="20gbps" operState="indeterminate" peerDn="sys/chassis-3/slot-2/host/pc-1281" portId="1281" rn="pc-1281" stateQual="" switchId="B" transport="ether" type="lan">
             <adaptorExtEthIfPcEp aggrPortId="0" chassisId="N/A" childAction="deleteNonPresent" epDn="sys/chassis-3/blade-1/adaptor-2/ext-eth-7" ifRole="server" ifType="physical" locale="external" membership="down" name="" peerAggrPortId="0" peerChassisId="3" peerDn="sys/chassis-3/slot-2/host/port-4" peerPortId="4" peerSlotId="2" portId="7" rn="ep-slot-2-port-7" slotId="2" switchId="B" transport="" type="lan"/>
@@ -106,6 +111,8 @@
                 <swUlan assocPrimaryVlanState="0" assocPrimaryVlanSwitchId="NONE" childAction="deleteNonPresent" epDn="" id="4047" ifRole="unknown" ifType="unknown" locale="" name="" operState="ok" overlapStateForA="not-active" overlapStateForB="not-active" peerDn="" policyOwner="local" pubNwDn="" pubNwId="0" pubNwName="" purpose="boot" rn="vlan-boot" sharing="none" switchId="B" transport="" type="" vlanType="default"/>
             </dcxVc>
         </fabricPath>
+
+
         <fabricPath cType="mux-fabric" chassisId="3" childAction="deleteNonPresent" enacp="virtual" id="1" locale="chassis" name="" nsSize="118" retimerHifPortList="" rn="path-1" side="right" switchId="B" transport="ether" type="lan">
             <fabricPathEp aggrPortId="0" cType="mux-fabricport-to-hostpc" chassisId="3" childAction="deleteNonPresent" diagLldpTransmit="no" epDn="sys/chassis-3/slot-2/fabric/port-1" ifRole="network" ifType="physical" locale="chassis" name="" peerAggrPortId="0" peerChassisId="N/A" peerDn="sys/chassis-3/slot-2/host/pc-1280" peerMac="00:00:00:00:00:00" peerPortId="1280" peerSlotId="0" portGroupRole="none" portId="1" rn="ep-mux-fabricport-to-hostpc" side="right" slotId="2" switchId="B" transport="ether" type="lan"/>
             <fabricPathEp aggrPortId="0" cType="mux-hostpc-to-adaptorpc" chassisId="3" childAction="deleteNonPresent" diagLldpTransmit="no" epDn="sys/chassis-3/slot-2/host/pc-1280" ifRole="server" ifType="physical" locale="server" name="" peerAggrPortId="0" peerChassisId="N/A" peerDn="sys/chassis-3/blade-1/fabric-B/pc-1280" peerMac="00:00:00:00:00:00" peerPortId="1280" peerSlotId="1" portGroupRole="none" portId="1280" rn="ep-mux-hostpc-to-adaptorpc" side="right" slotId="2" switchId="B" transport="ether" type="lan"/>
@@ -117,6 +124,8 @@
             </dcxVc>
         </fabricPath>
     </fabricLocale>
+
+    
     <fabricLocale cType="mux-to-host" chassisId="3" childAction="deleteNonPresent" evacState="fill" locale="server" name="" rn="fabric-A" side="left" slotId="1" switchId="A" transport="ether" type="lan">
         <adaptorExtEthIfPc childAction="deleteNonPresent" epDn="" fltAggr="0" ifRole="server" ifType="aggregation" locale="external" mac="00:00:00:00:00:00" name="" operSpeed="20gbps" operState="indeterminate" peerDn="sys/chassis-3/slot-1/host/pc-1287" portId="1287" rn="pc-1287" stateQual="" switchId="A" transport="ether" type="lan">
             <adaptorExtEthIfPcEp aggrPortId="0" chassisId="N/A" childAction="deleteNonPresent" epDn="sys/chassis-3/blade-1/adaptor-2/ext-eth-3" ifRole="server" ifType="physical" locale="external" membership="down" name="" peerAggrPortId="0" peerChassisId="3" peerDn="sys/chassis-3/slot-1/host/port-4" peerPortId="4" peerSlotId="1" portId="3" rn="ep-slot-2-port-3" slotId="2" switchId="A" transport="" type="lan"/>
@@ -157,8 +166,7 @@
     
     
     <computeBoard childAction="deleteNonPresent" cmosVoltage="ok" cpuTypeDescription="unknown" faultQualifier="" id="0" locationDn="" model="UCSB-EX-M4-1" operPower="off" operQualifierReason="N/A" operState="not-supported" operability="not-supported" perf="ok" power="ok" powerUsage="ok" presence="not-supported" revision="0" rn="board" serial="SRV72" thermal="ok" vendor="Cisco Systems Inc" voltage="ok">
-        
-        
+              
         <storageController adminAction="unspecified" adminActionTrigger="idle" childAction="deleteNonPresent" configState="not-applied" controllerOps="" controllerStatus="optimal" defaultStripSize="" deviceRaidSupport="RAID0, RAID1, RAID5, RAID6, RAID10, RAID50, RAID60" diskOps="" faultMonitoring="notSupported" hwRevision="0" id="1" idCount="min" lc="allocated" locationDn="" mode="unknown" model="LSI 6G MegaRAID 9265-8i" onBoardMemoryPresent="no" onBoardMemorySize="unknown" oobControllerId="0" oobInterfaceSupported="yes" operQualifierReason="N/A" operState="unknown" operability="operable" opromBootStatus="enabled" partNumber="" pciAddr="01:00.0" pciSlot="SAS" pciSlotRawName="SLOT-SAS" perf="unknown" pinnedCacheStatus="unknown" power="unknown" presence="equipped" raidBatteryOps="" raidSupport="RAID0, RAID1, RAID5, RAID6, RAID10, RAID50, RAID60" rebuildRate="0" revision="0" rn="storage-SAS-1" serial="SRVCTLR115" subOemId="0" supportedStripSizes="" thermal="unknown" type="SAS" variantType="default" vendor="LSI Corp." vid="" virtualDriveOps="" voltage="unknown">
             
             <firmwareRunning childAction="deleteNonPresent" deployment="boot-loader" invTag="" packageVersion="" rn="fw-boot-loader" type="storage-controller" version="3.1(2b)"/>

@@ -1,903 +1,885 @@
 <script>
-    import vSelect from 'vue-select'
-
-    export default {
-
-        components: {
-            vSelect
-        },
-
-        data() {
-
-            return {
-
-                blades: [],
-
-                savedSearches: '',
-
-                tableData: {},
-                features: [],
-                coltypes: [],
-                modifiedFeatures: [],
-                rowCount: 0,
-                syncedVal: '',
-                chartLine: null,
-
-                deliveries: [{
-                    name: "Normal Levering",
-                    value: 0
-                }, {
-                    name: "Next-day",
-                    value: 1
-                }, {
-                    name: "Express Levering",
-                    value: 2
-                }],
-
-                form: new Form({
-
-                    target: '',
-
-                    features: '',
-
-                    portal: 0,
-
-                    channel: 0,
-
-                    delivery: 0,
-
-                    client: 0,
-
-                    category: 0,
-
-                }),
+import vSelect from 'vue-select';
 
 
-                api_response: [],
-                uploadedFile: '',
+export default {
 
-                departments: [],
+    components: {
 
-                predictions: [],
-                predicted: '',
+        vSelect,
+        Bar,
+        LineChart,
+    },
 
-                monthsBag: [],
-                interval: null,
+    data() {
 
-                forecasted: [{
-                    y: 12,
-                    x: '2017-01-02T00:00:00'
-                }, {
-                    y: 3,
-                    x: '2017-01-03T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-04T00:00:00'
-                }, {
-                    y: 18,
-                    x: '2017-01-05T00:00:00'
-                }, {
-                    y: 19,
-                    x: '2017-01-06T00:00:00'
-                }, {
-                    y: 13,
-                    x: '2017-01-07T00:00:00'
-                }, {
-                    y: 5,
-                    x: '2017-01-08T00:00:00'
-                }, {
-                    y: 23,
-                    x: '2017-01-09T00:00:00'
-                }, {
-                    y: 51,
-                    x: '2017-01-10T00:00:00'
-                }, {
-                    y: 5,
-                    x: '2017-01-11T00:00:00'
-                }, {
-                    y: 6,
-                    x: '2017-01-12T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-13T00:00:00'
-                }, {
-                    y: 12,
-                    x: '2017-01-14T00:00:00'
-                }, {
-                    y: 3,
-                    x: '2017-01-15T00:00:00'
-                }, {
-                    y: -24,
-                    x: '2017-01-16T00:00:00'
-                }, {
-                    y: 10,
-                    x: '2017-01-17T00:00:00'
-                }, {
-                    y: 9,
-                    x: '2017-01-18T00:00:00'
-                }, {
-                    y: 11,
-                    x: '2017-01-19T00:00:00'
-                }, {
-                    y: 12,
-                    x: '2017-01-20T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-21T00:00:00'
-                }, {
-                    y: 16,
-                    x: '2017-01-22T00:00:00'
-                }, {
-                    y: 12,
-                    x: '2017-01-23T00:00:00'
-                }, {
-                    y: 3,
-                    x: '2017-01-24T00:00:00'
-                }, {
-                    y: 12,
-                    x: '2017-01-25T00:00:00'
-                }, {
-                    y: 7,
-                    x: '2017-01-26T00:00:00'
-                }, {
-                    y: 12,
-                    x: '2017-01-27T00:00:00'
-                }, {
-                    y: 7,
-                    x: '2017-01-28T00:00:00'
-                }, {
-                    y: 9,
-                    x: '2017-01-29T00:00:00'
-                }, {
-                    y: 1,
-                    x: '2017-01-30T00:00:00'
-                }, {
-                    y: 10,
-                    x: '2017-01-31T00:00:00'
-                }, {
-                    y: 7,
-                    x: '2017-02-01T00:00:00'
-                }],
+        return {
 
-                dataActual: [{
-                    y: 5,
-                    x: '2017-01-02T00:00:00'
-                }, {
-                    y: 3,
-                    x: '2017-01-03T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-04T00:00:00'
-                }, {
-                    y: 18,
-                    x: '2017-01-05T00:00:00'
-                }, {
-                    y: 5,
-                    x: '2017-01-06T00:00:00'
-                }, {
-                    y: 30,
-                    x: '2017-01-07T00:00:00'
-                }, {
-                    y: 5,
-                    x: '2017-01-08T00:00:00'
-                }, {
-                    y: 23,
-                    x: '2017-01-09T00:00:00'
-                }, {
-                    y: 18,
-                    x: '2017-01-10T00:00:00'
-                }, {
-                    y: 5,
-                    x: '2017-01-11T00:00:00'
-                }, {
-                    y: 6,
-                    x: '2017-01-12T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-13T00:00:00'
-                }, {
-                    y: -12,
-                    x: '2017-01-14T00:00:00'
-                }, {
-                    y: 3,
-                    x: '2017-01-15T00:00:00'
-                }, {
-                    y: 24,
-                    x: '2017-01-16T00:00:00'
-                }, {
-                    y: 5,
-                    x: '2017-01-17T00:00:00'
-                }, {
-                    y: 9,
-                    x: '2017-01-18T00:00:00'
-                }, {
-                    y: 6,
-                    x: '2017-01-19T00:00:00'
-                }, {
-                    y: 12,
-                    x: '2017-01-20T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-21T00:00:00'
-                }, {
-                    y: 16,
-                    x: '2017-01-22T00:00:00'
-                }, {
-                    y: 24,
-                    x: '2017-01-23T00:00:00'
-                }, {
-                    y: 3,
-                    x: '2017-01-24T00:00:00'
-                }, {
-                    y: 12,
-                    x: '2017-01-25T00:00:00'
-                }, {
-                    y: 7,
-                    x: '2017-01-26T00:00:00'
-                }, {
-                    y: -10,
-                    x: '2017-01-27T00:00:00'
-                }, {
-                    y: 7,
-                    x: '2017-01-28T00:00:00'
-                }, {
-                    y: 12,
-                    x: '2017-01-29T00:00:00'
-                }, {
-                    y: 1,
-                    x: '2017-01-30T00:00:00'
-                }, {
-                    y: 10,
-                    x: '2017-01-31T00:00:00'
-                }, {
-                    y: 7,
-                    x: '2017-02-01T00:00:00'
-                }],
+          
+            gauges: [],
+            barData: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                datasets: [{
+                    label: 'Test Data Hafiz',
+                    backgroundColor: '#ff8040',
 
-                predictdedForecast: [{
-                    y: 5,
-                    x: '2017-01-02T00:00:00'
-                }, {
-                    y: 6,
-                    x: '2017-01-03T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-04T00:00:00'
-                }, {
-                    y: 9,
-                    x: '2017-01-05T00:00:00'
-                }, {
-                    y: 19,
-                    x: '2017-01-06T00:00:00'
-                }, {
-                    y: 50,
-                    x: '2017-01-07T00:00:00'
-                }, {
-                    y: 5,
-                    x: '2017-01-08T00:00:00'
-                }, {
-                    y: 10,
-                    x: '2017-01-09T00:00:00'
-                }, {
-                    y: 18,
-                    x: '2017-01-10T00:00:00'
-                }, {
-                    y: 5,
-                    x: '2017-01-11T00:00:00'
-                }, {
-                    y: 6,
-                    x: '2017-01-12T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-13T00:00:00'
-                }, {
-                    y: 43,
-                    x: '2017-01-14T00:00:00'
-                }, {
-                    y: 3,
-                    x: '2017-01-15T00:00:00'
-                }, {
-                    y: 24,
-                    x: '2017-01-16T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-17T00:00:00'
-                }, {
-                    y: 9,
-                    x: '2017-01-18T00:00:00'
-                }, {
-                    y: 11,
-                    x: '2017-01-19T00:00:00'
-                }, {
-                    y: 10,
-                    x: '2017-01-20T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-21T00:00:00'
-                }, {
-                    y: 2,
-                    x: '2017-01-22T00:00:00'
-                }, {
-                    y: 24,
-                    x: '2017-01-23T00:00:00'
-                }, {
-                    y: 3,
-                    x: '2017-01-24T00:00:00'
-                }, {
-                    y: 13,
-                    x: '2017-01-25T00:00:00'
-                }, {
-                    y: 7,
-                    x: '2017-01-26T00:00:00'
-                }, {
-                    y: 10,
-                    x: '2017-01-27T00:00:00'
-                }, {
-                    y: 7,
-                    x: '2017-01-28T00:00:00'
-                }, {
-                    y: 6,
-                    x: '2017-01-29T00:00:00'
-                }, {
-                    y: 1,
-                    x: '2017-01-30T00:00:00'
-                }, {
-                    y: 9,
-                    x: '2017-01-31T00:00:00'
-                }, {
-                    y: 10,
-                    x: '2017-02-01T00:00:00'
-                }],
-                opt: {
-                    scales: {
-                        xAxes: [{
-                            type: 'time',
-                            position: 'bottom'
-                        }]
-                    }
-                }
+                    color: '#ffffff',
 
+                    data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+                }]
+            },
+
+            barData2: {
+
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+
+                datasets: [{
+
+                    label: 'Test Data 2',
+
+                    backgroundColor: '#ff0000',
+
+                    color: '#ffffff',
+
+                    fillColor: "rgba(220,220,220,0.5)",
+
+                    strokeColor: "rgba(220,220,220,0.8)",
+
+                    highlightFill: "rgba(220,220,220,0.75)",
+
+                    highlightStroke: "rgba(220,220,220,1)",
+
+                    borderColor: "#14B214",
+
+                    data: [100, 60, 12, 100, 10, 40, 1, 80, 2, 20, 12, 11]
+
+                }]
+
+            },
+
+            datacollection: null,
+
+            chassis: [],
+
+            blades: [],
+            faults: [],
+
+            savedSearches: '',
+
+            tableData: {},
+            features: [],
+            coltypes: [],
+            modifiedFeatures: [],
+            rowCount: 0,
+            syncedVal: '',
+            chartLine: null,
+
+
+            form: new Form({
+
+                target: '',
+
+                features: '',
+
+                portal: 0,
+
+                channel: 0,
+
+                delivery: 0,
+
+                client: 0,
+
+                category: 0,
+
+            }),
+
+
+            api_response: [],
+            uploadedFile: '',
+
+            departments: [],
+
+            predictions: [],
+            predicted: '',
+
+            monthsBag: [],
+            interval: null,
+
+        }
+    },
+
+    mounted() {
+
+        this.$nextTick(function () {
+
+            this.initialize();
+
+            this.fillData();
+            this.getBlades();
+            this.getChassis();
+            this.getBladeFaults();
+            var ctx = $("#myChart");
+
+            // this.plotChart(ctx);
+            // setInterval(function() {
+            //     let a = Math.floor((Math.random() * 50) + 1)
+            //     let i = Moment().format()
+            //     console.log(i)
+            //         // add(Math.floor((Math.random() * 6) + 1), 'days').
+            //     // this.forecasted = _.drop(this.forecasted, 1)
+            //     this.forecasted.push({
+            //         y: a,
+            //         x: i
+            //     })
+            //     this.plotChart(ctx)
+            //     // this.chartLine.update()
+            // }.bind(this), 3000);
+            // this.getSavedSearches();
+            // axios.get('api/departments')
+            // .then(response => {
+            // 	this.departments = JSON.parse(response.data)
+            // })
+        });
+
+    },
+
+    methods: {
+
+        fillData() {
+            this.datacollection = {
+                labels: [this.getRandomInt(), this.getRandomInt()],
+                datasets: [{
+                    label: 'Data One',
+                    backgroundColor: '#f87979',
+                    data: [this.getRandomInt(), this.getRandomInt()]
+                }, {
+                    label: 'Data One',
+                    backgroundColor: '#f87979',
+                    data: [this.getRandomInt(), this.getRandomInt()]
+                }]
             }
         },
+        getRandomInt() {
+            return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+        },
 
-        mounted() {
+        getChassis() {
+            axios.get('/api/get_chassis')
+                .then(response => {
+                    console.log(JSON.parse(response.data))
+                    this.chassis = []
+                    this.chassis = JSON.parse(response.data)
+                })
+                .catch(errors => { })
+        },
 
-            this.$nextTick(function() {
+        getBlades() {
+            axios.get('/api/get_blades')
+                .then(response => {
+                    this.blades = []
+                    this.blades = JSON.parse(response.data)
 
-                this.getBlades();
+                    console.log(this.blades)
+                })
+                .catch(errors => { })
+        },
 
-                var ctx = $("#myChart");
+        getBladeFaults() {
+            let chs = 'chassis-3'
+            let bld = 'blade-1'
+            axios.get(`/api/get_bladefaults/${chs}/${bld}`)
+                .then(response => {
+                    this.faults = []
+                    this.faults = JSON.parse(response.data)
+                })
+                .catch(errors => { })
+        },
 
-                // this.plotChart(ctx);
+        getSavedSearches() {
 
+            axios.post('api/getSavedSearches')
+                .then(response => {
 
-                // setInterval(function() {
+                    this.savedSearches = response.data
+                    console.log(response.data)
 
-                //     let a = Math.floor((Math.random() * 50) + 1)
+                    //this.onSuccess(response);
 
-                //     let i = Moment().format()
-                //     console.log(i)
-                //         // add(Math.floor((Math.random() * 6) + 1), 'days').
+                })
+                .catch(errors => { })
+        },
 
-                //     // this.forecasted = _.drop(this.forecasted, 1)				
+        onSubmit() {
+            // this.chartLine.update()
+            // console.log(this.form)
 
+            // axios.get('/api/departments/add', this.form)
+            // .then( response => {	
 
-                //     this.forecasted.push({
-                //         y: a,
-                //         x: i
-                //     })
+            // 	this.onSuccess(response.data);
 
-                //     this.plotChart(ctx)
+            // })
+            // .catch(response => {				
 
-                //     // this.chartLine.update()
-
-                // }.bind(this), 3000);
-
-
-                // this.getSavedSearches();
-
-                // axios.get('api/departments')
-                // .then(response => {
-
-                // 	this.departments = JSON.parse(response.data)
-                // })
-            });
+            // });			
 
         },
 
-        methods: {
+        makePrediction() {
+            // console.log(this.form)				
 
-            plotChart(ctx) {
+            // axios.get('api/predictOplage', this.form)
+            // .then(response => {
 
-                this.forecasted = _.drop(this.forecasted, 1)
-                this.dataActual = _.drop(this.dataActual, 1)
-                this.predictdedForecast = _.drop(this.predictdedForecast, 1)
+            // 	this.onSuccess(response);
 
-                let chartLine = new Chartjs(ctx, {
-                    type: 'line',
-                    data: {
-                        datasets: [{
-                            label: "Forecasted",
-                            fillColor: "rgba(220,220,220,0.5)",
-                            strokeColor: "rgba(220,220,220,0.8)",
-                            highlightFill: "rgba(220,220,220,0.75)",
-                            highlightStroke: "rgba(220,220,220,1)",
-                            borderColor: "#43ABFB",
+            // })
+            // .catch(errors => {})
+        },
 
-                            data: this.forecasted
-                        }, {
-                            label: "Actual",
-                            fillColor: "rgba(220,220,220,0.5)",
-                            strokeColor: "rgba(220,220,220,0.8)",
-                            highlightFill: "rgba(220,220,220,0.75)",
-                            highlightStroke: "rgba(220,220,220,1)",
-                            borderColor: "#14B214",
-                            data: this.dataActual
-                        }, {
-                            label: "Baseline",
-                            fillColor: "rgba(151,187,205,0.5)",
-                            strokeColor: "rgba(151,187,205,0.8)",
-                            highlightFill: "rgba(151,187,205,0.75)",
-                            highlightStroke: "rgba(151,187,205,1)",
-                            // backgroundColor: "red",
-                            borderColor: "#FF3535",
-                            data: this.predictdedForecast
-                        }],
+        onSuccess(response) {
 
-                    },
-                    options: this.opt
+            // if(!_.isEmpty(response.error))
+            // {
 
-                });
+            // 	this.form.errors.record(response.error)
 
-            },
-
-            createFeatures(val) {
-                this.modifiedFeatures = _.reject(this.features, function(f) {
-                    return f == val
-                })
-                this.form.features = _.reject(this.form.features, function(f) {
-                    return f == val
-                })
-            },
-
-            createFeatureTypes() {
-
-                for (let i = 0; i < this.features.length; i++) {
-                    let x = this.tableData[i][i]
-                    console.log(x)
-                    this.coltypes.push({
-                        'feature': this.features[i],
-                        'type': x
-                    })
-                }
-
-            },
+            // }
+            // else{
 
 
-            getBlades() {
-                axios.get('/api/get_blades')
-                    .then(response => {
+            // 	this.form.reset()
+            // 	this.form.errors.clear()				
 
-                        this.blades = []
-                        this.blades = JSON.parse(response.data)
+            // 	this.predicted = response.data					
+            // }
+        },
 
-                    })
-                    .catch(errors => {})
-            },
+        onFileChange(e) {
 
-            getSavedSearches() {
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length)
+                return;
+            this.createCSV(files);
+        },
 
-                axios.post('api/getSavedSearches')
-                    .then(response => {
+        createImage(file) {
+            var image = new Image();
+            var reader = new FileReader();
+            var vm = this;
 
-                        this.savedSearches = response.data
-                        console.log(response.data)
+            reader.onload = (e) => {
+                vm.uploadedFile = e.target.result;
+            };
+            reader.readAsDataURL(file);
 
-                        //this.onSuccess(response);
-
-                    })
-                    .catch(errors => {})
-            },
-
-            onSubmit() {
-                // this.chartLine.update()
-                // console.log(this.form)
-
-                // axios.get('/api/departments/add', this.form)
-                // .then( response => {	
-
-                // 	this.onSuccess(response.data);
-
-                // })
-                // .catch(response => {				
-
-                // });			
-
-            },
-
-            makePrediction() {
-                // console.log(this.form)				
-
-                // axios.get('api/predictOplage', this.form)
-                // .then(response => {
-
-                // 	this.onSuccess(response);
-
-                // })
-                // .catch(errors => {})
-            },
+            console.log()
+        },
 
 
-            onSuccess(response) {
+        createCSV(files) {
 
-                // if(!_.isEmpty(response.error))
-                // {
+            this.features = [];
+            this.coltypes = [];
+            this.modifiedFeatures = [];
+            this.form.features = '';
+            this.form.target = '';
+            this.target = '';
 
-                // 	this.form.errors.record(response.error)
+            let vm = this;
 
-                // }
-                // else{
+            Papa.parse(files[0], {
 
+                // header: true,
+                dynamicTyping: true,
 
-                // 	this.form.reset()
-                // 	this.form.errors.clear()				
+                complete: function (results) {
+                    vm.tableData = _.drop(results.data, 1)
 
-                // 	this.predicted = response.data					
-                // }
-            },
-
-            onFileChange(e) {
-
-                var files = e.target.files || e.dataTransfer.files;
-                if (!files.length)
-                    return;
-                this.createCSV(files);
-
-
-
-                // let fd = new FormData($('#photo')[0])				
-
-                // this.$http.post('api/sendForm', fd)
-                // .then(response => {
-                // 	console.log(response.data.result)
-                // 	this.api_response = response.data.result					
-                // })
-
-                // var files = e.target.files || e.dataTransfer.files;
-                // if (!files.length)
-                // 	return;
-                // this.createImage(files[0]);
-
-
-            },
-
-            createImage(file) {
-                var image = new Image();
-                var reader = new FileReader();
-                var vm = this;
-
-                reader.onload = (e) => {
-                    vm.uploadedFile = e.target.result;
-                };
-                reader.readAsDataURL(file);
-
-                console.log()
-            },
-
-
-            createCSV(files) {
-
-                this.features = [];
-                this.coltypes = [];
-                this.modifiedFeatures = [];
-                this.form.features = '';
-                this.form.target = '';
-                this.target = '';
-
-                let vm = this;
-
-                Papa.parse(files[0], {
-
-                    // header: true,
-                    dynamicTyping: true,
-
-                    complete: function(results) {
-                        vm.tableData = _.drop(results.data, 1)
-
-                        if (typeof results.data[0][0] == 'number') {
-                            for (let i = 0; i < results.data[0].length; i++) {
-                                let row = i + 1
-                                vm.features.push('Row ' + row)
-                            }
-
-                            vm.createFeatureTypes()
-
-                        } else {
-
-                            vm.features = results.data[0]
-                            vm.createFeatureTypes()
-
+                    if (typeof results.data[0][0] == 'number') {
+                        for (let i = 0; i < results.data[0].length; i++) {
+                            let row = i + 1
+                            vm.features.push('Row ' + row)
                         }
 
+                        vm.createFeatureTypes()
+
+                    } else {
+
+                        vm.features = results.data[0]
+                        vm.createFeatureTypes()
+
+                    }
 
 
-                        // console.log(typeof results.data[0][0])
 
-                        // vm.uploading = False;									
-                    },
+                    // console.log(typeof results.data[0][0])
 
-                    // step: function(results, parser) {
+                    // vm.uploading = False;									
+                },
 
-                    // 	vm.rowCount += 1					
+                // step: function(results, parser) {
 
-                    // 	console.log("Row data:", results.data);
-                    // 	// console.log("Row errors:", results.errors);
-                    // }
-                })
+                // 	vm.rowCount += 1					
 
-                // var extension = filename.replace(/^.*\./, '');
+                // 	console.log("Row data:", results.data);
+                // 	// console.log("Row errors:", results.errors);
+                // }
+            })
 
-                //        // Iff there is no dot anywhere in filename, we would have extension == filename,
-                //        // so we account for this possibility now
-                //        if (extension == filename) {
-                //        	extension = '';
-                //        } else {
-                //            // if there is an extension, we convert to lower case
-                //            // (N.B. this conversion will not effect the value of the extension
-                //            // on the file upload.)
-                //            extension = extension.toLowerCase();
-                //        }		
+            // var extension = filename.replace(/^.*\./, '');
+
+            //        // Iff there is no dot anywhere in filename, we would have extension == filename,
+            //        // so we account for this possibility now
+            //        if (extension == filename) {
+            //        	extension = '';
+            //        } else {
+            //            // if there is an extension, we convert to lower case
+            //            // (N.B. this conversion will not effect the value of the extension
+            //            // on the file upload.)
+            //            extension = extension.toLowerCase();
+            //        }		
 
 
-            },
+        },
 
-            removeImage: function(e) {
-                this.uploadedFile = '';
-            },
+        removeImage: function (e) {
+            this.uploadedFile = '';
+        },
 
-            sortAsc(items) {
-                return _.sortBy(items, [(i) => {
-                    return i.name;
-                }]);
-            },
+        sortAsc(items) {
+            return _.sortBy(items, [(i) => {
+                return i.name;
+            }]);
+        },
 
-            setSearch() {
-                alert('b')
+        setSearch() {
+            alert('b')
+        },
+
+        createGauge(name, label, min, max) {
+            var config =
+                {
+                    size: 150,
+                    label: label,
+                    min: undefined != min ? min : 0,
+                    max: undefined != max ? max : 100,
+                    minorTicks: 5
+                }
+
+            var range = config.max - config.min;
+            config.yellowZones = [{ from: config.min + range * 0.75, to: config.min + range * 0.9 }];
+            config.redZones = [{ from: config.min + range * 0.9, to: config.max }];
+
+            this.gauges[name] = new Gauge(name + "GaugeContainer", config);
+            this.gauges[name].render();
+        },
+
+        createGauges() {
+            this.createGauge("memory", "Memory");
+            this.createGauge("cpu", "CPU");
+            // this.createGauge("network", "Network");
+            this.createGauge("test", "Test", 1254, 3200);
+        },
+
+        updateGauges() {
+            for (var key in this.gauges) {
+                var value = this.getRandomValue(this.gauges[key])
+                this.gauges[key].redraw(value);
             }
         },
 
-        computed: {
-
+        getRandomValue(gauge) {
+            var overflow = 0; //10;
+            return gauge.config.min - overflow + (gauge.config.max - gauge.config.min + overflow * 2) * Math.random();
         },
 
-        beforeDestroy: function() {
-            clearInterval(this.interval);
+        initialize() {
+            this.createGauges();
+            setInterval(this.updateGauges, 5000);
         }
 
+    },
 
+
+    beforeDestroy: function () {
+        clearInterval(this.interval);
     }
+
+}
 </script>
 
 
 <template>
-
-
     <div class="main">
-        {{ blades[0] }}
-
-        <div class="container-fluid">
-            <div class="row">
-
-                <div class="col-md-4">
-                    <div class="widget">
-
-                        <div class="title">Campaign Prediction</div>
-
-                        <div class="chart">
-
-                            <div id="csvtable"></div>
-
-
-                            <form class="bs-customizer" role="form" method="POST" @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
-
-                                <fieldset>
-                                    <div class="row">
-
-
-                                        <div class="col-md-6">
-                                            <span class="label-success">{{ rowCount }}</span>
-
-
-                                            <div class="form-group">
-                                                <label for="uploadCsv" class="col-md-2 control-label">File</label>
-
-                                                <div class="col-md-10">
-                                                    <input type="text" readonly="" class="form-control" placeholder="Browse...">
-                                                    <input type="file" id="uploadCsv" multiple="False" @change="onFileChange">
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-
-                                    <div class="row">
-
-
-                                        <div class="col-md-4">
-
-                                            <div class="form-group">
-                                                <label for="search" class="col-md-12 control-label">Target</label>
-
-                                                <v-select :on-change="createFeatures" v-model="form.target" :options="features"></v-select>
-
-
-                                                <span class="help is-danger" v-if="form.errors.has('search')" v-text="form.errors.get('search')"></span>
-
-                                            </div>
-
-                                        </div>
-
-
-                                        <div class="col-md-6">
-                                            <div class="form-group" v-if='modifiedFeatures.length > 0'>
-                                                <label for="search" class="col-md-12 control-label">Saved Searches</label>
-
-                                                <v-select multiple v-model="form.features" :options="modifiedFeatures" transition='expand'></v-select>
-
-                                                <span class="help is-danger" v-if="form.errors.has('search')" v-text="form.errors.get('search')"></span>
-
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <table class="table table-bordered table-hover">
-                                            <tr>
-                                                <th v-for="head in coltypes">
-                                                    {{ head.feature }} {{ typeof head.type}}
-                                                </th>
-                                            </tr>
-
-                                        </table>
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        {{tableData }}
-                                        <div class="col-md-8 col-md-offset-4">
-                                            <button type="button" class="btn btn-default btn-xs">Reset</button>
-                                            <button type="submit" class="btn btn-primary btn-xs">Predict</button>
-                                        </div>
-                                    </div>
-
-                                </fieldset>
-                            </form>
-
-                        </div>
-
-                    </div>
-                </div>
-            
-            
-                <div class="col-md-4">
-                    <div class="widget">
-                        <div class="title">Departments Table</div>
-
-                        <div class="chart">
-
-                            <canvas id="myChart" width="400" height="200"></canvas>
-
-
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th width="15%"> Name </th>
-                                        <th width="40%"> Description </th>
-                                        <th width="15%"> Employee Count </th>
-                                        <th width="15%"> Edit </th>
-                                        <th width="15%"> Delete </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <tr v-for="blade in blades">
-                                        <td>
-                                            {{ blade.name}}
-                                        </td>
-
-                                        <td>
-                                            {{ blade.rn}}
-                                        </td>
-
-                                        <td>
-                                            {{ blade.name}}
-                                        </td>
-
-                                        <td>
-                                            {{ blade.dn }}
-                                        </td>
-
-                                        <td>
-                                            <a href="#">
-                                                <i class="fa fa-pencil"></i> Edit
-                                            </a>
-                                        </td>
-
-                                        <td>
-                                            <a href="#">
-                                                <i class="fa fa-trash"></i> Delete
-                                            </a>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-                </div>
+    
+        <div class="widget">
+    
+            <div class="title">Chassis List</div>
+    
+            <div class="chart">
+    
+                {{blades[0]}} <p>------------------</p> 
+                      
+    
+                <span id="memoryGaugeContainer"></span>
+                <span id="cpuGaugeContainer"></span>
+                <span id="networkGaugeContainer"></span>
+                <span id="testGaugeContainer"></span>
+    
+                <line-chart :chart-data="datacollection"
+                            :width="250"
+                            :height="150"></line-chart>
+    
+                <button @click="fillData()">Randomize</button>
+    
+                <table class="table table-striped table-bordered">
+    
+                    <thead>
+    
+                        <tr>
+    
+                            <th width="15%"> Id </th>
+    
+                            <th width="15%"> Dn </th>
+    
+                            <th width="15%"> Part # </th>
+    
+                            <th width="15%"> Operability </th>
+    
+                            <th width="15%"> Serial </th>
+    
+                        </tr>
+    
+                    </thead>
+    
+                    <tbody>
+    
+                        <tr v-for="chass in chassis">
+    
+                            <td>
+    
+                                <a href="#">
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    {{ chass.id}}
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    </a>
+    
+                            </td>
+    
+                            <td>
+    
+                                <a href="#">
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    {{ chass.dn}}
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                
+                                                                                                    
+                                                
+                                                        
+                                                
+                                                            
+                                                
+                                                        
+                                                </a>
+    
+                            </td>
+    
+                            <td>
+    
+                                {{ chass.part_number }}
+    
+                            </td>
+    
+                            <td>
+    
+                                {{ chass.operability }}
+    
+                            </td>
+    
+                            <td>
+    
+                                {{ chass.serial }}
+    
+                            </td>
+    
+                        </tr>
+    
+                    </tbody>
+    
+                </table>
+    
             </div>
-        
-            <div class="widget">
-                <div class="title">Departments Table</div>
-                
-
-                <div class="chart">
-
-                    <canvas id="myChart" width="400" height="200"></canvas>
-
-
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th width="15%"> Dn </th>
-                                <th width="40%"> Serial </th>                                
-                                <th width="15%"> Operability </th>
-                                <th width="15%"> Model </th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                            <tr v-for="blade in blades">
-                                <td>
-                                    <a href="#">
-                                        <i class="fa fa-pencil"></i> {{ blade.dn}}
-                                    </a>
-                                    
-                                </td>
-
-                                <td>
-                                    {{ blade.serial}}
-                                </td>                           
-
-                                <td>
-                                    {{ blade.operability }}
-                                </td>
-                                <td>
-                                    {{ blade.model }}
-                                </td>
-                               
-                            </tr>
-
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-
+    
         </div>
-
-
+    
+        <div class="widget">
+    
+            <div class="title">Chassis List</div>
+    
+            <div class="chart"
+                 style="background: #004080;">
+    
+                <bar :data="barData"
+                     :options="{responsive: false, maintainAspectRatio: false}"
+                     :width="400"
+                     :height="200">
+    
+                </bar>
+    
+            </div>
+    
+            <div class="chart">
+    
+                <bar :data="barData2"
+                     :options="{responsive: false, maintainAspectRatio: false}"
+                     :width="400"
+                     :height="200">
+    
+                </bar>
+    
+            </div>
+    
+        </div>
+    
+        <div class="widget"
+             v-if="blades">
+    
+            <div class="title">Blade List</div>
+    
+            <div class="chart">
+    
+                <canvas id="myChart"
+                        width="400"
+                        height="200"></canvas>
+    
+                <table class="table table-striped table-bordered">
+    
+                    <thead>
+    
+                        <tr>
+    
+                            <th width="15%"> Dn </th>
+    
+                            <th width="15%"> Serial </th>
+    
+                            <th width="15%"> Operability </th>
+    
+                            <th width="15%"> Model </th>
+    
+                        </tr>
+    
+                    </thead>
+    
+                    <tbody>
+    
+                        <tr v-for="blade in blades">
+    
+                            <td>
+    
+                                <a href="#">
+    
+                                    <i class="fa fa-pencil"></i> {{ blade.dn}}
+    
+                                </a>
+    
+                            </td>
+    
+                            <td>
+    
+                                {{ blade.serial}}
+    
+                            </td>
+    
+                            <td>
+    
+                                {{ blade.operability }}
+    
+                            </td>
+    
+                            <td>
+    
+                                {{ blade.model }}
+    
+                            </td>
+    
+                        </tr>
+    
+                    </tbody>
+    
+                </table>
+    
+                <ul class="list-group"
+                    v-for="fault in faults">
+    
+                    <li class="list-group-item">{{fault.code}}</li>
+    
+                    <li class="list-group-item">{{fault.cause}}</li>
+    
+                    <li class="list-group-item">{{fault.created}}</li>
+    
+                    <li class="list-group-item">{{fault.desc}}</li>
+    
+                    <li class="list-group-item">{{fault.severity}}</li>
+    
+                    <li class="list-group-item">{{fault.rule}}</li>
+    
+                    <li class="list-group-item">{{fault.status}}</li>
+    
+                    <li class="list-group-item">{{fault.type}}</li>
+    
+                </ul>
+    
+            </div>
+    
+        </div>
+    
     </div>
-
-
 </template>
 
-<style>
+<style lang="sass">
 
+.small {
+max-width: 150;
+margin:  150px auto;
+}
 </style>

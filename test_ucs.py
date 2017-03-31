@@ -10,12 +10,11 @@ from ucsmsdk.mometa.equipment import EquipmentChassisStats
 import json
 
 # Connection
-handle = UcsHandle("192.168.202.144", "ucspe", "ucspe")
+handle = UcsHandle("192.168.202.156", "ucspe", "ucspe")
 
-handle.logout()
+# handle.logout()
 #Login
-# handle.login()
-
+handle.login()
 
 # ucs_gui_launch(handle)
 
@@ -37,31 +36,41 @@ handle.logout()
 fault = handle.query_dn("sys/switch-A/fault-F1465")
 event = handle.query_dn("sys/switch-A")
 
-
-chassis = handle.query_classid(class_id="EquipmentChassisStats")
-
+flt = '(dn, "org-root/ls-FirstVMEver.*")'
+chassis = handle.query_classid(class_id="FaultAckFaultsMeta")
 print(chassis)
+for c in chassis:
+    print(c)
 
-# chasses = []
+# for c in chassis:
+#     print(c)
 
-# for chas in chassis:    
-#     x = dict(chas.__dict__)
-#     # print(x['config_state'])
-#     chasses.append(x)
+chasses = []
 
-#     # print(s)
 
-#     # i = {
-#     #     "dn": chas.dn,
-#     #     ""
-#     # }
+compute_blade = handle.query_classid(class_id="computeBlade")
+# for blade in compute_blade:
+        # print(blade)
 
-# print([0])
+
+for chas in chassis:    
+    x = dict(chas.__dict__)
+    # print(x['config_state'])
+    chasses.append(json.dumps(str(x)))
+
+    # print(s)
+
+    # i = {
+    #     "dn": chas.dn,
+    #     ""
+    # }
+
+# print(chasses[0])
 
 compute_blade = handle.query_classid(class_id="computeBlade")
 x = []
 for blade in compute_blade:  
-    # print(blade)  
+    
     i = {      
             "admin_power": blade.admin_power,
             "admin_state": blade.admin_state,
@@ -111,11 +120,38 @@ for blade in compute_blade:
 # print(event)
 
 # flt_str = '(dn, "sys/chassis-3/blade-1") and (severity, "minor")'
-flt_str = '(dn, "sys/chassis-3/blade-1")'
+flt_str = '(dn, "sys/chassis-6/blade-1/.*")'
 
-fs = handle.query_classid(class_id="faultInst", filter_str=flt_str)
+# fs = handle.query_classid(class_id="faultInst", filter_str=flt_str)
 e = handle.query_classid(class_id="processorEnvStats", filter_str=flt_str)
-# f = handle.query_classid(class_id="faultInst", filter_str=flt_str)
+# for i in e:
+#     print(i)
+
+
+# envs = []
+# for stat in e:    
+#     x = {
+#         "dn" : stat.dn,
+#         "input_current": stat.input_current,
+#         "input_current_avg": stat.input_current_avg,
+#         "input_current_max": stat.input_current_max,
+#         "input_current_min": stat.input_current_min,
+#         "intervals": stat.intervals,
+#         "rn": stat.rn,
+#         "status": stat.status,
+#         "suspect": stat.suspect,
+#         "temperature": stat.temperature,
+#         "temperature_avg": stat.temperature_avg,
+#         "temperature_max": stat.temperature_max,
+#         "temperature_min": stat.temperature_min,
+#         "thresholded": stat.thresholded,
+#         "time_collected": stat.time_collected,
+#         "update": stat.update
+#         }
+#     envs.append(x)
+# print(envs[0])
+# f = handle.q
+# uery_classid(class_id="faultInst", filter_str=flt_str)
 
 
 # for i, fl in enumerate(e):
@@ -130,6 +166,8 @@ e = handle.query_classid(class_id="processorEnvStats", filter_str=flt_str)
 # for b in x[0].faultInst:
 #     print(b)
 
+
+# blade = handle.query_dn('sys/chassis-3/blade-1')
 
 
 

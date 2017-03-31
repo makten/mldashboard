@@ -1,1 +1,20 @@
- <faultInst ack="no" cause="equipment-degraded" changeSet="" childAction="deleteNonPresent" code="F0184" created="2017-03-27T15:24:28.724" descr="DIMM  on server 6/1 operability: degraded" dn="sys/chassis-6/blade-1/board/memarray-1/mem-4/fault-F0184" highestSeverity="minor" id="59235" lastTransition="2017-03-27T15:25:32.578" lc="" occur="1" origSeverity="minor" prevSeverity="minor" rule="memory-unit-degraded" severity="cleared" tags="server" type="equipment"/> 
+ 
+<faultInst 
+ack="no" 
+cause="equipment-degraded" 
+changeSet="" 
+childAction="deleteNonPresent" 
+code="F0184" 
+created="2017-03-27T15:24:28.724" 
+descr="DIMM  on server 6/1 operability: degraded" 
+dn="sys/chassis-6/blade-1/board/memarray-1/mem-4/fault-F0184" 
+highestSeverity="minor" 
+id="59235" 
+lastTransition="2017-03-27T15:25:32.578" 
+lc="" 
+occur="1" origSeverity="minor" 
+prevSeverity="minor" 
+rule="memory-unit-degraded" 
+severity="cleared" 
+tags="server" 
+type="equipment"/> 

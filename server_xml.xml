@@ -325,4 +325,5 @@
         <computeRackUnitFsmStage childAction="deleteNonPresent" descr="Waiting for system reset on server 1(FSM-STAGE:sam:dme:ComputeRackUnitDiscover:BootWait)" lastUpdateTime="2017-03-27T15:25:37.135" name="DiscoverBootWait" order="30" retry="0" rn="stage-DiscoverBootWait" stageStatus="success"/>
         <computeRackUnitFsmStage childAction="deleteNonPresent" descr="Checking hardware configuration server 1(FSM-STAGE:sam:dme:ComputeRackUnitDiscover:Sanitize)" lastUpdateTime="2017-03-27T15:25:12.456" name="DiscoverSanitize" order="9" retry="1" rn="stage-DiscoverSanitize" stageStatus="success"/>
     </computeRackUnitFsm>
-</computeRackUnit> 
+</computeRackUnit>
+ 

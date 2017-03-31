@@ -45,6 +45,7 @@
     "bootstrap": "^3.3.5",
     "bootstrap-sass": "^3.3.7",
     "chart.js": "^2.5.0",
+    "d3": "^4.7.4",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-concat": "^2.6.1",
@@ -54,6 +55,8 @@
     "lodash": "^4.17.4",
     "selectize": "^0.12.4",
     "vue": "^2.1.8",
+    "vue-chartjs": "^2.5.6",
+    "vue-highcharts": "0.0.9",
     "vue-resource": "^1.0.3",
     "vueify": "^9.4.0"
   }
