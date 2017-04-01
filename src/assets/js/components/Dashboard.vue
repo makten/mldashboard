@@ -15,7 +15,7 @@ export default {
 
         return {
 
-          
+
             gauges: [],
             barData: {
                 labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
@@ -62,6 +62,7 @@ export default {
             chassis: [],
 
             blades: [],
+            blade_cpustats: [],
             faults: [],
 
             savedSearches: '',
@@ -184,13 +185,28 @@ export default {
                 .catch(errors => { })
         },
 
+        loadStats(cpustats) {
+
+           let len = cpustats.length;
+
+            _.each(cpustats, (val, key) => {
+                console.log(val, key)
+            })
+
+            this.blade_cpustats = cpustats;
+
+
+
+        },
+
         getBladeFaults() {
             let chs = 'chassis-3'
             let bld = 'blade-1'
             axios.get(`/api/get_bladefaults/${chs}/${bld}`)
                 .then(response => {
-                    this.faults = []
-                    this.faults = JSON.parse(response.data)
+                    this.faults = [];
+                    this.faults = JSON.parse(response.data);
+                    console.log(this.faults);
                 })
                 .catch(errors => { })
         },
@@ -419,9 +435,6 @@ export default {
     
             <div class="chart">
     
-                {{blades[0]}} <p>------------------</p> 
-                      
-    
                 <span id="memoryGaugeContainer"></span>
                 <span id="cpuGaugeContainer"></span>
                 <span id="networkGaugeContainer"></span>
@@ -459,268 +472,7 @@ export default {
     
                             <td>
     
-                                <a href="#">
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    {{ chass.id}}
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    </a>
-    
-                            </td>
-    
-                            <td>
-    
-                                <a href="#">
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    {{ chass.dn}}
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                
-                                                                                                    
-                                                
-                                                        
-                                                
-                                                            
-                                                
-                                                        
-                                                </a>
+                                <a href="#"> </a>
     
                             </td>
     
@@ -781,12 +533,21 @@ export default {
     
         </div>
     
-        <div class="widget"
-             v-if="blades">
+        <div class="widget">
     
             <div class="title">Blade List</div>
     
             <div class="chart">
+    
+                <div v-if="blade_cpustats.length >= 1">
+                    <ul class="list-group"
+                        v-for="stats in blade_cpustats">
+                        <li class="list-group-item">
+                            {{ stats.dn }}
+                        </li>
+                    </ul>
+    
+                </div>
     
                 <canvas id="myChart"
                         width="400"
@@ -798,13 +559,15 @@ export default {
     
                         <tr>
     
-                            <th width="15%"> Dn </th>
+                            <th width="60%"> Dn </th>
     
                             <th width="15%"> Serial </th>
     
                             <th width="15%"> Operability </th>
     
-                            <th width="15%"> Model </th>
+                            <th width="60%"> Model </th>
+                            <th width="15%"> CPU's </th>
+                            <th width="5%"> CPU_Stats </th>
     
                         </tr>
     
@@ -816,11 +579,9 @@ export default {
     
                             <td>
     
-                                <a href="#">
-    
-                                    <i class="fa fa-pencil"></i> {{ blade.dn}}
-    
-                                </a>
+                                <a href="#">            
+                                                        {{ blade.dn}}            
+                                            </a>
     
                             </td>
     
@@ -840,6 +601,18 @@ export default {
     
                                 {{ blade.model }}
     
+                            </td>
+    
+                            <td>
+                                {{ blade.cpu_stats.length }}
+                            </td>
+    
+                            <td>
+    
+                                <a href="javascript:void(0)"
+                                   @click="loadStats(blade.cpu_stats)">
+                                    <span class="material-icons">poll</span>
+                                </a>
                             </td>
     
                         </tr>

@@ -10,7 +10,7 @@ from ucsmsdk.mometa.equipment import EquipmentChassisStats
 import json
 
 # Connection
-handle = UcsHandle("192.168.202.156", "ucspe", "ucspe")
+handle = UcsHandle("192.168.202.159", "ucspe", "ucspe")
 
 # handle.logout()
 #Login
@@ -36,11 +36,11 @@ handle.login()
 fault = handle.query_dn("sys/switch-A/fault-F1465")
 event = handle.query_dn("sys/switch-A")
 
-flt = '(dn, "org-root/ls-FirstVMEver.*")'
-chassis = handle.query_classid(class_id="FaultAckFaultsMeta")
-print(chassis)
-for c in chassis:
-    print(c)
+# flt = '(dn, "org-root/ls-FirstVMEver.*")'
+# chassis = handle.query_classid(class_id="FaultAckFaultsMeta")
+# print(chassis)
+# for c in chassis:
+#     print('-----')
 
 # for c in chassis:
 #     print(c)
@@ -53,10 +53,10 @@ compute_blade = handle.query_classid(class_id="computeBlade")
         # print(blade)
 
 
-for chas in chassis:    
-    x = dict(chas.__dict__)
-    # print(x['config_state'])
-    chasses.append(json.dumps(str(x)))
+# for chas in chassis:    
+#     x = dict(chas.__dict__)
+#     # print(x['config_state'])
+#     chasses.append(json.dumps(str(x)))
 
     # print(s)
 
@@ -67,52 +67,53 @@ for chas in chassis:
 
 # print(chasses[0])
 
-compute_blade = handle.query_classid(class_id="computeBlade")
-x = []
-for blade in compute_blade:  
+# compute_blade = handle.query_classid(class_id="")
+# x = []
+# for blade in compute_blade:  
+#     print(blade)
     
-    i = {      
-            "admin_power": blade.admin_power,
-            "admin_state": blade.admin_state,
-            "availability": blade.availability,
-            "available_memory": blade.available_memory,
-            "chassis_id": blade.chassis_id,
-            "check_point": blade.check_point,
-            "child_action": blade.child_action,
-            "conn_path": blade.conn_path,
-            "conn_status": blade.conn_status,
-            "descr": blade.descr,
-            "dn": blade.dn,
-            "int_id": blade.int_id,
-            "memory_speed": blade.memory_speed,
-            "model": blade.model,
-            "name": blade.name,
-            "num_of_adaptors": blade.num_of_adaptors,
-            "num_of_cores": blade.num_of_cores,
-            "num_of_cores_enabled": blade.num_of_cores_enabled,
-            "num_of_cpus": blade.num_of_cpus,
-            "num_of_eth_host_ifs": blade.num_of_eth_host_ifs,
-            "num_of_fc_host_ifs": blade.num_of_fc_host_ifs,
-            "num_of_threads": blade.num_of_threads,
-            "oper_power": blade.oper_power,
-            "oper_state": blade.oper_state,
-            "operability": blade.operability,
-            "original_uuid": blade.original_uuid,
-            "part_number": blade.part_number,
-            "policy_level": blade.policy_level,
-            "policy_owner": blade.policy_owner,
-            "presence": blade.presence,
-            "rn": blade.rn,
-            "serial": blade.serial,
-            "server_id": blade.server_id,
-            "slot_id": blade.slot_id,
-            "status": blade.status,
-            "total_memory": blade.total_memory,
-            "uuid": blade.uuid,
-            "vendor": blade.vendor,
-            "vid": blade.vid
-        }
-    x.append(i)
+#     i = {      
+#             "admin_power": blade.admin_power,
+#             "admin_state": blade.admin_state,
+#             "availability": blade.availability,
+#             "available_memory": blade.available_memory,
+#             "chassis_id": blade.chassis_id,
+#             "check_point": blade.check_point,
+#             "child_action": blade.child_action,
+#             "conn_path": blade.conn_path,
+#             "conn_status": blade.conn_status,
+#             "descr": blade.descr,
+#             "dn": blade.dn,
+#             "int_id": blade.int_id,
+#             "memory_speed": blade.memory_speed,
+#             "model": blade.model,
+#             "name": blade.name,
+#             "num_of_adaptors": blade.num_of_adaptors,
+#             "num_of_cores": blade.num_of_cores,
+#             "num_of_cores_enabled": blade.num_of_cores_enabled,
+#             "num_of_cpus": blade.num_of_cpus,
+#             "num_of_eth_host_ifs": blade.num_of_eth_host_ifs,
+#             "num_of_fc_host_ifs": blade.num_of_fc_host_ifs,
+#             "num_of_threads": blade.num_of_threads,
+#             "oper_power": blade.oper_power,
+#             "oper_state": blade.oper_state,
+#             "operability": blade.operability,
+#             "original_uuid": blade.original_uuid,
+#             "part_number": blade.part_number,
+#             "policy_level": blade.policy_level,
+#             "policy_owner": blade.policy_owner,
+#             "presence": blade.presence,
+#             "rn": blade.rn,
+#             "serial": blade.serial,
+#             "server_id": blade.server_id,
+#             "slot_id": blade.slot_id,
+#             "status": blade.status,
+#             "total_memory": blade.total_memory,
+#             "uuid": blade.uuid,
+#             "vendor": blade.vendor,
+#             "vid": blade.vid
+#         }
+#     x.append(i)
 
 
 # print(json.dumps(x[0]))
@@ -120,12 +121,13 @@ for blade in compute_blade:
 # print(event)
 
 # flt_str = '(dn, "sys/chassis-3/blade-1") and (severity, "minor")'
-flt_str = '(dn, "sys/chassis-6/blade-1/.*")'
+# flt_str = '(dn, "sys/chassis-.*/blade-1/.*")'
 
 # fs = handle.query_classid(class_id="faultInst", filter_str=flt_str)
-e = handle.query_classid(class_id="processorEnvStats", filter_str=flt_str)
-# for i in e:
-#     print(i)
+e = handle.query_classid(class_id="EquipmentChassisStats")
+print(e)
+for i in e:
+    print(i)
 
 
 # envs = []

@@ -45,8 +45,10 @@ def get_blades(handle):
     blades = []
     for bid, blade in enumerate(compute_blade):  
         flt_str = '(dn, "'+ str(blade.dn) +'/.*")'
+        # stats = get_cpuStats(flt_str)
+        cpu_stats = []
         for cpu in handle.query_classid(class_id="ProcessorEnvStats", filter_str=flt_str):            
-            cpu_stats = []
+            
             cp = {
                 "child_action": cpu.child_action,
                 "dn": cpu.dn,
@@ -68,9 +70,9 @@ def get_blades(handle):
                 
             }
             cpu_stats.append(cp)
-
+            
                      
-            i = {   "cpu_stats": cpu_stats,              
+        i = {   "cpu_stats": cpu_stats,              
                     "admin_power": blade.admin_power,
                     "admin_state": blade.admin_state,
                     "availability": blade.availability,
@@ -112,13 +114,42 @@ def get_blades(handle):
                     "vid": blade.vid
                 }
 
-            blades.append(i)
+        blades.append(i)
     
     
     handle.logout()
     
     return blades
 
+
+def get_cpuStats(flt_str = None):
+    
+    cpu_stats = []
+    for cpu in handle.query_classid(class_id="ProcessorEnvStats", filter_str=flt_str):            
+            
+            cp = {
+                "child_action": cpu.child_action,
+                "dn": cpu.dn,
+                "input_current": cpu.input_current,
+                "input_current_avg": cpu.input_current_avg,
+                "input_current_max": cpu.input_current,
+                "input_current_min": cpu.input_current,
+                "intervals": cpu.intervals,
+                "rn": cpu.rn,
+                "sacl": cpu.sacl,
+                "suspect": cpu.suspect,
+                "temperature": cpu.temperature,
+                "temperature_avg": cpu.temperature_avg,
+                "temperature_max": cpu.temperature_max,
+                "temperature_min": cpu.temperature_min,
+                "thresholded": cpu.thresholded,
+                "time_collected": cpu.time_collected,
+                "update": cpu.update,
+                
+            }
+            cpu_stats.append(cp)
+    return cpu_stats
+            
 
 def get_bladestats(handle, dn):
     # Get all EquipmentChassis
@@ -138,6 +169,7 @@ def get_bladestats(handle, dn):
             "part_number": chas.part_number
 
         }
+        
         chasses.append(x) 
 
     handle.logout()

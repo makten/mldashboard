@@ -45804,6 +45804,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             chassis: [],
 
             blades: [],
+            blade_cpustats: [],
             faults: [],
 
             savedSearches: '',
@@ -45919,6 +45920,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(_this2.blades);
             }).catch(function (errors) {});
         },
+        loadStats: function loadStats(cpustats) {
+
+            var len = cpustats.length;
+
+            _.each(cpustats, function (val, key) {
+                console.log(val, key);
+            });
+
+            this.blade_cpustats = cpustats;
+        },
         getBladeFaults: function getBladeFaults() {
             var _this3 = this;
 
@@ -45927,6 +45938,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get('/api/get_bladefaults/' + chs + '/' + bld).then(function (response) {
                 _this3.faults = [];
                 _this3.faults = JSON.parse(response.data);
+                console.log(_this3.faults);
             }).catch(function (errors) {});
         },
         getSavedSearches: function getSavedSearches() {
@@ -75050,7 +75062,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "title"
   }, [_vm._v("Chassis List")]), _vm._v(" "), _c('div', {
     staticClass: "chart"
-  }, [_vm._v("\n\n            " + _vm._s(_vm.blades[0]) + " "), _c('p', [_vm._v("------------------")]), _vm._v(" "), _c('span', {
+  }, [_c('span', {
     attrs: {
       "id": "memoryGaugeContainer"
     }
@@ -75081,15 +75093,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("Randomize")]), _vm._v(" "), _c('table', {
     staticClass: "table table-striped table-bordered"
   }, [_vm._m(0), _vm._v(" "), _c('tbody', _vm._l((_vm.chassis), function(chass) {
-    return _c('tr', [_c('td', [_c('a', {
-      attrs: {
-        "href": "#"
-      }
-    }, [_vm._v("\n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                " + _vm._s(chass.id) + "\n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                ")])]), _vm._v(" "), _c('td', [_c('a', {
-      attrs: {
-        "href": "#"
-      }
-    }, [_vm._v("\n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                " + _vm._s(chass.dn) + "\n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            \n                                                                                                \n                                            \n                                                    \n                                            \n                                                        \n                                            \n                                                    \n                                            ")])]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(chass.part_number) + "\n\n                        ")]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(chass.operability) + "\n\n                        ")]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(chass.serial) + "\n\n                        ")])])
+    return _c('tr', [_vm._m(1, true), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(chass.part_number) + "\n\n                        ")]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(chass.operability) + "\n\n                        ")]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(chass.serial) + "\n\n                        ")])])
   }))])], 1)]), _vm._v(" "), _c('div', {
     staticClass: "widget"
   }, [_c('div', {
@@ -75121,13 +75125,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "width": 400,
       "height": 200
     }
-  })], 1)]), _vm._v(" "), (_vm.blades) ? _c('div', {
+  })], 1)]), _vm._v(" "), _c('div', {
     staticClass: "widget"
   }, [_c('div', {
     staticClass: "title"
   }, [_vm._v("Blade List")]), _vm._v(" "), _c('div', {
     staticClass: "chart"
-  }, [_c('canvas', {
+  }, [(_vm.blade_cpustats.length >= 1) ? _c('div', _vm._l((_vm.blade_cpustats), function(stats) {
+    return _c('ul', {
+      staticClass: "list-group"
+    }, [_c('li', {
+      staticClass: "list-group-item"
+    }, [_vm._v("\n                        " + _vm._s(stats.dn) + "\n                    ")])])
+  })) : _vm._e(), _vm._v(" "), _c('canvas', {
     attrs: {
       "id": "myChart",
       "width": "400",
@@ -75135,14 +75145,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }), _vm._v(" "), _c('table', {
     staticClass: "table table-striped table-bordered"
-  }, [_vm._m(1), _vm._v(" "), _c('tbody', _vm._l((_vm.blades), function(blade) {
+  }, [_vm._m(2), _vm._v(" "), _c('tbody', _vm._l((_vm.blades), function(blade) {
     return _c('tr', [_c('td', [_c('a', {
       attrs: {
         "href": "#"
       }
-    }, [_c('i', {
-      staticClass: "fa fa-pencil"
-    }), _vm._v(" " + _vm._s(blade.dn) + "\n\n                            ")])]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(blade.serial) + "\n\n                        ")]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(blade.operability) + "\n\n                        ")]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(blade.model) + "\n\n                        ")])])
+    }, [_vm._v("            \n                                                    " + _vm._s(blade.dn) + "            \n                                        ")])]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(blade.serial) + "\n\n                        ")]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(blade.operability) + "\n\n                        ")]), _vm._v(" "), _c('td', [_vm._v("\n\n                            " + _vm._s(blade.model) + "\n\n                        ")]), _vm._v(" "), _c('td', [_vm._v("\n                            " + _vm._s(blade.cpu_stats.length) + "\n                        ")]), _vm._v(" "), _c('td', [_c('a', {
+      attrs: {
+        "href": "javascript:void(0)"
+      },
+      on: {
+        "click": function($event) {
+          _vm.loadStats(blade.cpu_stats)
+        }
+      }
+    }, [_c('span', {
+      staticClass: "material-icons"
+    }, [_vm._v("poll")])])])])
   }))]), _vm._v(" "), _vm._l((_vm.faults), function(fault) {
     return _c('ul', {
       staticClass: "list-group"
@@ -75163,7 +75182,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_vm._v(_vm._s(fault.status))]), _vm._v(" "), _c('li', {
       staticClass: "list-group-item"
     }, [_vm._v(_vm._s(fault.type))])])
-  })], 2)]) : _vm._e()])
+  })], 2)])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', [_c('th', {
     attrs: {
@@ -75187,9 +75206,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v(" Serial ")])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', [_c('a', {
+    attrs: {
+      "href": "#"
+    }
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('thead', [_c('tr', [_c('th', {
     attrs: {
-      "width": "15%"
+      "width": "60%"
     }
   }, [_vm._v(" Dn ")]), _vm._v(" "), _c('th', {
     attrs: {
@@ -75201,9 +75226,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v(" Operability ")]), _vm._v(" "), _c('th', {
     attrs: {
+      "width": "60%"
+    }
+  }, [_vm._v(" Model ")]), _vm._v(" "), _c('th', {
+    attrs: {
       "width": "15%"
     }
-  }, [_vm._v(" Model ")])])])
+  }, [_vm._v(" CPU's ")]), _vm._v(" "), _c('th', {
+    attrs: {
+      "width": "5%"
+    }
+  }, [_vm._v(" CPU_Stats ")])])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
