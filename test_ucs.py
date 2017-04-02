@@ -10,7 +10,7 @@ from ucsmsdk.mometa.equipment import EquipmentChassisStats
 import json
 
 # Connection
-handle = UcsHandle("192.168.202.159", "ucspe", "ucspe")
+handle = UcsHandle("192.168.145.131", "ucspe", "ucspe")
 
 # handle.logout()
 #Login

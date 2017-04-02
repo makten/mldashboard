@@ -23,3 +23,12 @@ test/ml-cond-test.v12.suo
 local
 
 local.meta
+
+# ML data
+./ml_datasets
+./trained_models
+.ml_datasets
+.trained_models
+ml_datasets/
+trained_models/
+ucs_manager/
