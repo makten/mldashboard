@@ -1,1 +1,24 @@
- <fabricComputeSlotEp adminState="acknowledged" aggrPortId="0" autoNegotiate="yes" boardAggregationRole="single" chassisId="3" childAction="deleteNonPresent" connPath="A,B" connStatus="A,B" discovery="complete" discoveryStatus="" dn="fabric/server/chassis-3/slot-1" epDn="" fltAggr="0" fruIdentTrigTs="230537" fsmDescr="" fsmPrev="IdentifySuccess" fsmProgr="100" fsmRmtInvErrCode="none" fsmRmtInvErrDescr="" fsmRmtInvRslt="" fsmStageDescr="" fsmStamp="2017-03-30T12:10:33.559" fsmStatus="nop" fsmTry="0" ifRole="server" ifType="physical" lcTs="1970-01-01T01:00:00.000" licGP="0" licState="unknown" locale="internal" managingInst="A" model="UCSB-EX-M4-1" name="" operState="up" operStateReason="" peerAggrPortId="0" peerChassisId="N/A" peerDn="" peerPortId="0" peerSlotEpDn="" peerSlotId="0" portId="0" presence="equipped" presencePath="A,B" revision="0" serial="SRV72" slotId="1" switchId="B" transport="" type="lan" vendor="Cisco Systems Inc"> <fabricIf addr="127.6.3.1" childAction="deleteNonPresent" id="B" rn="mgmt-if-B"/> <fabricIf addr="127.5.3.1" childAction="deleteNonPresent" id="A" rn="mgmt-if-A"/> <fabricComputeSlotEpFsm childAction="deleteNonPresent" completionTime="2017-03-30T12:10:33.559" currentFsm="Identify" descr="" fsmStatus="success" instanceId="135" progress="100" rmtErrCode="none" rmtErrDescr="" rmtRslt="" rn="fsm"> <fabricComputeSlotEpFsmStage childAction="deleteNonPresent" descr="identifying a server in 3/1 via CIMC(FSM-STAGE:sam:dme:FabricComputeSlotEpIdentify:ExecuteLocal)" lastUpdateTime="2017-03-30T12:10:33.135" name="IdentifyExecuteLocal" order="1" retry="1" rn="stage-IdentifyExecuteLocal" stageStatus="success"/> <fabricComputeSlotEpFsmStage childAction="deleteNonPresent" descr="identifying a server in 3/1 via CIMC(FSM-STAGE:sam:dme:FabricComputeSlotEpIdentify:ExecutePeer)" lastUpdateTime="2017-03-30T12:10:33.550" name="IdentifyExecutePeer" order="2" retry="1" rn="stage-IdentifyExecutePeer" stageStatus="success"/> </fabricComputeSlotEpFsm> </fabricComputeSlotEp> 
+ 
+<fabricComputeSlotEp adminState="acknowledged" aggrPortId="0" autoNegotiate="yes" boardAggregationRole="single" 
+chassisId="3" childAction="deleteNonPresent" connPath="A,B" connStatus="A,B" discovery="complete" 
+discoveryStatus="" dn="fabric/server/chassis-3/slot-1" epDn="" fltAggr="0" fruIdentTrigTs="230537" fsmDescr="" fsmPrev="IdentifySuccess" 
+fsmProgr="100" fsmRmtInvErrCode="none" fsmRmtInvErrDescr="" fsmRmtInvRslt="" fsmStageDescr="" fsmStamp="2017-03-30T12:10:33.559" fsmStatus="nop" 
+fsmTry="0" ifRole="server" ifType="physical" lcTs="1970-01-01T01:00:00.000" licGP="0" licState="unknown" locale="internal" 
+managingInst="A" model="UCSB-EX-M4-1" name="" operState="up" operStateReason="" peerAggrPortId="0" peerChassisId="N/A" peerDn="" 
+peerPortId="0" peerSlotEpDn="" peerSlotId="0" portId="0" presence="equipped" presencePath="A,B" revision="0" serial="SRV72" 
+slotId="1" switchId="B" transport="" type="lan" vendor="Cisco Systems Inc">
+
+    <fabricIf addr="127.6.3.1" childAction="deleteNonPresent" id="B" rn="mgmt-if-B"/>
+    <fabricIf addr="127.5.3.1" childAction="deleteNonPresent" id="A" rn="mgmt-if-A"/>
+    
+    <fabricComputeSlotEpFsm childAction="deleteNonPresent" completionTime="2017-03-30T12:10:33.559" 
+    currentFsm="Identify" descr="" fsmStatus="success" instanceId="135" progress="100" rmtErrCode="none" rmtErrDescr="" rmtRslt="" rn="fsm">
+
+        <fabricComputeSlotEpFsmStage childAction="deleteNonPresent" descr="identifying a server in 3/1 via CIMC(FSM-STAGE:sam:dme:FabricComputeSlotEpIdentify:ExecuteLocal)" 
+        lastUpdateTime="2017-03-30T12:10:33.135" name="IdentifyExecuteLocal" order="1" retry="1" rn="stage-IdentifyExecuteLocal" stageStatus="success"/>
+
+        <fabricComputeSlotEpFsmStage childAction="deleteNonPresent" descr="identifying a server in 3/1 via CIMC(FSM-STAGE:sam:dme:FabricComputeSlotEpIdentify:ExecutePeer)" 
+        lastUpdateTime="2017-03-30T12:10:33.550" name="IdentifyExecutePeer" order="2" retry="1" rn="stage-IdentifyExecutePeer" stageStatus="success"/>
+
+    </fabricComputeSlotEpFsm>
+</fabricComputeSlotEp> 

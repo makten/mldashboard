@@ -10,13 +10,32 @@ from ucsmsdk.mometa.equipment import EquipmentChassisStats
 import json
 
 # Connection
-handle = UcsHandle("192.168.145.131", "ucspe", "ucspe")
+handle = UcsHandle("192.168.202.162", "ucspe", "ucspe")
 
-# handle.logout()
 #Login
-handle.login()
+handle.logout()
 
-# ucs_gui_launch(handle)
+
+
+## ----- Get ComputeMbTempStats ----
+# comp_temp = handle.query_classid(class_id='ComputeMbTempStats')
+
+# for temp in comp_temp:
+#     print(temp)
+
+
+##-----Switch stats Status --
+# sw_envs = handle.query_classid(class_id='SwEnvStats')
+
+# for sw in sw_envs:
+#     print(sw)
+
+
+##----Switch System status -----
+sw_sys_stats = handle.query_classid(class_id='SwSystemStats')
+
+for sw in sw_sys_stats:
+    print(sw)
 
 
 
@@ -124,10 +143,10 @@ compute_blade = handle.query_classid(class_id="computeBlade")
 # flt_str = '(dn, "sys/chassis-.*/blade-1/.*")'
 
 # fs = handle.query_classid(class_id="faultInst", filter_str=flt_str)
-e = handle.query_classid(class_id="EquipmentChassisStats")
-print(e)
-for i in e:
-    print(i)
+# e = handle.query_classid(class_id="EquipmentChassisStats")
+# print(e)
+# for i in e:
+#     print(i)
 
 
 # envs = []
