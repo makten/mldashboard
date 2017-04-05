@@ -19,11 +19,14 @@ def get_chassis(handle):
 
     chasses = []
     for chas in chassis:
+        print(chas)
         x = {
+            "name": chas.rn,
             "dn": chas.dn,
             "rn": chas.rn,
             "power": chas.power,
-            "oper_state": chas.oper_state,
+            "model": chas.model,
+            "status": chas.oper_state,
             "operability": chas.operability,
             "id": chas.id,
             "serial": chas.serial,
@@ -34,7 +37,24 @@ def get_chassis(handle):
 
     handle.logout()
     return chasses
+
+def getChassisStats(handle, dn):
     
+    flt_str = '(dn, "sys/'+ str(dn) +'")'
+    chas_stats = handle.query_classid(class_id='EquipmentChassisStats', filter_str=flt_str)
+
+    chassis_stats = {
+        # 'dn': chas_stats.dn,
+        'input_power': 123343,
+        'input_power_avg': 744,
+        'input_power_max': 238,
+        'input_power_min': 250,
+        'output_power': 250,
+    }
+
+    return chassis_stats
+
+
 
 def get_blades(handle):
     ## Get all blades from UCS    
@@ -44,6 +64,7 @@ def get_blades(handle):
 
     blades = []
     for bid, blade in enumerate(compute_blade):  
+        
         flt_str = '(dn, "'+ str(blade.dn) +'/.*")'
         # stats = get_cpuStats(flt_str)
         cpu_stats = []
@@ -51,7 +72,7 @@ def get_blades(handle):
             
             cp = {
                 "child_action": cpu.child_action,
-                "dn": cpu.dn,
+                "dn": cpu.dn,                
                 "input_current": cpu.input_current,
                 "input_current_avg": cpu.input_current_avg,
                 "input_current_max": cpu.input_current,
@@ -72,7 +93,12 @@ def get_blades(handle):
             cpu_stats.append(cp)
             
                      
-        i = {   "cpu_stats": cpu_stats,              
+        i = {       "cpu_stats": cpu_stats, 
+                    "equipment": 'Chassis '+blade.chassis_id,
+                    "num_cpu_cores": blade.num_of_cores_enabled,
+                    "enabled_cpu_cores": blade.num_of_cores_enabled,
+                    "adaptors": blade.num_of_adaptors,
+                    "NICs": blade.num_of_eth_host_ifs,            
                     "admin_power": blade.admin_power,
                     "admin_state": blade.admin_state,
                     "availability": blade.availability,
@@ -95,7 +121,7 @@ def get_blades(handle):
                     "num_of_eth_host_ifs": blade.num_of_eth_host_ifs,
                     "num_of_fc_host_ifs": blade.num_of_fc_host_ifs,
                     "num_of_threads": blade.num_of_threads,
-                    "oper_power": blade.oper_power,
+                    "power": blade.oper_power,
                     "oper_state": blade.oper_state,
                     "operability": blade.operability,
                     "original_uuid": blade.original_uuid,
@@ -111,7 +137,8 @@ def get_blades(handle):
                     "total_memory": blade.total_memory,
                     "uuid": blade.uuid,
                     "vendor": blade.vendor,
-                    "vid": blade.vid
+                    "vid": blade.vid,
+                    "assocState": blade.association
                 }
 
         blades.append(i)

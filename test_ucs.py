@@ -13,7 +13,7 @@ import json
 handle = UcsHandle("192.168.202.162", "ucspe", "ucspe")
 
 #Login
-handle.logout()
+handle.login()
 
 
 
@@ -30,12 +30,29 @@ handle.logout()
 # for sw in sw_envs:
 #     print(sw)
 
+flt_str = '(dn, "sys/chassis-5")'
+chas_stats = handle.query_classid(class_id='EquipmentChassisStats', filter_str=flt_str)
+print(chas_stats)
+for c in chas_stats:
+    print(c)
+
+# for sw in sw_envs:
+#     print(sw)
+
+# print(handle.session_id, handle.cookie, handle.ip, handle.domains)
+
+
+eq = handle.query_classid(class_id="EquipmentCapModSpec")
+
+for i in eq:
+    print(i)
+
 
 ##----Switch System status -----
-sw_sys_stats = handle.query_classid(class_id='SwSystemStats')
+# sw_sys_stats = handle.query_classid(class_id='SwSystemStats')
 
-for sw in sw_sys_stats:
-    print(sw)
+# for sw in sw_sys_stats:
+#     print(sw)
 
 
 

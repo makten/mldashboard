@@ -9,11 +9,13 @@ require('d3')
 window.axios = require('axios');
 import VueCharts from 'vue-chartjs';
 window.VueCharts = VueCharts;
+import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 
 // jsdom = require('jsdom');
 // window.document = jsdom.jsdom();
 
 window.Vue = require('vue');
+Vue.use(ClientTable, {}, false, require('./template.js')('client'))
 
 // import VueHighcharts from 'vue-highcharts';
 // import Highcharts from 'highcharts/highstock';
@@ -31,6 +33,7 @@ import Gauge from '../charts/Guage.js';
 import Moment from 'moment';
 import ChartJs from 'chart.js'
 window.Chartjs = ChartJs;
+
 
 window.Form = Form;
 window.Errors = Errors;

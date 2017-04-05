@@ -15,6 +15,30 @@ export default {
 
         return {
 
+            showStats: false,
+
+            chassisServerColumns: ['equipment', 'model', 'serial', 'num_of_cpus', 'num_of_cores', 'enabled_cpu_cores', 'total_memory', 'available_memory', 'NICs', 'power', 'serial', 'presence', 'assocState', 'stats', 'faults'],
+            chassisColumns: ['name', 'model', 'status'],
+
+            chassisServerOptions: {
+                // see the options API
+                templates: {
+
+                    // faults: function (h, row) {                        
+                    //     return <a href="javascript:void(0)" > <span class="material-icons text-danger" style="font-size:15px;">error</span></a>
+                    // }
+                }
+            },
+
+            chassisOptions: {
+                // see the options API
+                templates: {
+
+                    // faults: function (h, row) {                        
+                    //     return <a href="javascript:void(0)" > <span class="material-icons text-danger" style="font-size:15px;">error</span></a>
+                    // }
+                }
+            },
 
             gauges: [],
             barData: {
@@ -60,6 +84,8 @@ export default {
             datacollection: null,
 
             chassis: [],
+            single_chassis: {},
+            chassis_stats: [],
 
             blades: [],
             blade_cpustats: [],
@@ -143,7 +169,7 @@ export default {
         });
 
     },
-    
+
 
     methods: {
 
@@ -174,6 +200,26 @@ export default {
                     console.log(JSON.parse(response.data))
                     this.chassis = []
                     this.chassis = JSON.parse(response.data)
+                })
+                .catch(errors => { })
+        },
+
+        getChassisStats(dn, chassis) {
+
+            let str_dn = dn.split('/')
+            let chs = str_dn[1]
+            this.single_chassis = chassis
+
+            axios.get(`/api/getChassisStats/${chs}`)
+                .then(response => {
+                    this.chassis_stats = [];
+                    this.chassis_stats = JSON.parse(response.data);
+
+                    console.log(this.chassis_stats.input_power_min)
+
+                    this.createGauge('power', 'power', parseInt(this.chassis_stats.input_power_min), parseInt(this.chassis_stats.input_power))
+                    this.showStats = true;
+
                 })
                 .catch(errors => { })
         },
@@ -417,9 +463,12 @@ export default {
         },
 
         updateGauges() {
+            
             for (var key in this.gauges) {
+                console.log(key)
                 var value = this.getRandomValue(this.gauges[key])
                 this.gauges[key].redraw(value);
+                console.log(this.gauges)
             }
         },
 
@@ -431,7 +480,13 @@ export default {
         initialize() {
             this.createGauges();
             setInterval(this.updateGauges, 5000);
-        }
+        },
+
+        // toggleStatsView() {
+        //     this.showStats != this.showStats;
+        // }
+
+
 
     },
 
@@ -447,236 +502,205 @@ export default {
 <template>
     <div class="main">
     
-        <div class="widget">
+        <!--<div class="widget">
+                            
+                                    <div class="title">Chassis List</div>
+                            
+                                    <div class="chart" style="background: #004080;">
+                            
+                                      <bar :data="barData"
+                                             :options="{responsive: false, maintainAspectRatio: false}"
+                                             :width="400"
+                                             :height="200">
+                            
+                                        </bar>
+                            
+                                    </div>
+                            
+                                    <div class="chart">
+                            
+                                        <bar :data="barData2"
+                                             :options="{responsive: false, maintainAspectRatio: false}"
+                                             :width="400"
+                                             :height="200">
+                            
+                                        </bar>
+                            
+                                    </div>
+                            
+                                </div>-->
     
-            <div class="title">Chassis List</div>
+        <div class="widget">
     
             <div class="chart">
     
-                <span id="memoryGaugeContainer"></span>
-                <span id="cpuGaugeContainer"></span>
-                <span id="networkGaugeContainer"></span>
-                <span id="testGaugeContainer"></span>
+                <div id="exTab3"
+                     class="container"
+                     style="padding: 0px; margin: 0px;">
+    
+                    <!-- TABS -->
+                    <ul class="nav nav-pills">
+    
+                        <li class="active">
+                            <a href="#overview"
+                               data-toggle="tab">Overview</a>
+                        </li>
+    
+                        <li>
+                            <a href="#1b"
+                               data-toggle="tab">Chassis</a>
+                        </li>
+    
+                        <li><a href="#2b"
+                               data-toggle="tab">Chassis Servers</a>
+                        </li>
+                        <li><a href="#3b"
+                               data-toggle="tab">RackMounts</a>
+                        </li>
+    
+                        <li><a href="#4a"
+                               data-toggle="tab">Fabric Interconnect</a></li>
+                        <li><a href="#5a"
+                               data-toggle="tab">UCS Tree</a></li>
+                        <li><a href="#6a"
+                               data-toggle="tab">ServiceProfile</a></li>
+                        <li><a href="#6b"
+                               data-toggle="tab">UCS Components</a></li>
+    
+                    </ul>
+                    <!-- / TABS -->
+    
+                    <div class="tab-content clearfix">
+    
+                        <!-- OVERVIEW -->
+                        <div class="tab-pane active"
+                             id="overview">
+    
+                            <h3>UCS-OVERVIEW</h3>
+    
+                            <span id="memoryGaugeContainer"></span>
+                            <span id="cpuGaugeContainer"></span>
+                            <span id="networkGaugeContainer"></span>
+                            <span id="testGaugeContainer"></span>
+    
+                        </div>
+                        <!-- / OVERVIEW -->
+    
+                        <!-- CHASSIS VIEW -->
+                        <div class="tab-pane"
+                             id="1b">
+    
+                            <h3>Chassis list </h3>
+    
+                            <!-- LEFT SIDE STATISTICS -->
+    
+                            <div class="title">STATISTICS</div>
+    
+                            <div class="chart">                            
+    
+                                <span id="powerGaugeContainer"></span>
+    
+                                <canvas id="myChart"
+                                        width="400"
+                                        height="200"></canvas>
+    
+                            </div>
+                            <!-- / LEFT SIDE STATISTICS -->
+    
+                            <div id="Chassis">
+    
+                                <v-client-table :data="chassis"
+                                                :columns="chassisColumns"
+                                                :options="chassisOptions">
+                                    <template slot="name"
+                                              scope="props">
+                                        <div>
+                                            <a href="javascript:void(0)"
+                                               @click="getChassisStats(props.row.dn, props.row)">
+                                                            {{props.row.name}}
+                                                        </a>
+    
+                                        </div>
+                                    </template>
+                                </v-client-table>
+    
+                            </div>
+    
+                        </div>
+                        <!-- / CHASSIS VIEW -->
+    
+                        <!-- CHASSIS SERVERS VIEW -->
+                        <div class="tab-pane"
+                             id="2b">
+                            <h3>Chassis Servers coming here</h3>
+    
+                            <div id="ChassisServers">
+    
+                                <v-client-table :data="blades"
+                                                :columns="chassisServerColumns"
+                                                :options="chassisServerOptions">
+                                    <template slot="stats"
+                                              scope="props">
+                                        <div>
+                                            <a href="javascript:void(0)"
+                                               @click="loadStats(props.row.cpu_stats, props.row.dn)">
+                                                <span class="material-icons text-success icon-small">poll</span>
+                                            </a>
+    
+                                        </div>
+                                    </template>
+    
+                                    <template slot="faults"
+                                              scope="props">
+                                        <div>
+                                            <a href="javascript:void(0)"
+                                               @click="getBladeFaults(props.row.dn)">
+                                                <span class="material-icons text-danger icon-small">error</span>
+                                            </a>
+    
+                                        </div>
+                                    </template>
+                                </v-client-table>
+    
+                            </div>
+                            <!-- /CHASSIS SERVERS VIEW -->
+    
+                            <div v-if="blade_cpustats.length >= 1">
+                                <ul class="list-group"
+                                    v-for="stats in blade_cpustats">
+                                    <li class="list-group-item">
+                                        {{ stats.dn }} {{stats}}
+                                    </li>
+                                </ul>
+    
+                                <ul class="list-group"
+                                    v-for="fault in faults">
+                                    <li class="list-group-item">
+                                        {{ fault.code }} {{ fault.cause }} {{ fault.descr }} {{ fault.severity }} {{ fault.created }} {{fault}}
+                                    </li>
+                                </ul>
+    
+                            </div>
+    
+                        </div>
+    
+                        <div class="tab-pane"
+                             id="3b">
+                            <h3>RackMounts coming here</h3>
+                        </div>
+    
+                        <div class="tab-pane"
+                             id="4b">
+                            <h3>Fabric Interconnect list and details</h3>
+                        </div>
+                    </div>
+                </div>
     
                 <line-chart :chart-data="datacollection"
                             :width="250"
                             :height="150"></line-chart>
     
                 <button @click="fillData()">Randomize</button>
-    
-                <table class="table table-striped table-bordered">
-    
-                    <thead>
-    
-                        <tr>
-    
-                            <th width="15%"> Id </th>
-    
-                            <th width="15%"> Dn </th>
-    
-                            <th width="15%"> Part # </th>
-    
-                            <th width="15%"> Operability </th>
-    
-                            <th width="15%"> Serial </th>
-    
-                        </tr>
-    
-                    </thead>
-    
-                    <tbody>
-    
-                        <tr v-for="chass in chassis">
-    
-                            <td>
-    
-                                <a href="#"> </a>
-    
-                            </td>
-    
-                            <td>
-    
-                                {{ chass.part_number }}
-    
-                            </td>
-    
-                            <td>
-    
-                                {{ chass.operability }}
-    
-                            </td>
-    
-                            <td>
-    
-                                {{ chass.serial }}
-    
-                            </td>
-    
-                        </tr>
-    
-                    </tbody>
-    
-                </table>
-    
-            </div>
-    
-        </div>
-    
-        <div class="widget">
-    
-            <div class="title">Chassis List</div>
-    
-            <div class="chart"
-                 style="background: #004080;">
-    
-                <bar :data="barData"
-                     :options="{responsive: false, maintainAspectRatio: false}"
-                     :width="400"
-                     :height="200">
-    
-                </bar>
-    
-            </div>
-    
-            <div class="chart">
-    
-                <bar :data="barData2"
-                     :options="{responsive: false, maintainAspectRatio: false}"
-                     :width="400"
-                     :height="200">
-    
-                </bar>
-    
-            </div>
-    
-        </div>
-    
-        <div class="widget">
-    
-            <div class="title">Blade List</div>
-    
-            <div class="chart">
-    
-                <span id="singlecpuGaugeContainer"></span>
-    
-                <div v-if="blade_cpustats.length >= 1">
-                    <ul class="list-group"
-                        v-for="stats in blade_cpustats">
-                        <li class="list-group-item">
-                            {{ stats.dn }} {{stats}}
-                        </li>
-                    </ul>
-    
-                    <ul class="list-group"
-                        v-for="fault in faults">
-                        <li class="list-group-item">
-                            {{ fault.code }} {{ fault.cause }} {{ fault.descr }} {{ fault.severity }} {{ fault.created }} {{fault}}
-                        </li>
-                    </ul>
-    
-                </div>
-    
-                <canvas id="myChart"
-                        width="400"
-                        height="200"></canvas>
-    
-                <table class="table table-striped table-bordered">
-    
-                    <thead>
-    
-                        <tr>
-    
-                            <th width="60%"> Dn </th>
-    
-                            <th width="15%"> Serial </th>
-    
-                            <th width="15%"> Operability </th>
-    
-                            <th width="60%"> Model </th>
-                            <th width="15%"> CPU's </th>
-                            <th width="5%"> CPU_Stats </th>
-                            <th width="5%"> CPU_Faults </th>
-    
-                        </tr>
-    
-                    </thead>
-    
-                    <tbody>
-    
-                        <tr v-for="blade in blades">
-    
-                            <td>
-    
-                                <a href="#">            
-                                      {{ blade.dn}}            
-                                    </a>
-    
-                            </td>
-    
-                            <td>
-    
-                                {{ blade.serial}}
-    
-                            </td>
-    
-                            <td>
-    
-                                {{ blade.operability }}
-    
-                            </td>
-    
-                            <td>
-    
-                                {{ blade.model }}
-    
-                            </td>
-    
-                            <td>
-                                {{ blade.cpu_stats.length }}
-                            </td>
-    
-                            <td>
-    
-                                <a href="javascript:void(0)"
-                                   @click="loadStats(blade.cpu_stats, blade.dn)">
-                                    <span class="material-icons text-success">poll</span>
-                                </a>
-                            </td>
-    
-                            <td>
-                                <a href="javascript:void(0)"
-                                   @click="getBladeFaults(blade.dn)">
-                                    <span class="material-icons text-danger">error</span>
-                                </a>
-    
-                            </td>
-    
-                        </tr>
-    
-                    </tbody>
-    
-                </table>
-    
-                <ul class="list-group"
-                    v-for="fault in faults">
-    
-                    <li class="list-group-item">{{fault.code}}</li>
-    
-                    <li class="list-group-item">{{fault.cause}}</li>
-    
-                    <li class="list-group-item">{{fault.created}}</li>
-    
-                    <li class="list-group-item">{{fault.desc}}</li>
-    
-                    <li class="list-group-item">{{fault.severity}}</li>
-    
-                    <li class="list-group-item">{{fault.rule}}</li>
-    
-                    <li class="list-group-item">{{fault.status}}</li>
-    
-                    <li class="list-group-item">{{fault.type}}</li>
-    
-                </ul>
     
             </div>
     
@@ -690,4 +714,33 @@ export default {
         max-width: 150;
         margin: 150px auto;
     }
+
+ 
+    #exTab3 .nav-pills > li > a {
+    border-radius: 4px 4px 0 0 ;
+    }
+
+    #exTab3 .tab-content {
+        color : #3a3a3a;
+        background-color: #f0f5fb;
+        padding : 5px 15px;
+    }
+
+    .nav-pills>li.active>a, 
+    .nav-pills>li.active>a:focus, 
+    .nav-pills>li.active>a:hover {
+
+        color: #3a3a3a;
+        background-color: #f0f5fb;
+        
+    }
+
+    .VueTables__table tr {
+        font-size: 10px !important;
+    }
+
+    .icon-small {
+        font-size: 15px;
+    }
+
 </style>
