@@ -21,6 +21,7 @@ handle = None
 # Create your views here.
 
 
+
 class CreateView(generics.ListCreateAPIView):
     """This class defines the create behaviour of our rest api"""
     queryset = ModelBuilder.objects.all()
@@ -49,6 +50,25 @@ class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
     # return Response(serializer.data)
 
 
+def getUcsInfo(request):
+    try:
+        global handle
+        global ucs_info
+        handle = ucs_login()
+
+        ucs_info = json.dumps(ucs.getUcsInfo(handle), ensure_ascii=False)
+
+        ucs_logout(handle)
+
+    except:
+        ucs_logout(handle)
+        raise
+
+    return JsonResponse(ucs_info, safe=False)
+
+
+
+
 class BladeDetails(TemplateView):
     def get(self, request, **kwargs):
 
@@ -66,6 +86,24 @@ class BladeDetails(TemplateView):
             raise
 
         return JsonResponse(blades, safe=False)
+
+
+class RackDetails(TemplateView):
+    def get(self, request, **kwargs):
+
+        try:
+            global handle
+            global rackunits
+            handle = ucs_login()
+            # rackunits = json.dumps(ucs.get_blades(handle), ensure_ascii=False)
+
+            ucs_logout(handle)
+
+        except:
+            ucs_logout(handle)
+            raise
+
+        return JsonResponse({'test': 'test'}, safe=False)
 
 
 class ChassisDetails(TemplateView):

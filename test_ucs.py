@@ -10,7 +10,7 @@ from ucsmsdk.mometa.equipment import EquipmentChassisStats
 import json
 
 # Connection
-handle = UcsHandle("192.168.202.162", "ucspe", "ucspe")
+handle = UcsHandle("192.168.202.168", "ucspe", "ucspe")
 
 #Login
 handle.login()
@@ -25,16 +25,17 @@ handle.login()
 
 
 ##-----Switch stats Status --
-# sw_envs = handle.query_classid(class_id='SwEnvStats')
+sw_envs = handle.query_classid(class_id='ComputeRackUnit')
+print(len(sw_envs))
+for sw in sw_envs:
+    print(sw.dn)
 
-# for sw in sw_envs:
-#     print(sw)
+# flt_str = '(dn, "sys/chassis-5")'
+# chas_stats = handle.query_classid(class_id='EquipmentChassis', filter_str=flt_str)
+# print(len(chas_stats))
 
-flt_str = '(dn, "sys/chassis-5")'
-chas_stats = handle.query_classid(class_id='EquipmentChassisStats', filter_str=flt_str)
-print(chas_stats)
-for c in chas_stats:
-    print(c)
+# for c in chas_stats:
+#     print(c)
 
 # for sw in sw_envs:
 #     print(sw)

@@ -12,14 +12,33 @@ import json
 handle = None
 
 
+def getUcsInfo(handle):
+    """ 
+        Get General UCS Information 
+    """
+    
+    info = handle.query_classid(class_id='TopSystem')
+    for ucs in info:
+        ucs_info = {
+            'address': ucs.address,
+            'status': ucs.status,
+            'name': ucs.name,
+            'mode': ucs.mode,
+            'owner': ucs.owner,
+            'site': ucs.site,
+            'system_up_time': ucs.system_up_time,            
+        }
+
+    return ucs_info
+
+
 def get_chassis(handle):
     # Get all EquipmentChassis
 
     chassis = handle.query_classid(class_id="EquipmentChassis")
 
     chasses = []
-    for chas in chassis:
-        print(chas)
+    for chas in chassis:        
         x = {
             "name": chas.rn,
             "dn": chas.dn,
@@ -31,7 +50,6 @@ def get_chassis(handle):
             "id": chas.id,
             "serial": chas.serial,
             "part_number": chas.part_number
-
         }
         chasses.append(x) 
 
@@ -60,8 +78,7 @@ def get_blades(handle):
     ## Get all blades from UCS    
 
     compute_blade = handle.query_classid(class_id="computeBlade")
-    blades = []
-
+    
     blades = []
     for bid, blade in enumerate(compute_blade):  
         
@@ -147,6 +164,13 @@ def get_blades(handle):
     handle.logout()
     
     return blades
+
+
+def get_rackcomputes(handle):
+    r_units = handle.query_classid(class_id='ComputeRackUnit')
+    pass
+
+
 
 
 def get_cpuStats(flt_str = None):

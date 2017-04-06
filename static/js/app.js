@@ -49376,441 +49376,508 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
-            components: {
+    components: {
 
-                        vSelect: __WEBPACK_IMPORTED_MODULE_0_vue_select___default.a,
-                        Bar: Bar,
-                        LineChart: LineChart
+        vSelect: __WEBPACK_IMPORTED_MODULE_0_vue_select___default.a,
+        Bar: Bar,
+        LineChart: LineChart
+    },
+
+    data: function data() {
+
+        return {
+
+            showStats: false,
+
+            ucs_info: [],
+
+            datacollection: null,
+
+            chassis: [],
+            single_chassis: {},
+            chassis_stats: [],
+
+            blades: [],
+            rackunits: [],
+            blade_cpustats: [],
+            faults: [],
+
+            savedSearches: '',
+
+            tableData: {},
+            features: [],
+            coltypes: [],
+            modifiedFeatures: [],
+            rowCount: 0,
+            syncedVal: '',
+            chartLine: null,
+
+            chassisServerColumns: ['equipment', 'model', 'serial', 'num_of_cpus', 'num_of_cores', 'enabled_cpu_cores', 'total_memory', 'available_memory', 'NICs', 'power', 'serial', 'presence', 'assocState', 'stats', 'faults'],
+            chassisColumns: ['name', 'model', 'status'],
+
+            chassisServerOptions: {
+                // see the options API
+                templates: {
+
+                    // faults: function (h, row) {                        
+                    //     return <a href="javascript:void(0)" > <span class="material-icons text-danger" style="font-size:15px;">error</span></a>
+                    // }
+                }
             },
 
-            data: function data() {
+            chassisOptions: {
+                // see the options API
+                templates: {
 
-                        return {
-
-                                    showStats: false,
-
-                                    chassisServerColumns: ['equipment', 'model', 'serial', 'num_of_cpus', 'num_of_cores', 'enabled_cpu_cores', 'total_memory', 'available_memory', 'NICs', 'power', 'serial', 'presence', 'assocState', 'stats', 'faults'],
-                                    chassisColumns: ['name', 'model', 'status'],
-
-                                    chassisServerOptions: {
-                                                // see the options API
-                                                templates: {
-
-                                                            // faults: function (h, row) {                        
-                                                            //     return <a href="javascript:void(0)" > <span class="material-icons text-danger" style="font-size:15px;">error</span></a>
-                                                            // }
-                                                }
-                                    },
-
-                                    chassisOptions: {
-                                                // see the options API
-                                                templates: {
-
-                                                            // faults: function (h, row) {                        
-                                                            //     return <a href="javascript:void(0)" > <span class="material-icons text-danger" style="font-size:15px;">error</span></a>
-                                                            // }
-                                                }
-                                    },
-
-                                    gauges: [],
-                                    barData: {
-                                                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                                                datasets: [{
-                                                            label: 'Test Data Hafiz',
-                                                            backgroundColor: '#ff8040',
-
-                                                            color: '#ffffff',
-
-                                                            data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-                                                }]
-                                    },
-
-                                    barData2: {
-
-                                                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-
-                                                datasets: [{
-
-                                                            label: 'Test Data 2',
-
-                                                            backgroundColor: '#ff0000',
-
-                                                            color: '#ffffff',
-
-                                                            fillColor: "rgba(220,220,220,0.5)",
-
-                                                            strokeColor: "rgba(220,220,220,0.8)",
-
-                                                            highlightFill: "rgba(220,220,220,0.75)",
-
-                                                            highlightStroke: "rgba(220,220,220,1)",
-
-                                                            borderColor: "#14B214",
-
-                                                            data: [100, 60, 12, 100, 10, 40, 1, 80, 2, 20, 12, 11]
-
-                                                }]
-
-                                    },
-
-                                    datacollection: null,
-
-                                    chassis: [],
-                                    single_chassis: {},
-                                    chassis_stats: [],
-
-                                    blades: [],
-                                    blade_cpustats: [],
-                                    faults: [],
-
-                                    savedSearches: '',
-
-                                    tableData: {},
-                                    features: [],
-                                    coltypes: [],
-                                    modifiedFeatures: [],
-                                    rowCount: 0,
-                                    syncedVal: '',
-                                    chartLine: null,
-
-                                    form: new Form({
-
-                                                target: '',
-
-                                                features: '',
-
-                                                portal: 0,
-
-                                                channel: 0,
-
-                                                delivery: 0,
-
-                                                client: 0,
-
-                                                category: 0
-
-                                    }),
-
-                                    api_response: [],
-                                    uploadedFile: '',
-
-                                    departments: [],
-
-                                    predictions: [],
-                                    predicted: '',
-
-                                    monthsBag: [],
-                                    interval: null
-
-                        };
-            },
-            mounted: function mounted() {
-
-                        this.$nextTick(function () {
-
-                                    this.initialize();
-
-                                    this.fillData();
-                                    this.getBlades();
-                                    this.getChassis();
-                                    //this.getBladeFaults();
-                                    var ctx = $("#myChart");
-
-                                    // this.plotChart(ctx);
-                                    // setInterval(function() {
-                                    //     let a = Math.floor((Math.random() * 50) + 1)
-                                    //     let i = Moment().format()
-                                    //     console.log(i)
-                                    //         // add(Math.floor((Math.random() * 6) + 1), 'days').
-                                    //     // this.forecasted = _.drop(this.forecasted, 1)
-                                    //     this.forecasted.push({
-                                    //         y: a,
-                                    //         x: i
-                                    //     })
-                                    //     this.plotChart(ctx)
-                                    //     // this.chartLine.update()
-                                    // }.bind(this), 3000);
-                                    // this.getSavedSearches();
-                                    // axios.get('api/departments')
-                                    // .then(response => {
-                                    // 	this.departments = JSON.parse(response.data)
-                                    // })
-                        });
+                    // faults: function (h, row) {                        
+                    //     return <a href="javascript:void(0)" > <span class="material-icons text-danger" style="font-size:15px;">error</span></a>
+                    // }
+                }
             },
 
+            gauges: [],
 
-            methods: {
-                        fillData: function fillData() {
-                                    this.datacollection = {
-                                                labels: [this.getRandomInt(), this.getRandomInt()],
-                                                datasets: [{
-                                                            label: 'Data One',
-                                                            backgroundColor: '#f87979',
-                                                            data: [this.getRandomInt(), this.getRandomInt()]
-                                                }, {
-                                                            label: 'Data One',
-                                                            backgroundColor: '#f87979',
-                                                            data: [this.getRandomInt(), this.getRandomInt()]
-                                                }]
-                                    };
-                        },
-                        getRandomInt: function getRandomInt() {
-                                    return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
-                        },
-                        getChassis: function getChassis() {
-                                    var _this = this;
+            barData: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                datasets: [{
+                    label: 'Test Data Hafiz',
+                    backgroundColor: '#ff8040',
 
-                                    axios.get('/api/get_chassis').then(function (response) {
-                                                console.log(JSON.parse(response.data));
-                                                _this.chassis = [];
-                                                _this.chassis = JSON.parse(response.data);
-                                    }).catch(function (errors) {});
-                        },
-                        getChassisStats: function getChassisStats(dn, chassis) {
-                                    var _this2 = this;
+                    color: '#ffffff',
 
-                                    var str_dn = dn.split('/');
-                                    var chs = str_dn[1];
-                                    this.single_chassis = chassis;
+                    data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+                }]
+            },
 
-                                    axios.get('/api/getChassisStats/' + chs).then(function (response) {
-                                                _this2.chassis_stats = [];
-                                                _this2.chassis_stats = JSON.parse(response.data);
+            barData2: {
 
-                                                console.log(_this2.chassis_stats.input_power_min);
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 
-                                                _this2.createGauge('power', 'power', parseInt(_this2.chassis_stats.input_power_min), parseInt(_this2.chassis_stats.input_power));
-                                                _this2.showStats = true;
-                                    }).catch(function (errors) {});
-                        },
-                        getBlades: function getBlades() {
-                                    var _this3 = this;
+                datasets: [{
 
-                                    axios.get('/api/get_blades').then(function (response) {
-                                                _this3.blades = [];
-                                                _this3.blades = JSON.parse(response.data);
+                    label: 'Test Data 2',
 
-                                                console.log(_this3.blades);
-                                    }).catch(function (errors) {});
-                        },
-                        loadStats: function loadStats(cpustats, dn) {
+                    backgroundColor: '#ff0000',
 
-                                    var len = cpustats.length;
-                                    var sm = 0;
+                    color: '#ffffff',
 
-                                    _.each(cpustats, function (val, key) {
-                                                sm += parseInt(val.input_current);
-                                                //singlecpu
-                                    });
+                    fillColor: "rgba(220,220,220,0.5)",
 
-                                    console.log(sm, sm / len);
+                    strokeColor: "rgba(220,220,220,0.8)",
 
-                                    this.createGauge('singlecpu', 'CPU', 0, sm);
+                    highlightFill: "rgba(220,220,220,0.75)",
 
-                                    this.blade_cpustats = cpustats;
-                                    this.getBladeFaults(dn);
-                        },
-                        getBladeFaults: function getBladeFaults(dn) {
-                                    var _this4 = this;
+                    highlightStroke: "rgba(220,220,220,1)",
 
-                                    var str_dn = dn.split('/');
+                    borderColor: "#14B214",
 
-                                    var chs = str_dn[1];
-                                    var bld = str_dn[2];
-                                    axios.get('/api/get_bladefaults/' + chs + '/' + bld).then(function (response) {
-                                                _this4.faults = [];
-                                                _this4.faults = JSON.parse(response.data);
-                                    }).catch(function (errors) {});
-                        },
-                        getSavedSearches: function getSavedSearches() {
-                                    var _this5 = this;
+                    data: [100, 60, 12, 100, 10, 40, 1, 80, 2, 20, 12, 11]
 
-                                    axios.post('api/getSavedSearches').then(function (response) {
+                }]
 
-                                                _this5.savedSearches = response.data;
-                                                console.log(response.data);
+            },
 
-                                                //this.onSuccess(response);
-                                    }).catch(function (errors) {});
-                        },
-                        onSubmit: function onSubmit() {
-                                    // this.chartLine.update()
-                                    // console.log(this.form)
+            form: new Form({
 
-                                    // axios.get('/api/departments/add', this.form)
-                                    // .then( response => {	
+                target: '',
 
-                                    // 	this.onSuccess(response.data);
+                features: '',
 
-                                    // })
-                                    // .catch(response => {				
+                portal: 0,
 
-                                    // });			
+                channel: 0,
 
-                        },
-                        makePrediction: function makePrediction() {
-                                    // console.log(this.form)				
+                delivery: 0,
 
-                                    // axios.get('api/predictOplage', this.form)
-                                    // .then(response => {
+                client: 0,
 
-                                    // 	this.onSuccess(response);
+                category: 0
 
-                                    // })
-                                    // .catch(errors => {})
-                        },
-                        onSuccess: function onSuccess(response) {
+            }),
 
-                                    // if(!_.isEmpty(response.error))
-                                    // {
+            api_response: [],
+            uploadedFile: '',
 
-                                    // 	this.form.errors.record(response.error)
+            departments: [],
 
-                                    // }
-                                    // else{
+            predictions: [],
+            predicted: '',
+
+            monthsBag: [],
+            interval: null
+
+        };
+    },
+    mounted: function mounted() {
+
+        this.$nextTick(function () {
+
+            this.initialize();
+            this.getUcsInfo();
+            this.fillData();
+            this.getBlades();
+            this.getRackUnits();
+            this.getChassis();
+
+            //this.getBladeFaults();
+
+            var ctx = $("#myChart");
+
+            // $('#modal-create-company').on('shown.bs.modal', () => {
+            //     $('#create-company-name').focus();
+            // });
+
+            // $('#modal-edit-client').on('shown.bs.modal', () => {
+            //     $('#edit-client-name').focus();
+            // });
+
+            // this.plotChart(ctx);
+            // setInterval(function() {
+            //     let a = Math.floor((Math.random() * 50) + 1)
+            //     let i = Moment().format()
+            //     console.log(i)
+            //         // add(Math.floor((Math.random() * 6) + 1), 'days').
+            //     // this.forecasted = _.drop(this.forecasted, 1)
+            //     this.forecasted.push({
+            //         y: a,
+            //         x: i
+            //     })
+            //     this.plotChart(ctx)
+            //     // this.chartLine.update()
+            // }.bind(this), 3000);
+            // this.getSavedSearches();
+            // axios.get('api/departments')
+            // .then(response => {
+            // 	this.departments = JSON.parse(response.data)
+            // })
+        });
+    },
 
 
-                                    // 	this.form.reset()
-                                    // 	this.form.errors.clear()				
+    methods: {
+        getUcsInfo: function getUcsInfo() {
+            var _this = this;
 
-                                    // 	this.predicted = response.data					
-                                    // }
-                        },
-                        onFileChange: function onFileChange(e) {
+            axios.get('/api/get_ucsinfo').then(function (response) {
 
-                                    var files = e.target.files || e.dataTransfer.files;
-                                    if (!files.length) return;
-                                    this.createCSV(files);
-                        },
-                        createImage: function createImage(file) {
-                                    var image = new Image();
-                                    var reader = new FileReader();
-                                    var vm = this;
-
-                                    reader.onload = function (e) {
-                                                vm.uploadedFile = e.target.result;
-                                    };
-                                    reader.readAsDataURL(file);
-
-                                    console.log();
-                        },
-                        createCSV: function createCSV(files) {
-
-                                    this.features = [];
-                                    this.coltypes = [];
-                                    this.modifiedFeatures = [];
-                                    this.form.features = '';
-                                    this.form.target = '';
-                                    this.target = '';
-
-                                    var vm = this;
-
-                                    Papa.parse(files[0], {
-
-                                                // header: true,
-                                                dynamicTyping: true,
-
-                                                complete: function complete(results) {
-                                                            vm.tableData = _.drop(results.data, 1);
-
-                                                            if (typeof results.data[0][0] == 'number') {
-                                                                        for (var i = 0; i < results.data[0].length; i++) {
-                                                                                    var row = i + 1;
-                                                                                    vm.features.push('Row ' + row);
-                                                                        }
-
-                                                                        vm.createFeatureTypes();
-                                                            } else {
-
-                                                                        vm.features = results.data[0];
-                                                                        vm.createFeatureTypes();
-                                                            }
-
-                                                            // console.log(typeof results.data[0][0])
-
-                                                            // vm.uploading = False;									
-                                                }
-
-                                    });
-
-                                    // var extension = filename.replace(/^.*\./, '');
-
-                                    //        // Iff there is no dot anywhere in filename, we would have extension == filename,
-                                    //        // so we account for this possibility now
-                                    //        if (extension == filename) {
-                                    //        	extension = '';
-                                    //        } else {
-                                    //            // if there is an extension, we convert to lower case
-                                    //            // (N.B. this conversion will not effect the value of the extension
-                                    //            // on the file upload.)
-                                    //            extension = extension.toLowerCase();
-                                    //        }		
-
-                        },
+                _this.ucs_info = JSON.parse(response.data);
+                console.log(_this.ucs_info);
+            }).catch(function (errors) {});
+        },
 
 
-                        removeImage: function removeImage(e) {
-                                    this.uploadedFile = '';
-                        },
+        /**
+        * Show the form for creating new company.
+        */
+        showcompanyForm: function showcompanyForm() {
+            $('#modal-create-company').modal('show');
+        },
 
-                        sortAsc: function sortAsc(items) {
-                                    return _.sortBy(items, [function (i) {
-                                                return i.name;
-                                    }]);
-                        },
-                        setSearch: function setSearch() {
-                                    alert('b');
-                        },
-                        createGauge: function createGauge(name, label, min, max) {
-                                    var config = {
-                                                size: 120,
-                                                label: label,
-                                                min: undefined != min ? min : 0,
-                                                max: undefined != max ? max : 100,
-                                                minorTicks: 5
-                                    };
 
-                                    var range = config.max - config.min;
-                                    config.yellowZones = [{
-                                                from: config.min + range * 0.75,
-                                                to: config.min + range * 0.9
-                                    }];
-                                    config.redZones = [{
-                                                from: config.min + range * 0.9,
-                                                to: config.max
-                                    }];
+        /**
+        * Show the form for creating new contact person.
+        */
+        showcontactpersonForm: function showcontactpersonForm() {
+            $('#modal-create-contactperson').modal('show');
+        },
 
-                                    this.gauges[name] = new Gauge(name + "GaugeContainer", config);
-                                    this.gauges[name].render();
-                        },
-                        createGauges: function createGauges() {
-                                    this.createGauge("memory", "Memory");
-                                    this.createGauge("cpu", "CPU");
-                                    // this.createGauge("network", "Network");
-                                    this.createGauge("test", "Test", 1254, 3200);
-                        },
-                        updateGauges: function updateGauges() {
 
-                                    for (var key in this.gauges) {
-                                                console.log(key);
-                                                var value = this.getRandomValue(this.gauges[key]);
-                                                this.gauges[key].redraw(value);
-                                                console.log(this.gauges);
-                                    }
-                        },
-                        getRandomValue: function getRandomValue(gauge) {
-                                    var overflow = 0; //10;
-                                    return gauge.config.min - overflow + (gauge.config.max - gauge.config.min + overflow * 2) * Math.random();
-                        },
-                        initialize: function initialize() {
-                                    this.createGauges();
-                                    setInterval(this.updateGauges, 5000);
+        /**
+        * Edit the given client.
+        */
+        edit: function edit(client) {
+
+            this.editForm.id = client.id;
+            this.editForm.name = client.name;
+            this.editForm.redirect = client.redirect;
+
+            $('#modal-edit-client').modal('show');
+        },
+        fillData: function fillData() {
+            this.datacollection = {
+                labels: [this.getRandomInt(), this.getRandomInt()],
+                datasets: [{
+                    label: 'Data One',
+                    backgroundColor: '#f87979',
+                    data: [this.getRandomInt(), this.getRandomInt()]
+                }, {
+                    label: 'Data One',
+                    backgroundColor: '#f87979',
+                    data: [this.getRandomInt(), this.getRandomInt()]
+                }]
+            };
+        },
+        getRandomInt: function getRandomInt() {
+            return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
+        },
+        getChassis: function getChassis() {
+            var _this2 = this;
+
+            axios.get('/api/get_chassis/').then(function (response) {
+
+                _this2.chassis = [];
+                _this2.chassis = JSON.parse(response.data);
+            }).catch(function (errors) {});
+        },
+        getChassisStats: function getChassisStats(dn, chassis) {
+            var _this3 = this;
+
+            var str_dn = dn.split('/');
+            var chs = str_dn[1];
+            this.single_chassis = chassis;
+
+            axios.get('/api/getChassisStats/' + chs).then(function (response) {
+
+                _this3.chassis_stats = [];
+                _this3.chassis_stats = JSON.parse(response.data);
+
+                _this3.createGauge('power', 'power', parseInt(_this3.chassis_stats.input_power_min), parseInt(_this3.chassis_stats.input_power));
+
+                _this3.editForm.id = client.id;
+                _this3.editForm.name = client.name;
+                _this3.editForm.redirect = client.redirect;
+
+                $('#modal-edit-client').modal('show');
+
+                _this3.showStats = true;
+            }).catch(function (errors) {});
+        },
+        getBlades: function getBlades() {
+            var _this4 = this;
+
+            axios.get('/api/get_blades').then(function (response) {
+
+                _this4.blades = [];
+                _this4.blades = JSON.parse(response.data);
+            }).catch(function (errors) {});
+        },
+        getRackUnits: function getRackUnits() {
+            var _this5 = this;
+
+            axios.get('/api/get_rackunits').then(function (response) {
+
+                _this5.this.rackunits = [];
+                _this5.rackunits = JSON.parse(response.data);
+                console.log(_this5.rackunits);
+            }).catch(function (errors) {});
+        },
+        loadStats: function loadStats(cpustats, dn) {
+
+            var len = cpustats.length;
+            var sm = 0;
+
+            _.each(cpustats, function (val, key) {
+                sm += parseInt(val.input_current);
+                //singlecpu
+            });
+
+            console.log(sm, sm / len);
+
+            this.createGauge('singlecpu', 'CPU', 0, sm);
+
+            this.blade_cpustats = cpustats;
+            this.getBladeFaults(dn);
+        },
+        getBladeFaults: function getBladeFaults(dn) {
+            var _this6 = this;
+
+            var str_dn = dn.split('/');
+
+            var chs = str_dn[1];
+            var bld = str_dn[2];
+            axios.get('/api/get_bladefaults/' + chs + '/' + bld).then(function (response) {
+                _this6.faults = [];
+                _this6.faults = JSON.parse(response.data);
+            }).catch(function (errors) {});
+        },
+        getSavedSearches: function getSavedSearches() {
+            var _this7 = this;
+
+            axios.post('api/getSavedSearches').then(function (response) {
+
+                _this7.savedSearches = response.data;
+                console.log(response.data);
+
+                //this.onSuccess(response);
+            }).catch(function (errors) {});
+        },
+        onSubmit: function onSubmit() {
+            // this.chartLine.update()
+            // console.log(this.form)
+
+            // axios.get('/api/departments/add', this.form)
+            // .then( response => {	
+
+            // 	this.onSuccess(response.data);
+
+            // })
+            // .catch(response => {				
+
+            // });			
+
+        },
+        makePrediction: function makePrediction() {
+            // console.log(this.form)				
+
+            // axios.get('api/predictOplage', this.form)
+            // .then(response => {
+
+            // 	this.onSuccess(response);
+
+            // })
+            // .catch(errors => {})
+        },
+        onSuccess: function onSuccess(response) {
+
+            // if(!_.isEmpty(response.error))
+            // {
+
+            // 	this.form.errors.record(response.error)
+
+            // }
+            // else{
+
+
+            // 	this.form.reset()
+            // 	this.form.errors.clear()				
+
+            // 	this.predicted = response.data					
+            // }
+        },
+        onFileChange: function onFileChange(e) {
+
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length) return;
+            this.createCSV(files);
+        },
+        createImage: function createImage(file) {
+            var image = new Image();
+            var reader = new FileReader();
+            var vm = this;
+
+            reader.onload = function (e) {
+                vm.uploadedFile = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            console.log();
+        },
+        createCSV: function createCSV(files) {
+
+            this.features = [];
+            this.coltypes = [];
+            this.modifiedFeatures = [];
+            this.form.features = '';
+            this.form.target = '';
+            this.target = '';
+
+            var vm = this;
+
+            Papa.parse(files[0], {
+
+                // header: true,
+                dynamicTyping: true,
+
+                complete: function complete(results) {
+                    vm.tableData = _.drop(results.data, 1);
+
+                    if (typeof results.data[0][0] == 'number') {
+                        for (var i = 0; i < results.data[0].length; i++) {
+                            var row = i + 1;
+                            vm.features.push('Row ' + row);
                         }
-            },
 
-            beforeDestroy: function beforeDestroy() {
-                        clearInterval(this.interval);
+                        vm.createFeatureTypes();
+                    } else {
+
+                        vm.features = results.data[0];
+                        vm.createFeatureTypes();
+                    }
+
+                    // console.log(typeof results.data[0][0])
+
+                    // vm.uploading = False;									
+                }
+
+            });
+
+            // var extension = filename.replace(/^.*\./, '');
+
+            //        // Iff there is no dot anywhere in filename, we would have extension == filename,
+            //        // so we account for this possibility now
+            //        if (extension == filename) {
+            //        	extension = '';
+            //        } else {
+            //            // if there is an extension, we convert to lower case
+            //            // (N.B. this conversion will not effect the value of the extension
+            //            // on the file upload.)
+            //            extension = extension.toLowerCase();
+            //        }		
+        },
+
+
+        removeImage: function removeImage(e) {
+            this.uploadedFile = '';
+        },
+
+        sortAsc: function sortAsc(items) {
+            return _.sortBy(items, [function (i) {
+                return i.name;
+            }]);
+        },
+        setSearch: function setSearch() {
+            alert('b');
+        },
+        createGauge: function createGauge(name, label, min, max) {
+            var config = {
+                size: 120,
+                label: label,
+                min: undefined != min ? min : 0,
+                max: undefined != max ? max : 100,
+                minorTicks: 5
+            };
+
+            var range = config.max - config.min;
+            config.yellowZones = [{
+                from: config.min + range * 0.75,
+                to: config.min + range * 0.9
+            }];
+            config.redZones = [{
+                from: config.min + range * 0.9,
+                to: config.max
+            }];
+
+            this.gauges[name] = new Gauge(name + "GaugeContainer", config);
+            this.gauges[name].render();
+        },
+        createGauges: function createGauges() {
+            this.createGauge("memory", "Memory");
+            this.createGauge("cpu", "CPU");
+            // this.createGauge("network", "Network");
+            this.createGauge("test", "Test", 1254, 3200);
+        },
+        updateGauges: function updateGauges() {
+
+            for (var key in this.gauges) {
+                console.log(key);
+                var value = this.getRandomValue(this.gauges[key]);
+                this.gauges[key].redraw(value);
+                console.log(this.gauges);
             }
+        },
+        getRandomValue: function getRandomValue(gauge) {
+            var overflow = 0; //10;
+            return gauge.config.min - overflow + (gauge.config.max - gauge.config.min + overflow * 2) * Math.random();
+        },
+        initialize: function initialize() {
+            this.createGauges();
+            setInterval(this.updateGauges, 5000);
+        }
+    },
+
+    beforeDestroy: function beforeDestroy() {
+        clearInterval(this.interval);
+    }
 
 });
 
@@ -69473,7 +69540,7 @@ exports = module.exports = __webpack_require__(44)();
 
 
 // module
-exports.push([module.i, "\n.small {\n  max-width: 150;\n  margin: 150px auto;\n}\n#exTab3 .nav-pills > li > a {\n  border-radius: 4px 4px 0 0;\n}\n#exTab3 .tab-content {\n  color: #3a3a3a;\n  background-color: #f0f5fb;\n  padding: 5px 15px;\n}\n.nav-pills > li.active > a,\n.nav-pills > li.active > a:focus,\n.nav-pills > li.active > a:hover {\n  color: #3a3a3a;\n  background-color: #f0f5fb;\n}\n.VueTables__table tr {\n  font-size: 10px !important;\n}\n.icon-small {\n  font-size: 15px;\n}\n", ""]);
+exports.push([module.i, "\n.small {\n  max-width: 150;\n  margin: 150px auto;\n}\n#exTab3 .nav-pills > li > a {\n  border-radius: 4px 4px 0 0;\n}\n#exTab3 .tab-content {\n  color: #3a3a3a;\n  background-color: #f0f5fb;\n  padding: 5px 15px;\n}\n.nav-pills > li.active > a,\n.nav-pills > li.active > a:focus,\n.nav-pills > li.active > a:hover {\n  color: #3a3a3a;\n  background-color: #f0f5fb;\n}\n.VueTables__table tr {\n  font-size: 10px !important;\n}\n.icon-small {\n  font-size: 15px;\n}\n.table-borderless > tbody > tr > td,\n.table-borderless > tbody > tr > th,\n.table-borderless > tfoot > tr > td,\n.table-borderless > tfoot > tr > th,\n.table-borderless > thead > tr > td,\n.table-borderless > thead > tr > th {\n  border: none;\n}\n.title {\n  background: #DAD8D8 !important;\n}\n", ""]);
 
 // exports
 
@@ -82775,6 +82842,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "widget"
   }, [_c('div', {
+    staticClass: "title"
+  }, [_vm._v("Chassis List")]), _vm._v(" "), _c('div', {
+    staticClass: "chart",
+    staticStyle: {
+      "background": "#004080"
+    }
+  }, [_c('bar', {
+    attrs: {
+      "data": _vm.barData,
+      "options": {
+        responsive: false,
+        maintainAspectRatio: false
+      },
+      "width": 400,
+      "height": 200
+    }
+  })], 1), _vm._v(" "), _c('div', {
+    staticClass: "chart"
+  }, [_c('bar', {
+    attrs: {
+      "data": _vm.barData2,
+      "options": {
+        responsive: false,
+        maintainAspectRatio: false
+      },
+      "width": 400,
+      "height": 200
+    }
+  })], 1)]), _vm._v(" "), _c('div', {
+    staticClass: "widget"
+  }, [_c('div', {
     staticClass: "chart"
   }, [_c('div', {
     staticClass: "container",
@@ -82787,14 +82885,151 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "tab-content clearfix"
-  }, [_vm._m(1), _vm._v(" "), _c('div', {
+  }, [_c('div', {
+    staticClass: "tab-pane active",
+    attrs: {
+      "id": "overview"
+    }
+  }, [_c('h3', [_vm._v("UCS-OVERVIEW")]), _vm._v(" "), _c('table', {
+    staticClass: "table table-responsive table-responsive"
+  }, [_c('tbody', [_c('tr', [_c('td', {
+    attrs: {
+      "width": "30%"
+    }
+  }, [_c('div', {
+    staticClass: "widget",
+    staticStyle: {
+      "margin-left": "0px",
+      "padding": "0px"
+    }
+  }, [_c('div', {
+    staticClass: "title"
+  }, [_vm._v("UCS information")]), _vm._v(" "), _c('table', {
+    staticClass: "table table-borderless"
+  }, [_c('tbody', [_c('tr', [_vm._m(1), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v(" " + _vm._s(_vm.ucs_info.name) + " ")])])]), _vm._v(" "), _c('tr', [_vm._m(2), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_c('i', {
+    staticClass: "material-icons text-success",
+    staticStyle: {
+      "font-size": "10px"
+    }
+  }, [_vm._v("fiber_manual_record")]), _vm._v(" " + _vm._s(_vm.ucs_info.status) + " Clear")])])]), _vm._v(" "), _c('tr', [_vm._m(3), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v(" " + _vm._s(_vm.ucs_info.address))])])]), _vm._v(" "), _c('tr', [_vm._m(4), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v(" " + _vm._s(_vm.ucs_info.system_up_time))])])]), _vm._v(" "), _c('tr', [_vm._m(5), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v(" " + _vm._s(_vm.ucs_info.mode))])])])])])]), _vm._v(" "), _vm._m(6), _vm._v(" "), _c('div', {
+    staticClass: "widget",
+    staticStyle: {
+      "margin-left": "0px",
+      "padding": "0px"
+    }
+  }, [_c('div', {
+    staticClass: "title",
+    staticStyle: {
+      "background": "#e4e4e4"
+    }
+  }, [_vm._v("UCS Components")]), _vm._v(" "), _c('table', {
+    staticClass: "table table-borderless"
+  }, [_c('tbody', [_c('tr', [_vm._m(7), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(" " + _vm._s(_vm.chassis.length) + " ")])])]), _vm._v(" "), _c('tr', [_vm._m(8), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', {
+    staticClass: "badge"
+  }, [_vm._v(" " + _vm._s(_vm.blades.length))])])]), _vm._v(" "), _c('tr', [_vm._m(9), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v(" " + _vm._s(_vm.ucs_info.address))])])]), _vm._v(" "), _c('tr', [_vm._m(10), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v(" " + _vm._s(_vm.ucs_info.system_up_time))])])]), _vm._v(" "), _c('tr', [_vm._m(11), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v(" " + _vm._s(_vm.ucs_info.mode))])])])])])])]), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "2%"
+    }
+  }), _vm._v(" "), _vm._m(12)])])])]), _vm._v(" "), _c('div', {
     staticClass: "tab-pane",
     attrs: {
-      "id": "1b"
+      "id": "chassis_tab"
     }
   }, [_c('h3', [_vm._v("Chassis list ")]), _vm._v(" "), _c('div', {
     staticClass: "title"
-  }, [_vm._v("STATISTICS")]), _vm._v(" "), _vm._m(2), _vm._v(" "), _c('div', {
+  }, [_vm._v("STATISTICS")]), _vm._v(" "), _vm._m(13), _vm._v(" "), _c('div', {
     attrs: {
       "id": "Chassis"
     }
@@ -82815,13 +83050,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
               _vm.getChassisStats(props.row.dn, props.row)
             }
           }
-        }, [_vm._v("\n                                                        " + _vm._s(props.row.name) + "\n                                                    ")])])]
+        }, [_vm._v("\n                                    " + _vm._s(props.row.name) + "\n                                ")])])]
       }]
     ])
-  })], 1)]), _vm._v(" "), _c('div', {
+  })], 1), _vm._v(" "), _c('p', [_vm._v("-----------------------------------")]), _vm._v(" "), _vm._m(14)]), _vm._v(" "), _c('div', {
     staticClass: "tab-pane",
     attrs: {
-      "id": "2b"
+      "id": "chassis_servers"
     }
   }, [_c('h3', [_vm._v("Chassis Servers coming here")]), _vm._v(" "), _c('div', {
     attrs: {
@@ -82868,26 +83103,41 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticClass: "list-group"
     }, [_c('li', {
       staticClass: "list-group-item"
-    }, [_vm._v("\n                                    " + _vm._s(stats.dn) + " " + _vm._s(stats) + "\n                                ")])])
+    }, [_vm._v("\n                " + _vm._s(stats.dn) + " " + _vm._s(stats) + "\n            ")])])
   }), _vm._v(" "), _vm._l((_vm.faults), function(fault) {
     return _c('ul', {
       staticClass: "list-group"
     }, [_c('li', {
       staticClass: "list-group-item"
-    }, [_vm._v("\n                                    " + _vm._s(fault.code) + " " + _vm._s(fault.cause) + " " + _vm._s(fault.descr) + " " + _vm._s(fault.severity) + " " + _vm._s(fault.created) + " " + _vm._s(fault) + "\n                                ")])])
-  })], 2) : _vm._e()]), _vm._v(" "), _vm._m(3), _vm._v(" "), _vm._m(4)])]), _vm._v(" "), _c('line-chart', {
+    }, [_vm._v("\n                " + _vm._s(fault.code) + " " + _vm._s(fault.cause) + " " + _vm._s(fault.descr) + " " + _vm._s(fault.severity) + " " + _vm._s(fault.created) + " " + _vm._s(fault) + "\n            ")])])
+  })], 2) : _vm._e()]), _vm._v(" "), _vm._m(15), _vm._v(" "), _vm._m(16)])])])]), _vm._v(" "), _c('div', {
+    staticClass: "modal fade",
     attrs: {
-      "chart-data": _vm.datacollection,
-      "width": 250,
-      "height": 150
+      "id": "modal-create-company",
+      "tabindex": "-1",
+      "role": "dialog"
     }
-  }), _vm._v(" "), _c('button', {
+  }, [_c('div', {
+    staticClass: "modal-dialog"
+  }, [_c('div', {
+    staticClass: "modal-content"
+  }, [_vm._m(17), _vm._v(" "), _vm._m(18), _vm._v(" "), _c('div', {
+    staticClass: "modal-footer"
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "type": "button",
+      "data-dismiss": "modal"
+    }
+  }, [_vm._v("Close")]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-primary",
+    attrs: {
+      "type": "button"
+    },
     on: {
-      "click": function($event) {
-        _vm.fillData()
-      }
+      "click": _vm.storeCompany
     }
-  }, [_vm._v("Randomize")])], 1)])])
+  }, [_vm._v(" Opslaan ")])])])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('ul', {
     staticClass: "nav nav-pills"
@@ -82900,22 +83150,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("Overview")])]), _vm._v(" "), _c('li', [_c('a', {
     attrs: {
-      "href": "#1b",
+      "href": "#chassis_tab",
       "data-toggle": "tab"
     }
   }, [_vm._v("Chassis")])]), _vm._v(" "), _c('li', [_c('a', {
     attrs: {
-      "href": "#2b",
+      "href": "#chassis_servers",
       "data-toggle": "tab"
     }
   }, [_vm._v("Chassis Servers")])]), _vm._v(" "), _c('li', [_c('a', {
     attrs: {
-      "href": "#3b",
+      "href": "#rackmount",
       "data-toggle": "tab"
     }
   }, [_vm._v("RackMounts")])]), _vm._v(" "), _c('li', [_c('a', {
     attrs: {
-      "href": "#4a",
+      "href": "#finterconnects",
       "data-toggle": "tab"
     }
   }, [_vm._v("Fabric Interconnect")])]), _vm._v(" "), _c('li', [_c('a', {
@@ -82935,12 +83185,124 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("UCS Components")])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "tab-pane active",
+  return _c('td', {
     attrs: {
-      "id": "overview"
+      "width": "30%",
+      "align": "left"
     }
-  }, [_c('h3', [_vm._v("UCS-OVERVIEW")]), _vm._v(" "), _c('span', {
+  }, [_c('span', [_vm._v("Name")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("Status")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("IP Address")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("System up time")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("Mode")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "widget",
+    staticStyle: {
+      "margin-left": "0px",
+      "padding": "0px"
+    }
+  }, [_c('div', {
+    staticClass: "title",
+    staticStyle: {
+      "background": "#e4e4e4"
+    }
+  }, [_vm._v("UCS Faults")]), _vm._v(" "), _c('ul', {
+    staticClass: "list list-group"
+  }, [_c('li', {
+    staticClass: " list-group-item text-success"
+  }, [_vm._v("General information")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Number of faults per type")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Power consumption")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of blades")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of Chassis")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Availabity")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Network ports")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Packets")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Service Profiles")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("Chassis")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("Chassis Servers")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("IP Address")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("System up time")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("Mode")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('td', [_c('div', {
+    staticClass: "widget",
+    staticStyle: {
+      "margin-left": "0px",
+      "padding": "0px"
+    }
+  }, [_c('div', {
+    staticClass: "title"
+  }, [_vm._v("UCS Statistics")]), _vm._v(" "), _c('div', {
+    staticClass: "chart"
+  }, [_c('span', {
+    attrs: {
+      "id": "powerGaugeContainer"
+    }
+  }), _vm._v(" "), _c('span', {
     attrs: {
       "id": "memoryGaugeContainer"
     }
@@ -82952,11 +83314,127 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "networkGaugeContainer"
     }
-  }), _vm._v(" "), _c('span', {
-    attrs: {
-      "id": "testGaugeContainer"
-    }
-  })])
+  })]), _vm._v(" "), _c('ul', {
+    staticClass: "list list-group"
+  }, [_c('li', {
+    staticClass: " list-group-item text-success"
+  }, [_vm._v("General information")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Number of faults per type")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Power consumption")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of blades")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of Chassis")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Availabity")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Network ports")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Packets")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Service Profiles")])]), _vm._v(" "), _c('ul', {
+    staticClass: "list list-group"
+  }, [_c('li', {
+    staticClass: " list-group-item text-success"
+  }, [_vm._v("General information")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Number of faults per type")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Power consumption")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of blades")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of Chassis")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Availabity")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Network ports")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Packets")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Service Profiles")])]), _vm._v(" "), _c('ul', {
+    staticClass: "list list-group"
+  }, [_c('li', {
+    staticClass: " list-group-item text-success"
+  }, [_vm._v("General information")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Number of faults per type")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Power consumption")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of blades")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of Chassis")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Availabity")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Network ports")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Packets")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Service Profiles")])]), _vm._v(" "), _c('ul', {
+    staticClass: "list list-group"
+  }, [_c('li', {
+    staticClass: " list-group-item text-success"
+  }, [_vm._v("General information")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Number of faults per type")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Power consumption")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of blades")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of Chassis")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Availabity")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Network ports")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Packets")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Service Profiles")])]), _vm._v(" "), _c('ul', {
+    staticClass: "list list-group"
+  }, [_c('li', {
+    staticClass: " list-group-item text-success"
+  }, [_vm._v("General information")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Number of faults per type")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Power consumption")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of blades")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of Chassis")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Availabity")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Network ports")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Packets")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Service Profiles")])]), _vm._v(" "), _c('ul', {
+    staticClass: "list list-group"
+  }, [_c('li', {
+    staticClass: " list-group-item text-success"
+  }, [_vm._v("General information")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Number of faults per type")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Power consumption")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of blades")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Num of Chassis")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Availabity")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Network ports")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Packets")]), _vm._v(" "), _c('li', {
+    staticClass: " list-group-item"
+  }, [_vm._v("Service Profiles")])])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "chart"
@@ -82972,10 +83450,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('ul', {
+    staticClass: "list-group"
+  }, [_c('li', {
+    staticClass: "list-group-item-heading"
+  }, [_vm._v("To Add")]), _vm._v(" "), _c('li', [_vm._v("Power Consumption")]), _vm._v(" "), _c('li', [_vm._v("InputCurrent")]), _vm._v(" "), _c('li', [_vm._v("Power voltage")]), _vm._v(" "), _c('li')])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "tab-pane",
     attrs: {
-      "id": "3b"
+      "id": "rackmounts"
     }
   }, [_c('h3', [_vm._v("RackMounts coming here")])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -82985,6 +83469,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": "4b"
     }
   }, [_c('h3', [_vm._v("Fabric Interconnect list and details")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "modal-header"
+  }, [_c('button', {
+    staticClass: "close",
+    attrs: {
+      "type": "button ",
+      "data-dismiss": "modal",
+      "aria-hidden": "true"
+    }
+  }, [_vm._v("×")]), _vm._v(" "), _c('h4', {
+    staticClass: "modal-title"
+  }, [_vm._v(" Bedrijf toevoegen")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "modal-body"
+  }, [_c('h3', [_vm._v("body")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {
