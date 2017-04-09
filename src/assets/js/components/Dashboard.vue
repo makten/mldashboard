@@ -1,33 +1,39 @@
 <script>
     import vSelect from 'vue-select';
+    import tabs from '../../core/tabs.js';
+    import tab from '../../core/tab.js';
+    import UcsSystem from './ucs_components/UcsSystem.vue';
+    import Chassis from './ucs_components/Chassis.vue';
+    import ChassisServer from './ucs_components/ChassisServer.vue';
+    import RackMount from './ucs_components/RackMounts.vue';
+    
+
 
 
     export default {
 
         components: {
-
+            UcsSystem,
+            Chassis,
+            ChassisServer,
+            RackMount,
             vSelect,
             Bar,
             LineChart,
+            tabs,
+            tab
         },
 
         data() {
 
-            return {
+            return {        
 
-                showStats: false,
-
-                ucs_info: [],
+                ucs_systems: [],
+                ipAddress: '',                     
 
                 datacollection: null,
-
-                chassis: [],
-                single_chassis: {},
-                chassis_stats: [],
-
-                blades: [],
-                rackunits: [],
-                blade_cpustats: [],
+                
+                rackunits: [],                
                 faults: [],
 
                 savedSearches: '',
@@ -40,28 +46,8 @@
                 syncedVal: '',
                 chartLine: null,
 
-                chassisServerColumns: ['equipment', 'model', 'serial', 'num_of_cpus', 'num_of_cores', 'enabled_cpu_cores', 'total_memory', 'available_memory', 'NICs', 'power', 'serial', 'presence', 'assocState', 'stats', 'faults'],
-                chassisColumns: ['name', 'model', 'status'],
-
-                chassisServerOptions: {
-                    // see the options API
-                    templates: {
-
-                        // faults: function (h, row) {                        
-                        //     return <a href="javascript:void(0)" > <span class="material-icons text-danger" style="font-size:15px;">error</span></a>
-                        // }
-                    }
-                },
-
-                chassisOptions: {
-                    // see the options API
-                    templates: {
-
-                        // faults: function (h, row) {                        
-                        //     return <a href="javascript:void(0)" > <span class="material-icons text-danger" style="font-size:15px;">error</span></a>
-                        // }
-                    }
-                },
+                
+                
 
                 gauges: [],
 
@@ -143,12 +129,25 @@
 
             this.$nextTick(function () {
 
-                this.initialize();
-                this.getUcsInfo();
-                this.fillData();
-                this.getBlades();
-                this.getRackUnits();
-                this.getChassis();
+                this.getUcsList();
+
+                /** Query UCS System
+                // If none popup modal to add
+                    /**
+                    * 1. IP and subnet
+                    * 2. Add credentials
+                    * 3 Discover and show overview
+                    *
+                // ELSE show a list of ucs to select from
+                * If online one, show it
+                */ 
+
+                // this.initialize();
+                // this.getUcsInfo();
+                // this.fillData();
+                
+                // this.getRackUnits();
+                
 
             //this.getBladeFaults();
 
@@ -187,19 +186,25 @@
         },
 
 
-        methods: {
+        methods: {  
 
-            getUcsInfo() {
+            getUcsList() {
+                axios.get(`/api/getUcsSystems/`)
+                .then(response => {                 
 
-                axios.get('/api/get_ucsinfo')
-                .then(response => {
+                    this.ucs_systems = response.data  
+                    
+                    // this.ipAddress = this.ucs_systems[0].ipAddress                  
 
-                    this.ucs_info = JSON.parse(response.data)
-                    console.log(this.ucs_info)
+                    // $('#modal-ucs-list').modal('show');                    
+
                 })
                 .catch(errors => { })
+            }, 
 
-            },
+            selectUCS(ucs) {
+                this.ipAddress = ucs.ipAddress
+            },         
 
             /**
             * Show the form for creating new company.
@@ -246,57 +251,7 @@
 
             getRandomInt() {
                 return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-            },
-
-
-            getChassis() {
-
-                axios.get('/api/get_chassis/')
-                .then(response => {
-
-                    this.chassis = []
-                    this.chassis = JSON.parse(response.data)
-                })
-                .catch(errors => { })
-            },
-
-            getChassisStats(dn, chassis) {
-
-                let str_dn = dn.split('/')
-                let chs = str_dn[1]
-                this.single_chassis = chassis
-
-                axios.get(`/api/getChassisStats/${chs}`)
-                .then(response => {
-
-                    this.chassis_stats = [];
-                    this.chassis_stats = JSON.parse(response.data);
-
-                    this.createGauge('power', 'power', parseInt(this.chassis_stats.input_power_min), parseInt(this.chassis_stats.input_power))
-
-                    this.editForm.id = client.id;
-                    this.editForm.name = client.name;
-                    this.editForm.redirect = client.redirect;
-
-                    $('#modal-edit-client').modal('show');
-
-                    this.showStats = true;
-
-                })
-                .catch(errors => { })
-            },
-
-            getBlades() {
-
-                axios.get('/api/get_blades')
-                .then(response => {
-
-                    this.blades = []
-                    this.blades = JSON.parse(response.data)
-                    
-                })
-                .catch(errors => { })
-            },
+            },          
 
 
             getRackUnits() {
@@ -310,42 +265,7 @@
                     
                 })
                 .catch(errors => { })
-            },
-
-            loadStats(cpustats, dn) {
-
-                let len = cpustats.length;
-                let sm = 0;
-
-                _.each(cpustats, (val, key) => {
-                    sm += parseInt(val.input_current)
-                    //singlecpu
-
-                })
-
-                console.log(sm, sm / len)
-
-                this.createGauge('singlecpu', 'CPU', 0, sm)
-
-
-                this.blade_cpustats = cpustats;
-                this.getBladeFaults(dn)
-
-            },
-
-            getBladeFaults(dn) {
-                let str_dn = dn.split('/')
-
-                let chs = str_dn[1]
-                let bld = str_dn[2]
-                axios.get(`/api/get_bladefaults/${chs}/${bld}`)
-                .then(response => {
-                    this.faults = [];
-                    this.faults = JSON.parse(response.data);
-
-                })
-                .catch(errors => { })
-            },
+            },            
 
             getSavedSearches() {
 
@@ -585,541 +505,101 @@
 
     <div class="main">
 
+
         <div class="widget">
+
+            <div class="chart">
+
+                <tabs v-if="ipAddress">
+
+                    <tab name="UCS Overview" :selected="true" >
+                        <h1>Here is the content for the UCS overview tab.</h1>
+                        
+                        <ucs-system :ucs="ipAddress"></ucs-system>
+                        
+                    </tab>
+
+
+                    <tab name="Chassis">
+                        <h1>Here is the content for the chassis tab.</h1>
+                        <chassis></chassis>
+
+                    </tab>
+
+                    <tab name="Chassis Servers">
+                        <h1>Here is the content for the chassis servers tab.</h1>
+                        <chassis-server></chassis-server>
+                    </tab>
+
+                    <tab name="RackMounts">
+                        <h1>Here is the content for the about our vision tab.</h1>
+                        <rack-mount ucs=''></rack-mount>
+                    </tab>
+                </tabs>
+                <div v-else>
+                    <h3>Select UCS System</h3>
+                    
+                    <ul class="list-group" v-for="ucs in ucs_systems">
+                        <li class="list-group-item">
+                            <a href="#" @click="selectUCS(ucs)"> {{ ucs.ipAddress }} </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- <div class="widget">
 
             <div class="title">Chassis List</div>
 
             <div class="chart" style="background: #004080;">
-
-              <bar :data="barData"
-              :options="{responsive: false, maintainAspectRatio: false}"
-              :width="400"
-              :height="200"> </bar>
-
-          </div>
-
-          <div class="chart">
-
-            <bar :data="barData2"
-            :options="{responsive: false, maintainAspectRatio: false}"
-            :width="400"
-            :height="200">
-
-        </bar>
-
-    </div>
-
-</div>
-
-
-
-<div class="widget">
-
-    <div class="chart">
-
-        <div id="exTab3" class="container" style="padding: 0px; margin: 0px;">
-
-            <!-- TABS -->
-            <ul class="nav nav-pills">
-
-                <li class="active">
-                    <a href="#overview"
-                    data-toggle="tab">Overview</a>
-                </li>
-
-                <li>
-                    <a href="#chassis_tab"
-                    data-toggle="tab">Chassis</a>
-                </li>
-
-                <li>
-                    <a href="#chassis_servers"
-                    data-toggle="tab">Chassis Servers</a>
-                </li>
-                <li>
-                    <a href="#rackmount"
-                    data-toggle="tab">RackMounts</a>
-                </li>
-
-                <li>
-                    <a href="#finterconnects"
-                    data-toggle="tab">Fabric Interconnect</a>
-                </li>
-
-                <li>
-                    <a href="#5a"
-                    data-toggle="tab">UCS Tree</a>
-                </li>
-
-                <li>
-                    <a href="#6a"
-                    data-toggle="tab">ServiceProfile</a>
-                </li>
-
-                <li>
-                    <a href="#6b"
-                    data-toggle="tab">UCS Components</a>
-                </li>
-
-            </ul>
-            <!-- / TABS -->
-
-
-
-            <div class="tab-content clearfix">
-
-
-                <!-- OVERVIEW -->
-                <div class="tab-pane active" id="overview">
-
-                    <h3>UCS-OVERVIEW</h3>
-
-                    <!-- General UCS Information -->
-                    <table class="table table-responsive table-responsive">
-                     <tbody>
-                         <tr>
-                             <td width="30%">
-                                 <div class="widget" style="margin-left: 0px; padding: 0px;">
-
-                                     <div class="title">UCS information</div>
-
-                                     <table class="table table-borderless">                       
-
-                                        <tbody>
-                                            <tr>
-                                                <td width="30%" align="left">
-                                                    <span>Name</span>
-                                                </td>
-                                                <td width="5%" align="center">:</td>
-
-                                                <td align="left">
-                                                    <span> {{ ucs_info.name }} </span>
-                                                </td>       
-                                            </tr>
-
-                                            <tr>
-                                                <td width="30%" align="left">
-                                                    <span>Status</span>
-                                                </td>
-                                                <td width="5%" align="center">:</td>
-
-                                                <td align="left">
-                                                    <span><i class="material-icons text-success" style="font-size: 10px;">fiber_manual_record</i> {{ ucs_info.status }} Clear</span>
-                                                </td>       
-                                            </tr>
-
-                                            <tr>
-                                                <td width="30%" align="left">
-                                                    <span>IP Address</span>
-                                                </td>
-                                                <td width="5%" align="center">:</td>
-
-                                                <td align="left">
-                                                    <span> {{ ucs_info.address }}</span>
-                                                </td>       
-                                            </tr>
-
-                                            <tr>
-                                                <td width="30%" align="left">
-                                                    <span>System up time</span>
-                                                </td>
-                                                <td width="5%" align="center">:</td>
-
-                                                <td align="left">
-                                                    <span> {{ ucs_info.system_up_time }}</span>
-                                                </td>       
-                                            </tr>
-
-                                            <tr>
-                                                <td width="30%" align="left">
-                                                    <span>Mode</span>
-                                                </td>
-                                                <td width="5%" align="center">:</td>
-
-                                                <td align="left">
-                                                    <span> {{ ucs_info.mode }}</span>
-                                                </td>       
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-
-                                </div> <!-- / General UCS Information -->
-
-
-                                <div class="widget" style="margin-left: 0px; padding: 0px;">
-
-                                    <div class="title" style="background: #e4e4e4">UCS Faults</div> 
-
-
-                                    <ul class="list list-group">                            
-
-                                        <li class=" list-group-item text-success">General information</li>
-                                        <li class=" list-group-item">Number of faults per type</li>
-                                        <li class=" list-group-item">Power consumption</li>
-                                        <li class=" list-group-item">Num of blades</li>
-                                        <li class=" list-group-item" >Num of Chassis</li>
-                                        <li class=" list-group-item">Availabity</li>
-                                        <li class=" list-group-item">Network ports</li>
-                                        <li class=" list-group-item">Packets</li>
-                                        <li class=" list-group-item">Service Profiles</li>
-                                    </ul> 
-                                </div>
-
-
-                                <div class="widget" style="margin-left: 0px; padding: 0px;">
-
-                                    <div class="title" style="background: #e4e4e4">UCS Components</div>                       
-
-                                     <table class="table table-borderless">                       
-
-                                        <tbody>
-                                            <tr>
-                                                <td width="30%" align="left">
-                                                    <span>Chassis</span>
-                                                </td>
-                                                <td width="5%" align="center">:</td>
-
-                                                <td align="left">
-                                                    <span class="badge"> {{ chassis.length }} </span>
-                                                </td>       
-                                            </tr>
-
-                                            <tr>
-                                                <td width="30%" align="left">
-                                                    <span>Chassis Servers</span>
-                                                </td>
-                                                <td width="5%" align="center">:</td>
-
-                                                <td align="left">
-                                                    <span class="badge"> {{ blades.length }}</span>
-                                                </td>       
-                                            </tr>
-
-                                            <tr>
-                                                <td width="30%" align="left">
-                                                    <span>IP Address</span>
-                                                </td>
-                                                <td width="5%" align="center">:</td>
-
-                                                <td align="left">
-                                                    <span> {{ ucs_info.address }}</span>
-                                                </td>       
-                                            </tr>
-
-                                            <tr>
-                                                <td width="30%" align="left">
-                                                    <span>System up time</span>
-                                                </td>
-                                                <td width="5%" align="center">:</td>
-
-                                                <td align="left">
-                                                    <span> {{ ucs_info.system_up_time }}</span>
-                                                </td>       
-                                            </tr>
-
-                                            <tr>
-                                                <td width="30%" align="left">
-                                                    <span>Mode</span>
-                                                </td>
-                                                <td width="5%" align="center">:</td>
-
-                                                <td align="left">
-                                                    <span> {{ ucs_info.mode }}</span>
-                                                </td>       
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                            </td>
-
-                            <td width="2%"></td>
-
-
-                            <td>
-                                <div class="widget" style="margin-left: 0px; padding: 0px;">
-
-                                    <div class="title">UCS Statistics</div>                       
-
-                                    <div class="chart">
-
-                                        <span id="powerGaugeContainer"></span>
-                                        <span id="memoryGaugeContainer"></span>
-                                        <span id="cpuGaugeContainer"></span>
-                                        <span id="networkGaugeContainer"></span>                                       
-
-                                    </div>
-
-                                    <!-- <div class="chart">
-                                       <canvas id="myChart" width="400" height="200"></canvas>
-                                   </div> -->
-
-
-                                   <ul class="list list-group">                            
-
-                                    <li class=" list-group-item text-success">General information</li>
-                                    <li class=" list-group-item">Number of faults per type</li>
-                                    <li class=" list-group-item">Power consumption</li>
-                                    <li class=" list-group-item">Num of blades</li>
-                                    <li class=" list-group-item" >Num of Chassis</li>
-                                    <li class=" list-group-item">Availabity</li>
-                                    <li class=" list-group-item">Network ports</li>
-                                    <li class=" list-group-item">Packets</li>
-                                    <li class=" list-group-item">Service Profiles</li>
-                                </ul>                           
-
-                                <ul class="list list-group">                            
-
-                                    <li class=" list-group-item text-success">General information</li>
-                                    <li class=" list-group-item">Number of faults per type</li>
-                                    <li class=" list-group-item">Power consumption</li>
-                                    <li class=" list-group-item">Num of blades</li>
-                                    <li class=" list-group-item" >Num of Chassis</li>
-                                    <li class=" list-group-item">Availabity</li>
-                                    <li class=" list-group-item">Network ports</li>
-                                    <li class=" list-group-item">Packets</li>
-                                    <li class=" list-group-item">Service Profiles</li>
-                                </ul> 
-
-                                <ul class="list list-group">                            
-
-                                    <li class=" list-group-item text-success">General information</li>
-                                    <li class=" list-group-item">Number of faults per type</li>
-                                    <li class=" list-group-item">Power consumption</li>
-                                    <li class=" list-group-item">Num of blades</li>
-                                    <li class=" list-group-item" >Num of Chassis</li>
-                                    <li class=" list-group-item">Availabity</li>
-                                    <li class=" list-group-item">Network ports</li>
-                                    <li class=" list-group-item">Packets</li>
-                                    <li class=" list-group-item">Service Profiles</li>
-                                </ul>
-
-
-                                <ul class="list list-group">                            
-
-                                    <li class=" list-group-item text-success">General information</li>
-                                    <li class=" list-group-item">Number of faults per type</li>
-                                    <li class=" list-group-item">Power consumption</li>
-                                    <li class=" list-group-item">Num of blades</li>
-                                    <li class=" list-group-item" >Num of Chassis</li>
-                                    <li class=" list-group-item">Availabity</li>
-                                    <li class=" list-group-item">Network ports</li>
-                                    <li class=" list-group-item">Packets</li>
-                                    <li class=" list-group-item">Service Profiles</li>
-                                </ul>
-
-
-
-                                <ul class="list list-group">                            
-
-                                    <li class=" list-group-item text-success">General information</li>
-                                    <li class=" list-group-item">Number of faults per type</li>
-                                    <li class=" list-group-item">Power consumption</li>
-                                    <li class=" list-group-item">Num of blades</li>
-                                    <li class=" list-group-item" >Num of Chassis</li>
-                                    <li class=" list-group-item">Availabity</li>
-                                    <li class=" list-group-item">Network ports</li>
-                                    <li class=" list-group-item">Packets</li>
-                                    <li class=" list-group-item">Service Profiles</li>
-                                </ul>
-
-
-                                <ul class="list list-group">                            
-
-                                    <li class=" list-group-item text-success">General information</li>
-                                    <li class=" list-group-item">Number of faults per type</li>
-                                    <li class=" list-group-item">Power consumption</li>
-                                    <li class=" list-group-item">Num of blades</li>
-                                    <li class=" list-group-item" >Num of Chassis</li>
-                                    <li class=" list-group-item">Availabity</li>
-                                    <li class=" list-group-item">Network ports</li>
-                                    <li class=" list-group-item">Packets</li>
-                                    <li class=" list-group-item">Service Profiles</li>
-                                </ul>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                </tbody>
-            </table>                
-
-
-                    <!-- <span id="memoryGaugeContainer"></span>
-                    <span id="cpuGaugeContainer"></span>
-                    <span id="networkGaugeContainer"></span>
-                    <span id="testGaugeContainer"></span>
-
-                    <line-chart :chart-data="datacollection"
-                    :width="150"
-                    :height="150"></line-chart>
-
-                    <button @click="fillData()">Randomize</button> -->
-
-                </div>
-                <!-- / OVERVIEW -->
-
-                <!-- CHASSIS VIEW -->
-                <div class="tab-pane"
-                id="chassis_tab">
-
-                <h3>Chassis list </h3>
-
-                <!-- LEFT SIDE STATISTICS -->
-                <div class="title">STATISTICS</div>
-
-                <div class="chart">
-
-                    <span id="powerGaugeContainer"></span>
-
-                    <canvas id="myChart"
-                    width="400"
-                    height="200"></canvas>
-
-                </div>
-                <!-- / LEFT SIDE STATISTICS -->
-
-                <div id="Chassis">
-
-                    <v-client-table :data="chassis" :columns="chassisColumns" :options="chassisOptions">
-                        <template slot="name" scope="props">
-
-                            <div>
-                                <a href="javascript:void(0)" @click="getChassisStats(props.row.dn, props.row)">
-                                    {{props.row.name}}
-                                </a>
-
-                            </div>
-                        </template>
-                    </v-client-table>
-
-                </div>
-
-
-                <p>-----------------------------------</p>
-                <ul class="list-group">
-                    <li class="list-group-item-heading">To Add</li>
-
-                    <li>Power Consumption</li>
-                    <li>InputCurrent</li>
-                    <li>Power voltage</li>
-                    <li></li>
-                </ul>
-
-            </div>
-            <!-- / CHASSIS VIEW -->
-
-            <!-- CHASSIS SERVERS VIEW -->
-            <div class="tab-pane"
-            id="chassis_servers">
-            <h3>Chassis Servers coming here</h3>
-
-            <div id="ChassisServers">
-
-                <v-client-table :data="blades"
-                :columns="chassisServerColumns"
-                :options="chassisServerOptions">
-                <template slot="stats"
-                scope="props">
-                <div>
-                    <a href="javascript:void(0)" @click="loadStats(props.row.cpu_stats, props.row.dn)">
-                        <span class="material-icons text-success icon-small">poll</span>
-                    </a>
-
-                </div>
-            </template>
-
-            <template slot="faults" scope="props">
-                <div>
-                    <a href="javascript:void(0)" @click="getBladeFaults(props.row.dn)">
-                        <span class="material-icons text-danger icon-small">error</span>
-                    </a>
-
-                </div>
-            </template>
-
-        </v-client-table>
-
-    </div>
-    <!-- /CHASSIS SERVERS VIEW -->
-
-    <div v-if="blade_cpustats.length >= 1">
-
-        <ul class="list-group" v-for="stats in blade_cpustats">
-
-            <li class="list-group-item">
-                {{ stats.dn }} {{stats}}
-            </li>
-
-        </ul>
-
-        <ul class="list-group" v-for="fault in faults">
-
-            <li class="list-group-item">
-                {{ fault.code }} {{ fault.cause }} {{ fault.descr }} {{ fault.severity }} {{ fault.created }} {{fault}}
-            </li>
-
-        </ul>
-
-    </div>
-
-
-</div>
-
-<div class="tab-pane" id="rackmounts">
-
-    <h3>RackMounts coming here</h3>
-
-</div>
-
-
-<div class="tab-pane" id="4b">
-
-    <h3>Fabric Interconnect list and details</h3>
-</div>
-
-</div>
-</div>
-</div>
-
-</div>
-
-<!-- Create Client Modal -->
-<div class="modal fade" id="modal-create-company" tabindex="-1" role="dialog">
-
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <button type="button " class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-                <h4 class="modal-title"> Bedrijf toevoegen</h4>
+                <bar :data="barData" :options="{responsive: false, maintainAspectRatio: false}" :width="400" :height="200"> </bar>
             </div>
 
-            <div class="modal-body">
-
-                <h3>body</h3>
-
+            <div class="chart">
+                <bar :data="barData2" :options="{responsive: false, maintainAspectRatio: false}" :width="400" :height="200"></bar>
             </div>
+        </div> -->
 
-            <!-- Modal Actions -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
-                <button type="button" class="btn btn-primary" @click="storeCompany"> Opslaan </button>
+        <!-- Show UCS List Modal -->
+        <div class="modal fade" id="modal-ucs-list" tabindex="-1" role="dialog">
+
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button " class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                        <h4 class="modal-title"> UCS LIST</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <h3>body</h3>
+
+                        {{ ucs_systems }}
+
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary" @click="storeCompany"> Opslaan </button> -->
+                    </div>
+
+                </div>
             </div>
-
         </div>
-    </div>
-</div>
 
-</div>
+
+        
+
+    </div>
+
 </template>
 
 
@@ -1132,31 +612,21 @@
     }
 
 
-    #exTab3 .nav-pills > li > a {
-        border-radius: 4px 4px 0 0 ;
+    .VueTables__table tr {
+        font-size: 11px !important;
     }
 
-    #exTab3 .tab-content {
-        color : #3a3a3a;
-        background-color: #f0f5fb;
-        padding : 5px 15px;
+    .icon-small {
+        font-size: 15px;
     }
 
-    .nav-pills>li.active>a, 
+    .nav-pills>li.is-active>a, 
     .nav-pills>li.active>a:focus, 
     .nav-pills>li.active>a:hover {
 
         color: #3a3a3a;
         background-color: #f0f5fb;
-        
-    }
 
-    .VueTables__table tr {
-        font-size: 10px !important;
-    }
-
-    .icon-small {
-        font-size: 15px;
     }
 
     .table-borderless > tbody > tr > td,

@@ -1,16 +1,18 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-class HomePageView(TemplateView):
-	def get(self, request, **kwargs):
-		return render(request, 'index.html', context=None)
+@login_required(login_url='/auth/login/')
+def dashboardfull(request):
+	return render(request, 'dashboard/dashboardfull.html', context=None)
 
-
-class DashboardPageView(TemplateView):	
-	template_name = "dashboard.html"
+@login_required(login_url='/auth/login/')
+def dashboard(request):
+    return render(request, "dashboard.html")
 
 
 class TestDataView(TemplateView):

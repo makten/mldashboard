@@ -27,6 +27,8 @@ require('vue-resource');
 
 import Form from '../core/Form.js';
 import Errors from '../core/Errors.js';
+// import tabs from '../core/tabs.js';
+// import tab from '../core/tab.js';
 import Bar from '../charts/Bar.js';
 import LineChart from '../charts/Line.js';
 import Gauge from '../charts/Guage.js';
@@ -37,6 +39,8 @@ window.Chartjs = ChartJs;
 
 window.Form = Form;
 window.Errors = Errors;
+// window.tabs = tabs;
+// window.tab = tab;
 window.Bar = Bar;
 window.LineChart = LineChart;
 window.Gauge = Gauge;

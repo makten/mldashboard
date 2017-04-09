@@ -1,18 +1,21 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from .serializers import ModelBuilderSerializer, UserSerializer
-from .models import ModelBuilder
+from .serializers import ModelBuilderSerializer, UserSerializer, UcsSystemSerializer
+from .models import ModelBuilder, UcsSystem
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from django.core import serializers
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
+from .permissions import IsOwner
 from api import ucs_manager as ucs
 import json
 from ucs_manager.connection import ucs_login, ucs_logout
+from django.contrib.auth.decorators import login_required
 
 from ucsmsdk.ucshandle import UcsHandle
 
@@ -24,18 +27,24 @@ handle = None
 
 class CreateView(generics.ListCreateAPIView):
     """This class defines the create behaviour of our rest api"""
-    queryset = ModelBuilder.objects.all()
-    serializer_class = ModelBuilderSerializer
+    queryset = UcsSystem.objects.all()
+    serializer_class = UcsSystemSerializer
+    permission_classes = ( permissions.IsAuthenticated, IsOwner )
+
 
     def perform_create(self, serializer):
         """Save the post data when creating a new ml model"""
-        serializer.save()
+
+        serializer.save(owner=self.request.user)
 
 
 class DetailsView(generics.RetrieveUpdateDestroyAPIView):
-    """Handles the http GET, PUT and DELETE request for MODELBUILDER"""
-    queryset = ModelBuilder.objects.all()
-    serializer_class = ModelBuilderSerializer
+    """Handles the http GET, PUT and DELETE request for UcsSystem"""
+    queryset = UcsSystem.objects.all()
+    serializer_class = UcsSystemSerializer
+    permission_classes = (permissions.IsAuthenticated, IsOwner)
+
+
 
 
 class UserProfile(generics.ListCreateAPIView):
@@ -48,6 +57,19 @@ class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     # return Response(serializer.data)
+
+@login_required(login_url='/auth/login/')
+@api_view(['GET'])
+def getUcsSystems(request):
+    if request.method == 'GET':
+        print(request.user.username)
+        queryset = request.user.ucssystems.filter()              
+        # queryset = UcsSystem.objects.all()        
+        serializer_class = UcsSystemSerializer(queryset, many=True)        
+        # permission_classes = (permissions.IsAuthenticated, IsOwner)
+        
+        return Response(serializer_class.data)
+
 
 
 def getUcsInfo(request):
