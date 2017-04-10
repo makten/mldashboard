@@ -6,9 +6,6 @@
     import Chassis from './ucs_components/Chassis.vue';
     import ChassisServer from './ucs_components/ChassisServer.vue';
     import RackMount from './ucs_components/RackMounts.vue';
-    
-
-
 
     export default {
 
@@ -29,12 +26,12 @@
             return {        
 
                 ucs_systems: [],
-                ipAddress: '',                     
+                ipAddress: '',
 
                 datacollection: null,
                 
                 rackunits: [],                
-                faults: [],
+                
 
                 savedSearches: '',
 
@@ -44,9 +41,7 @@
                 modifiedFeatures: [],
                 rowCount: 0,
                 syncedVal: '',
-                chartLine: null,
-
-                
+                chartLine: null,              
                 
 
                 gauges: [],
@@ -192,11 +187,15 @@
                 axios.get(`/api/getUcsSystems/`)
                 .then(response => {                 
 
-                    this.ucs_systems = response.data  
-                    
-                    // this.ipAddress = this.ucs_systems[0].ipAddress                  
+                    this.ucs_systems = response.data 
 
-                    // $('#modal-ucs-list').modal('show');                    
+                    if (this.ucs_systems.length >= 0) {
+
+                        $('#modal-ucs-list').modal('show');
+                    } 
+
+
+
 
                 })
                 .catch(errors => { })
@@ -261,7 +260,7 @@
 
                     this.this.rackunits = []
                     this.rackunits = JSON.parse(response.data)
-                    console.log(this.rackunits)
+                    // console.log(this.rackunits)
                     
                 })
                 .catch(errors => { })
@@ -564,7 +563,7 @@
         </div> -->
 
 
-        <!-- Show UCS List Modal -->
+        <!-- Create UCS System -->
         <div class="modal fade" id="modal-ucs-list" tabindex="-1" role="dialog">
 
             <div class="modal-dialog">
@@ -582,6 +581,33 @@
                         <h3>body</h3>
 
                         {{ ucs_systems }}
+                        
+                        <form action="">
+                            <table class="table">
+                                <tr>
+                                    <td width="15%">
+                                        <label for="ipAddress" class="input-conrol">IP Adress</label>
+
+                                    </td>
+
+                                    <td width="1%">:</td>
+                                    <td>
+                                    <input type="text" name="ipAddress">
+                                    </td>
+
+
+                                    <td>
+                                        <label for="subnet" class="label label-default"></label>
+                                        
+                                    </td>
+                                    <td>:</td>
+                                    <td><input type="text" name="subnet"></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </form>
+                        
+                        
 
                     </div>
 
@@ -640,6 +666,4 @@
 
     .title {
         background: #DAD8D8 !important;
-    }
-
-</style>
+    }</style>

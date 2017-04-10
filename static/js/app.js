@@ -49418,7 +49418,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             datacollection: null,
 
             rackunits: [],
-            faults: [],
 
             savedSearches: '',
 
@@ -49570,9 +49569,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this.ucs_systems = response.data;
 
-                // this.ipAddress = this.ucs_systems[0].ipAddress                  
+                if (_this.ucs_systems.length >= 0) {
 
-                // $('#modal-ucs-list').modal('show');                    
+                    $('#modal-ucs-list').modal('show');
+                }
             }).catch(function (errors) {});
         },
         selectUCS: function selectUCS(ucs) {
@@ -49631,7 +49631,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 _this2.this.rackunits = [];
                 _this2.rackunits = JSON.parse(response.data);
-                console.log(_this2.rackunits);
+                // console.log(this.rackunits)
             }).catch(function (errors) {});
         },
         getSavedSearches: function getSavedSearches() {
@@ -50054,6 +50054,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             showStats: false,
             chassis_servers: [],
             blade_cpustats: [],
+            faults: [],
             chassisServerColumns: ['equipment', 'model', 'serial', 'num_of_cpus', 'num_of_cores', 'enabled_cpu_cores', 'total_memory', 'available_memory', 'NICs', 'power', 'serial', 'presence', 'assocState', 'stats', 'faults'],
 
             chassisServerOptions: {
@@ -69825,7 +69826,7 @@ exports = module.exports = __webpack_require__(10)();
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -83361,7 +83362,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "modal-content"
   }, [_vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "modal-body"
-  }, [_c('h3', [_vm._v("body")]), _vm._v("\n\n                    " + _vm._s(_vm.ucs_systems) + "\n\n                ")]), _vm._v(" "), _vm._m(1)])])])])
+  }, [_c('h3', [_vm._v("body")]), _vm._v("\n\n                    " + _vm._s(_vm.ucs_systems) + "\n                    \n                    "), _vm._m(1)]), _vm._v(" "), _vm._m(2)])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "modal-header"
@@ -83375,6 +83376,42 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("×")]), _vm._v(" "), _c('h4', {
     staticClass: "modal-title"
   }, [_vm._v(" UCS LIST")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('form', {
+    attrs: {
+      "action": ""
+    }
+  }, [_c('table', {
+    staticClass: "table"
+  }, [_c('tr', [_c('td', {
+    attrs: {
+      "width": "15%"
+    }
+  }, [_c('label', {
+    staticClass: "input-conrol",
+    attrs: {
+      "for": "ipAddress"
+    }
+  }, [_vm._v("IP Adress")])]), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "1%"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', [_c('input', {
+    attrs: {
+      "type": "text",
+      "name": "ipAddress"
+    }
+  })]), _vm._v(" "), _c('td', [_c('label', {
+    staticClass: "label label-default",
+    attrs: {
+      "for": "subnet"
+    }
+  })]), _vm._v(" "), _c('td', [_vm._v(":")]), _vm._v(" "), _c('td', [_c('input', {
+    attrs: {
+      "type": "text",
+      "name": "subnet"
+    }
+  })]), _vm._v(" "), _c('td')])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "modal-footer"
