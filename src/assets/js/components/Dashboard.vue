@@ -581,10 +581,11 @@
                         <h3>body</h3>
 
                         {{ ucs_systems }}
-                        
+
                         <form class="form-horizontal">
                           <fieldset>
 
+                       
                               <legend>Add UCS System</legend>
                               
                               <div class="form-group">
@@ -749,9 +750,10 @@
 
     .title {
         background: #DAD8D8 !important;
+
     }
 
     .help-block {
         font-size: 10px !important;
     }
-</style>}
+</style>
