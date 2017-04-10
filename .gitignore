@@ -31,4 +31,5 @@ local.meta
 .trained_models
 ml_datasets/
 trained_models/
+ucs_manager/
 ucs_manager/connection.cfg

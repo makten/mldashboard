@@ -6,9 +6,6 @@
     import Chassis from './ucs_components/Chassis.vue';
     import ChassisServer from './ucs_components/ChassisServer.vue';
     import RackMount from './ucs_components/RackMounts.vue';
-    
-
-
 
     export default {
 
@@ -29,12 +26,12 @@
             return {        
 
                 ucs_systems: [],
-                ipAddress: '',                     
+                ipAddress: '',
 
                 datacollection: null,
                 
                 rackunits: [],                
-                faults: [],
+                
 
                 savedSearches: '',
 
@@ -44,9 +41,7 @@
                 modifiedFeatures: [],
                 rowCount: 0,
                 syncedVal: '',
-                chartLine: null,
-
-                
+                chartLine: null,              
                 
 
                 gauges: [],
@@ -92,11 +87,11 @@
                 },              
 
 
-                form: new Form({
+                ucs_form: new Form({
 
-                    target: '',
+                    ipAddress: '',
 
-                    features: '',
+                    subnet: '',
 
                     portal: 0,
 
@@ -192,11 +187,15 @@
                 axios.get(`/api/getUcsSystems/`)
                 .then(response => {                 
 
-                    this.ucs_systems = response.data  
-                    
-                    // this.ipAddress = this.ucs_systems[0].ipAddress                  
+                    this.ucs_systems = response.data 
 
-                    // $('#modal-ucs-list').modal('show');                    
+                    if (this.ucs_systems.length >= 0) {
+
+                        $('#modal-ucs-list').modal('show');
+                    } 
+
+
+
 
                 })
                 .catch(errors => { })
@@ -261,7 +260,7 @@
 
                     this.this.rackunits = []
                     this.rackunits = JSON.parse(response.data)
-                    console.log(this.rackunits)
+                    // console.log(this.rackunits)
                     
                 })
                 .catch(errors => { })
@@ -513,7 +512,7 @@
                 <tabs v-if="ipAddress">
 
                     <tab name="UCS Overview" :selected="true" >
-                        <h1>Here is the content for the UCS overview tab.</h1>
+                        <h3>UCS overview</h3>
                         
                         <ucs-system :ucs="ipAddress"></ucs-system>
                         
@@ -521,18 +520,18 @@
 
 
                     <tab name="Chassis">
-                        <h1>Here is the content for the chassis tab.</h1>
+                        <h3>Chassis list</h3>
                         <chassis></chassis>
 
                     </tab>
 
                     <tab name="Chassis Servers">
-                        <h1>Here is the content for the chassis servers tab.</h1>
+                        <h1>Chassis Servers List</h1>
                         <chassis-server></chassis-server>
                     </tab>
 
                     <tab name="RackMounts">
-                        <h1>Here is the content for the about our vision tab.</h1>
+                        <h1>RackMount Servers</h1>
                         <rack-mount ucs=''></rack-mount>
                     </tab>
                 </tabs>
@@ -564,7 +563,7 @@
         </div> -->
 
 
-        <!-- Show UCS List Modal -->
+        <!-- Create UCS System -->
         <div class="modal fade" id="modal-ucs-list" tabindex="-1" role="dialog">
 
             <div class="modal-dialog">
@@ -582,23 +581,133 @@
                         <h3>body</h3>
 
                         {{ ucs_systems }}
+                        
+                        <form class="form-horizontal">
+                          <fieldset>
 
-                    </div>
+                              <legend>Add UCS System</legend>
+                              
+                              <div class="form-group">
+                                  <label for="ipAddress" class="col-md-3 control-label">IP Address :</label>
+
+                                  <div class="col-md-6">
+                                    <input type="text" class="form-control" id="ipAddress" placeholder="192.168.1.1" v-model="ucs_form.ipAddress">
+                                    <p class="help-block text-info">Enter the IP address of the UCS system</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                              <label for="subnet" class="col-md-3 control-label">Email :</label>
+
+                              <div class="col-md-6">
+                                <input type="text" class="form-control" id="subnet" placeholder="255.255.255.0" v-model="ucs_form.subnet">
+                                <p class="help-block text-info">Enter the subnet of the UCS system</p>
+                            </div>
+                        </div>                     
 
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <!-- <button type="button" class="btn btn-primary" @click="storeCompany"> Opslaan </button> -->
-                    </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><span><i class="fa fa-lock fa-lg"></i></span> UCS Login Credentials</h3>
+                            </div>
 
-                </div>
-            </div>
-        </div>
+                            <div class="panel-body">
+
+                                <table class="table">
+                                    <tr>
+                                        <td width="100%" colspan="3"><a href="javascript:void(0)" class="text-success"><i class="material-icons">add_circle</i> Add Credentials</a></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td width="30%">
+                                            <ul class="list-group">
+                                                <li class="list-group-item-info">admin</li>
+                                                <li class="list-group-item-danger">user 2</li>
+                                                <li class="list-group-item-warning">admin 3</li>
+                                            </ul>
+                                        </td>
+
+                                        <td width="5%"></td>
+
+                                        <td width="40%">
+
+                                            <div class="well">
+
+                                                <form class="form-horizontal">
+                                                  <fieldset>                                                  
+
+                                                   <div class="form-group label-floating">
+                                                      <label class="control-label" for="focusedInput1"><i class="fa fa-user"></i> Name</label>
+                                                      <input class="form-control input-sm" id="focusedInput1" type="text">
+                                                      <p class="help-block text-info">Enter credential name</p>
+                                                  </div>
+
+                                                  <div class="form-group label-floating">
+                                                      <label class="control-label" for="username"><i class="fa fa-user"></i> Username</label>
+                                                      <input class="form-control input-sm" id="username" type="text">
+                                                      <p class="help-block text-info">UCS Username</p>
+                                                  </div>
+
+                                                  <div class="form-group label-floating">
+                                                      <label class="control-label" for="password"><i class="fa fa-user-secret" aria-hidden="true"></i> Password</label>
+                                                      <input class="form-control input-sm" id="password" type="password">
+                                                      <p class="help-block text-info">UCS password</p>
+                                                  </div>
+
+                                                  <div class="form-group label-floating">
+                                                      <label class="control-label" for="port">Port</label>
+                                                      <input class="form-control input-sm" id="port" type="text">
+                                                      <p class="help-block text-info">UCS Port</p>
+                                                  </div>
+
+                                                  <div class="form-group label-floating">
+                                                      <label class="control-label" for="focusedInput2"><i class="fa fa-globe"></i> Protocol</label>
+                                                      <input class="form-control input-sm" id="focusedInput2" type="text">
+                                                      <p class="help-block text-info">UCS Connection protocol</p>
+                                                  </div>
+
+                                              </fieldset>
+                                          </form>
+
+                                      </div>
+                                  </td>
+                              </tr>
+                          </table>                                
 
 
-        
 
+
+                      </div>
+
+
+
+                  </div>
+
+
+
+
+              </fieldset>
+
+          </form>
+
+
+
+      </div>
+
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <!-- <button type="button" class="btn btn-primary" @click="storeCompany"> Opslaan </button> -->
     </div>
+
+</div>
+</div>
+</div>
+
+
+
+
+</div>
 
 </template>
 
@@ -642,4 +751,7 @@
         background: #DAD8D8 !important;
     }
 
-</style>
+    .help-block {
+        font-size: 10px !important;
+    }
+</style>}

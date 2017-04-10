@@ -16,6 +16,7 @@
 				showStats: false, 
 				chassis_servers: [],
 				blade_cpustats: [],
+                faults: [],
 				chassisServerColumns: [
 				'equipment', 'model', 'serial', 'num_of_cpus', 'num_of_cores', 
 				'enabled_cpu_cores', 'total_memory', 'available_memory', 'NICs', 
