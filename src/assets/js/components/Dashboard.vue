@@ -513,7 +513,7 @@
                 <tabs v-if="ipAddress">
 
                     <tab name="UCS Overview" :selected="true" >
-                        <h1>Here is the content for the UCS overview tab.</h1>
+                        <h3>UCS overview</h3>
                         
                         <ucs-system :ucs="ipAddress"></ucs-system>
                         
@@ -521,18 +521,18 @@
 
 
                     <tab name="Chassis">
-                        <h1>Here is the content for the chassis tab.</h1>
+                        <h3>Chassis list</h3>
                         <chassis></chassis>
 
                     </tab>
 
                     <tab name="Chassis Servers">
-                        <h1>Here is the content for the chassis servers tab.</h1>
+                        <h1>Chassis Servers List</h1>
                         <chassis-server></chassis-server>
                     </tab>
 
                     <tab name="RackMounts">
-                        <h1>Here is the content for the about our vision tab.</h1>
+                        <h1>RackMount Servers</h1>
                         <rack-mount ucs=''></rack-mount>
                     </tab>
                 </tabs>
