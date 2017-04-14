@@ -86,6 +86,7 @@ def getUcsInfo(request):
         ucs_logout(handle)
         raise
 
+    ucs_logout(handle)
     return JsonResponse(ucs_info, safe=False)
 
 
@@ -106,7 +107,7 @@ class BladeDetails(TemplateView):
         except:
             ucs_logout(handle)
             raise
-
+        ucs_logout(handle)
         return JsonResponse(blades, safe=False)
 
 
@@ -124,7 +125,7 @@ class RackDetails(TemplateView):
         except:
             ucs_logout(handle)
             raise
-
+        ucs_logout(handle)
         return JsonResponse({'test': 'test'}, safe=False)
 
 
@@ -143,7 +144,7 @@ class ChassisDetails(TemplateView):
         except:
             ucs_logout(handle)
             raise
-
+        ucs_logout(handle)
         return JsonResponse(chassis, safe=False)
 
     def getChassisStats(self, request, dn, **kwargs):
@@ -160,6 +161,7 @@ class ChassisDetails(TemplateView):
         except:
             ucs_logout(handle)
             raise
+        ucs_logout(handle)
         return JsonResponse(faults, safe=False)
 
 
@@ -180,6 +182,7 @@ class ChassisStats(TemplateView):
         except:
             ucs_logout(handle)
             raise
+        ucs_logout(handle)
         return JsonResponse(faults, safe=False)
 
 
@@ -199,4 +202,5 @@ class BladeFaults(TemplateView):
         except:
             ucs_logout(handle)
             raise
+        ucs_logout(handle)
         return JsonResponse(faults, safe=False)

@@ -10,12 +10,14 @@ window.axios = require('axios');
 import VueCharts from 'vue-chartjs';
 window.VueCharts = VueCharts;
 import { ServerTable, ClientTable, Event } from 'vue-tables-2';
+import VeeValidate from 'vee-validate';
 
 // jsdom = require('jsdom');
 // window.document = jsdom.jsdom();
 
 window.Vue = require('vue');
 Vue.use(ClientTable, {}, false, require('./template.js')('client'))
+Vue.use(VeeValidate)
 
 // import VueHighcharts from 'vue-highcharts';
 // import Highcharts from 'highcharts/highstock';
@@ -33,7 +35,7 @@ import Bar from '../charts/Bar.js';
 import LineChart from '../charts/Line.js';
 import Gauge from '../charts/Guage.js';
 import Moment from 'moment';
-import ChartJs from 'chart.js'
+import ChartJs from 'chart.js';
 window.Chartjs = ChartJs;
 
 

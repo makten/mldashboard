@@ -3,13 +3,16 @@
     import tabs from '../../core/tabs.js';
     import tab from '../../core/tab.js';
     import UcsSystem from './ucs_components/UcsSystem.vue';
+    import Ucs from './ucs_components/Ucs.vue';
     import Chassis from './ucs_components/Chassis.vue';
     import ChassisServer from './ucs_components/ChassisServer.vue';
     import RackMount from './ucs_components/RackMounts.vue';
+    import { Validator } from 'vee-validate';
 
     export default {
 
         components: {
+            Ucs,
             UcsSystem,
             Chassis,
             ChassisServer,
@@ -18,17 +21,21 @@
             Bar,
             LineChart,
             tabs,
-            tab
+            tab,
+            Validator
         },
 
         data() {
 
-            return {        
+            return {    
 
-                ucs_systems: [],
+                // errors: null, 
+
+                               
+                
                 ipAddress: '',
 
-                datacollection: null,
+                                
                 
                 rackunits: [],                
                 
@@ -84,26 +91,9 @@
 
                     }]
 
-                },              
+                },
 
-
-                ucs_form: new Form({
-
-                    ipAddress: '',
-
-                    subnet: '',
-
-                    portal: 0,
-
-                    channel: 0,
-
-                    delivery: 0,
-
-                    client: 0,
-
-                    category: 0,
-
-                }),
+                
 
 
                 api_response: [],
@@ -123,8 +113,15 @@
         mounted() {
 
             this.$nextTick(function () {
+                                
+                // Broadcast the currently selected tab id to tabs.vue
 
-                this.getUcsList();
+                if(window.location.hash){
+                    eventBroadcaster.$emit('setTab', window.location.hash)
+                }
+                
+
+
 
                 /** Query UCS System
                 // If none popup modal to add
@@ -148,19 +145,11 @@
 
             var ctx = $("#myChart");
 
-            // $('#modal-create-company').on('shown.bs.modal', () => {
-            //     $('#create-company-name').focus();
-            // });
-
-            // $('#modal-edit-client').on('shown.bs.modal', () => {
-            //     $('#edit-client-name').focus();
-            // });
-
             // this.plotChart(ctx);
             // setInterval(function() {
             //     let a = Math.floor((Math.random() * 50) + 1)
             //     let i = Moment().format()
-            //     console.log(i)
+
             //         // add(Math.floor((Math.random() * 6) + 1), 'days').
             //     // this.forecasted = _.drop(this.forecasted, 1)
             //     this.forecasted.push({
@@ -183,34 +172,16 @@
 
         methods: {  
 
-            getUcsList() {
-                axios.get(`/api/getUcsSystems/`)
-                .then(response => {                 
+            
 
-                    this.ucs_systems = response.data 
+                   
 
-                    if (this.ucs_systems.length >= 0) {
-
-                        $('#modal-ucs-list').modal('show');
-                    } 
+            
 
 
+            
 
-
-                })
-                .catch(errors => { })
-            }, 
-
-            selectUCS(ucs) {
-                this.ipAddress = ucs.ipAddress
-            },         
-
-            /**
-            * Show the form for creating new company.
-            */
-            showcompanyForm() {
-                $('#modal-create-company').modal('show');
-            },
+            
 
 
             /**
@@ -427,76 +398,16 @@
 
             setSearch() {
                 alert('b')
-            },
+            }
+
+        },
 
 
-            createGauge(name, label, min, max) {
-                var config = {
-                    size: 120,
-                    label: label,
-                    min: undefined != min ? min : 0,
-                    max: undefined != max ? max : 100,
-                    minorTicks: 5
-                }
+        beforeDestroy: function () {
+            clearInterval(this.interval);
+        }
 
-                var range = config.max - config.min;
-                config.yellowZones = [{
-                    from: config.min + range * 0.75,
-                    to: config.min + range * 0.9
-                }];
-                config.redZones = [{
-                    from: config.min + range * 0.9,
-                    to: config.max
-                }];
-
-                this.gauges[name] = new Gauge(name + "GaugeContainer", config);
-                this.gauges[name].render();
-            },
-
-
-            createGauges() {
-                this.createGauge("memory", "Memory");
-                this.createGauge("cpu", "CPU");
-                // this.createGauge("network", "Network");
-                this.createGauge("test", "Test", 1254, 3200);
-            },
-
-
-            updateGauges() {
-
-                for (var key in this.gauges) {
-                    console.log(key)
-                    var value = this.getRandomValue(this.gauges[key])
-                    this.gauges[key].redraw(value);
-                    console.log(this.gauges)
-                }
-            },
-
-
-            getRandomValue(gauge) {
-                var overflow = 0; //10;
-                return gauge.config.min - overflow + (gauge.config.max - gauge.config.min + overflow * 2) * Math.random();
-            },
-
-
-            initialize() {
-                this.createGauges();
-                setInterval(this.updateGauges, 5000);
-            },
-
-
-        // toggleStatsView() {
-        //     this.showStats != this.showStats;
-        // }
-
-    },
-
-
-    beforeDestroy: function () {
-        clearInterval(this.interval);
     }
-
-}
 </script>
 
 
@@ -505,13 +416,48 @@
     <div class="main">
 
 
+
+
         <div class="widget">
+
+
+
+
+            <!-- <div class="chart" style="background: #004080;">
+    
+                <bar :data="barData"
+                     :options="{responsive: false, maintainAspectRatio: false}"
+                     :width="400"
+                     :height="200">
+    
+                </bar>
+    
+            </div> -->
+
+            <!-- <div class="chart">
+    
+                <bar :data="barData2"
+                     :options="{responsive: false, maintainAspectRatio: false}"
+                     :width="400"
+                     :height="200">
+    
+                </bar>
+    
+            </div> -->
+
 
             <div class="chart">
 
-                <tabs v-if="ipAddress">
+                <tabs>
 
-                    <tab name="UCS Overview" :selected="true" >
+                    <tab name="UCS" :selected="true" >
+                        <h3>UCS Systems</h3>
+                        
+                        <ucs></ucs>
+                        
+                    </tab>
+
+                    <tab name="UCS Overview">
                         <h3>UCS overview</h3>
                         
                         <ucs-system :ucs="ipAddress"></ucs-system>
@@ -534,16 +480,7 @@
                         <h1>RackMount Servers</h1>
                         <rack-mount ucs=''></rack-mount>
                     </tab>
-                </tabs>
-                <div v-else>
-                    <h3>Select UCS System</h3>
-                    
-                    <ul class="list-group" v-for="ucs in ucs_systems">
-                        <li class="list-group-item">
-                            <a href="#" @click="selectUCS(ucs)"> {{ ucs.ipAddress }} </a>
-                        </li>
-                    </ul>
-                </div>
+                </tabs>                
 
             </div>
         </div>
@@ -551,161 +488,19 @@
 
         <!-- <div class="widget">
 
-            <div class="title">Chassis List</div>
+        <div class="title">Chassis List</div>
 
-            <div class="chart" style="background: #004080;">
-                <bar :data="barData" :options="{responsive: false, maintainAspectRatio: false}" :width="400" :height="200"> </bar>
-            </div>
+        <div class="chart" style="background: #004080;">
+            <bar :data="barData" :options="{responsive: false, maintainAspectRatio: false}" :width="400" :height="200"> </bar>
+        </div>
 
-            <div class="chart">
-                <bar :data="barData2" :options="{responsive: false, maintainAspectRatio: false}" :width="400" :height="200"></bar>
-            </div>
-        </div> -->
-
-
-        <!-- Create UCS System -->
-        <div class="modal fade" id="modal-ucs-list" tabindex="-1" role="dialog">
-
-            <div class="modal-dialog">
-
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <button type="button " class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-                        <h4 class="modal-title"> UCS LIST</h4>
-                    </div>
-
-                    <div class="modal-body">
-
-                        <h3>body</h3>
-
-                        {{ ucs_systems }}
-
-                        <form class="form-horizontal">
-                          <fieldset>
-
-                       
-                              <legend>Add UCS System</legend>
-                              
-                              <div class="form-group">
-                                  <label for="ipAddress" class="col-md-3 control-label">IP Address :</label>
-
-                                  <div class="col-md-6">
-                                    <input type="text" class="form-control" id="ipAddress" placeholder="192.168.1.1" v-model="ucs_form.ipAddress">
-                                    <p class="help-block text-info">Enter the IP address of the UCS system</p>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                              <label for="subnet" class="col-md-3 control-label">Email :</label>
-
-                              <div class="col-md-6">
-                                <input type="text" class="form-control" id="subnet" placeholder="255.255.255.0" v-model="ucs_form.subnet">
-                                <p class="help-block text-info">Enter the subnet of the UCS system</p>
-                            </div>
-                        </div>                     
+        <div class="chart">
+            <bar :data="barData2" :options="{responsive: false, maintainAspectRatio: false}" :width="400" :height="200"></bar>
+        </div>
+    </div> -->
 
 
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><span><i class="fa fa-lock fa-lg"></i></span> UCS Login Credentials</h3>
-                            </div>
-
-                            <div class="panel-body">
-
-                                <table class="table">
-                                    <tr>
-                                        <td width="100%" colspan="3"><a href="javascript:void(0)" class="text-success"><i class="material-icons">add_circle</i> Add Credentials</a></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td width="30%">
-                                            <ul class="list-group">
-                                                <li class="list-group-item-info">admin</li>
-                                                <li class="list-group-item-danger">user 2</li>
-                                                <li class="list-group-item-warning">admin 3</li>
-                                            </ul>
-                                        </td>
-
-                                        <td width="5%"></td>
-
-                                        <td width="40%">
-
-                                            <div class="well">
-
-                                                <form class="form-horizontal">
-                                                  <fieldset>                                                  
-
-                                                   <div class="form-group label-floating">
-                                                      <label class="control-label" for="focusedInput1"><i class="fa fa-user"></i> Name</label>
-                                                      <input class="form-control input-sm" id="focusedInput1" type="text">
-                                                      <p class="help-block text-info">Enter credential name</p>
-                                                  </div>
-
-                                                  <div class="form-group label-floating">
-                                                      <label class="control-label" for="username"><i class="fa fa-user"></i> Username</label>
-                                                      <input class="form-control input-sm" id="username" type="text">
-                                                      <p class="help-block text-info">UCS Username</p>
-                                                  </div>
-
-                                                  <div class="form-group label-floating">
-                                                      <label class="control-label" for="password"><i class="fa fa-user-secret" aria-hidden="true"></i> Password</label>
-                                                      <input class="form-control input-sm" id="password" type="password">
-                                                      <p class="help-block text-info">UCS password</p>
-                                                  </div>
-
-                                                  <div class="form-group label-floating">
-                                                      <label class="control-label" for="port">Port</label>
-                                                      <input class="form-control input-sm" id="port" type="text">
-                                                      <p class="help-block text-info">UCS Port</p>
-                                                  </div>
-
-                                                  <div class="form-group label-floating">
-                                                      <label class="control-label" for="focusedInput2"><i class="fa fa-globe"></i> Protocol</label>
-                                                      <input class="form-control input-sm" id="focusedInput2" type="text">
-                                                      <p class="help-block text-info">UCS Connection protocol</p>
-                                                  </div>
-
-                                              </fieldset>
-                                          </form>
-
-                                      </div>
-                                  </td>
-                              </tr>
-                          </table>                                
-
-
-
-
-                      </div>
-
-
-
-                  </div>
-
-
-
-
-              </fieldset>
-
-          </form>
-
-
-
-      </div>
-
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <!-- <button type="button" class="btn btn-primary" @click="storeCompany"> Opslaan </button> -->
-    </div>
-
-</div>
-</div>
-</div>
-
-
+   
 
 
 </div>
@@ -715,12 +510,6 @@
 
 
 <style lang="sass">
-
-    .small {
-        max-width: 150;
-        margin: 150px auto;
-    }
-
 
     .VueTables__table tr {
         font-size: 11px !important;
@@ -733,10 +522,8 @@
     .nav-pills>li.is-active>a, 
     .nav-pills>li.active>a:focus, 
     .nav-pills>li.active>a:hover {
-
         color: #3a3a3a;
         background-color: #f0f5fb;
-
     }
 
     .table-borderless > tbody > tr > td,
@@ -748,12 +535,21 @@
         border: none;
     }
 
-    .title {
-        background: #DAD8D8 !important;
-
-    }
 
     .help-block {
         font-size: 10px !important;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    a :hover {
+        text-decoration: none;
+    }
+
+    .small {
+        max-width: 350px;
+        max-heigth: 100px;
     }
 </style>
