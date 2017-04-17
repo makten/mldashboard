@@ -128,6 +128,7 @@ methods: {
 },
 
 showFaults(faults) {
+	
 	if(faults.length > 0){ 
 		this.faultDetails = faults 
 		this.modalset = true;
@@ -398,7 +399,7 @@ computed() {
 
 		</div>
 
-		<modal modalname='modal-fault-details' v-if='modalset' @closeFaultsDetails="modalset = false"> 
+		<modal modalname='modal-fault-details' v-if='modalset' @closeModal="modalset = false"> 
 
 		</modal>
 		

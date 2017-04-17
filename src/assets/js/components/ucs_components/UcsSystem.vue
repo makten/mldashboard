@@ -264,10 +264,7 @@
 				background-color: #f0f5fb;
 				padding : 5px 15px;
 			}
-
-			.well {
-				text-align: center;
-			}
+			
 
 			.well-center {								
 				font-weight: 600;

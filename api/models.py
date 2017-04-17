@@ -21,12 +21,12 @@ class ModelBuilder(models.Model):
 
 class UcsCredentials(models.Model):
 	"""The class represents a UCS model."""
-	username = models.CharField(max_length=255, blank=False, unique=True)
-	password = models.CharField(max_length=255, blank=False, unique=True)
-	name = models.CharField(max_length=255, blank=False, unique=False)
-	protocal = models.CharField(max_length=60, blank=False, unique=False)
-	port = models.IntegerField(blank=False, unique=False)
-	timeout = models.IntegerField(blank=True, unique=False)	
+	cred_username = models.CharField(max_length=255, blank=False, unique=True)
+	cred_password = models.CharField(max_length=255, blank=False, unique=False)
+	cred_name = models.CharField(max_length=255, blank=False, unique=False)
+	cred_protocol = models.CharField(max_length=60, blank=False, unique=False)
+	cred_port = models.IntegerField(blank=False, unique=False)
+	cred_timeout = models.IntegerField(blank=True, unique=False)	
 	date_created = models.DateTimeField(auto_now_add=True)
 	date_modified = models.DateTimeField(auto_now=True)
 

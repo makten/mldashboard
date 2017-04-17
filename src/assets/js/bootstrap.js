@@ -5,6 +5,10 @@ window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
 require('bootstrap');
 require('d3')
+require('arrive/src/arrive.js');
+require('bootstrap-material-design/dist/js/material.js');
+require('bootstrap-material-design/dist/js/ripples.js');
+require('../mixins/dropdown.js');
 
 window.axios = require('axios');
 import VueCharts from 'vue-chartjs';
@@ -12,18 +16,21 @@ window.VueCharts = VueCharts;
 import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 import VeeValidate from 'vee-validate';
 
-// jsdom = require('jsdom');
-// window.document = jsdom.jsdom();
 
 window.Vue = require('vue');
 Vue.use(ClientTable, {}, false, require('./template.js')('client'))
 Vue.use(VeeValidate)
 
-// import VueHighcharts from 'vue-highcharts';
-// import Highcharts from 'highcharts/highstock';
-// import loadMap from 'highcharts/modules/map';
-// loadMap(Highcharts);
-// Vue.use(VueHighcharts, { Highcharts });
+import NProgress from 'nprogress';
+
+
+
+window.Validator = require('validatorjs');
+
+Validator.register('multi_required', function(value, requirement, attr){
+	console.log(attr)
+}, 'test');
+
 
 require('vue-resource');
 
@@ -41,8 +48,6 @@ window.Chartjs = ChartJs;
 
 window.Form = Form;
 window.Errors = Errors;
-// window.tabs = tabs;
-// window.tab = tab;
 window.Bar = Bar;
 window.LineChart = LineChart;
 window.Gauge = Gauge;
@@ -58,18 +63,16 @@ require('selectize');
 
 axios.interceptors.request.use((request) => {
 
-    request.headers['X-CSRF-TOKEN'] = csrfToken;
-    return request;
+	request.headers['X-CSRF-TOKEN'] = csrfToken;
+	return request;
 
 });
 
 
 // Vue.http.interceptors.push((request, next) => {
 
-
 // 	request.headers.set('X-CSRF-TOKEN', csrfToken);
 
 // 	next();
-
 
 // });

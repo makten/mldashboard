@@ -55,9 +55,9 @@
 
 	<div class="header">
 
-		<div class="logo">
-			<i class="fa fa-tachometer"></i>
-			<span>Brand</span>
+		<div class="logo" style="margin-left: 20px;">
+			<i class=""></i>
+			<span></span>
 		</div>
 
 		<a href="#" class="nav-trigger"><span></span></a>
@@ -81,7 +81,7 @@
 
 					<li>
 
-						<li class="dropdown" >
+						<li class="dropdown hidden-xs" >
 
 							<!-- Menu Toggle Button -->
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">

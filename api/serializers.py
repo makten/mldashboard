@@ -30,7 +30,7 @@ class UcsCredentialsSerializer(serializers.ModelSerializer):
 	class Meta:
 		"""Meta class to map serializer's fields with the model fields"""
 		model = UcsCredentials
-		fields = ('id', 'username', 'protocol', 'port', 'timeout', 'name', 'date_created', 'date_modified')
+		fields = ('id', 'cred_username', 'cred_protocol', 'cred_port', 'cred_timeout', 'cred_name', 'date_created', 'date_modified')
 		read_only_fields = ('date_created', 'date_modified')
 
 

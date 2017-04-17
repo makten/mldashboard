@@ -31,6 +31,8 @@
 
     <link href="{% static 'css/selectize.css' %}" rel="stylesheet">
     <link href="{% static 'css/selectize.default.css' %}" rel="stylesheet">
+    <link href="{% static 'css/nprogress.css' %}" rel="stylesheet">
+
 
     <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
 
@@ -74,6 +76,16 @@
     <script type="text/javascript" src="{% static 'js/vendor.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>
     <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.nav-trigger').click(function() {
+                $('.side-nav').toggleClass('visible');
+            });
+
+            
+        });
+    </script>
 
 
 </body>

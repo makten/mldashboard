@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from .serializers import ModelBuilderSerializer, UserSerializer, UcsSystemSerializer
-from .models import ModelBuilder, UcsSystem
+from .serializers import ModelBuilderSerializer, UserSerializer, UcsSystemSerializer, UcsCredentialsSerializer
+from .models import ModelBuilder, UcsSystem, UcsCredentials
 from django.views.generic import TemplateView
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponse
@@ -17,12 +18,25 @@ import json
 from ucs_manager.connection import ucs_login, ucs_logout
 from django.contrib.auth.decorators import login_required
 
+
+
 from ucsmsdk.ucshandle import UcsHandle
 
 handle = None
 
-# Create your views here.
 
+# def make_password(password, secret_key='2222'):
+#     assert password        
+#     cipher = AES.new(secret_key, AES.MODE_ECB)
+#     encoded = base64.b64encode(cipher.encrypt(password))
+#     return encoded
+
+
+# def unmake_password(encoded_password, secret_key='2222'):
+#     assert encoded_password        
+#     cipher = cAES.new(secret_key, AES.MODE_ECB)
+#     decoded = cipher.decrypt(base64.b64encode(encoded_password))
+#     return decoded.strip()
 
 
 class CreateView(generics.ListCreateAPIView):
@@ -61,8 +75,7 @@ class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
 @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 def getUcsSystems(request):
-    if request.method == 'GET':
-        print(request.user.username)
+    if request.method == 'GET':        
         queryset = request.user.ucssystems.filter()              
         # queryset = UcsSystem.objects.all()        
         serializer_class = UcsSystemSerializer(queryset, many=True)        
@@ -90,6 +103,34 @@ def getUcsInfo(request):
     return JsonResponse(ucs_info, safe=False)
 
 
+@login_required(login_url='/auth/login/')
+@api_view(['GET'])
+def getUcsCredentials(request):
+    if request.method == 'GET':        
+        # queryset = request.user.ucssystems.filter()              
+        queryset = UcsCredentials.objects.all()        
+        serializer_class = UcsCredentialsSerializer(queryset, many=True)        
+        # permission_classes = (permissions.IsAuthenticated, IsOwner)
+        
+        return Response(serializer_class.data)
+
+
+@login_required(login_url='/auth/login/')
+@api_view(['POST'])
+def createUcsCredentials(request):
+    """ 
+        Try connecting to ucs with cred, if success check if item
+        exists in db, if not add it else add ucs
+    """
+    if request.method == 'POST':
+        
+        serializer = UcsCredentialsSerializer(data = request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
 
 class BladeDetails(TemplateView):

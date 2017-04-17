@@ -12,9 +12,10 @@
 
 
 		mounted() {
-			this.$nextTick(function(){
+			this.$nextTick(function(){				
 
 				$(`#${this.modalname}`).modal('show'); 
+
 				$(`#${this.modalname}`).modal({
 					backdrop: 'static',
 					keyboard: true
@@ -22,7 +23,7 @@
 
 				$(`#${this.modalname}`).on("hidden.bs.modal", function () {
 
-					eventBroadcaster.$emit('closeFaultsDetails')
+					eventBroadcaster.$emit('closeModal')
 				});
 
 			});
@@ -51,7 +52,7 @@
 			<div class="modal-content">
 
 				<div class="modal-header">
-					<button @click="$emit('closeFaultsDetails')" type="button " class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<button @click="$emit('closeModal')" type="button " class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
 					<h4 class="modal-title"> 
 
@@ -71,7 +72,8 @@
 				<div class="modal-footer">
 
 					<slot name='footer'></slot>
-					<button @click="$emit('closeFaultsDetails')" type="button" class="btn btn-xs btn-default" data-dismiss="modal">Close</button>
+					<button @click="$emit('closeModal')" type="button" class="btn btn-xs btn-default" data-dismiss="modal">Close</button>
+
 				</div>
 
 			</div>
