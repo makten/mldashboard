@@ -1,8 +1,3 @@
-/**
-*
-*
-*/
-
 <script>
 	import vSelect from 'vue-select';    
 	import { Validator } from 'vee-validate';
@@ -66,157 +61,107 @@
 
 <template>
 	<div>
+		
+		<div class="table-responsive">
+			<table class="table">
+				<tbody>
+					<tr>				
+						<td width="30%">
 
-		<div class="widget">
-			<div class="chart">
+							<div class="widget" style="margin-left: 0px; padding: 0px;">
 
-				<div class="container" style="padding: 3px !important; margin: 5px;">
-					<div class="row">
-						<div class="col-xs-3">
-							<div class="well">
-								
-								<h3 class="well-center boldered" style="background: #FFFFFF;"> 11 <i class="fa fa-server"></i></h3>
-								<h3 class="text-muted">Active Blades</h3>
-								
+								<div class="title">UCS information</div>
+
+								<table class="table table-borderless">                       
+
+									<tbody>
+										<tr>
+											<td width="30%" align="left">
+												<span>Name</span>
+											</td>
+											<td width="5%" align="center">:</td>
+
+											<td align="left">
+												<span> {{ ucs_info.name }} </span>
+											</td>       
+										</tr>
+
+										<tr>
+											<td width="30%" align="left">
+												<span>Status</span>
+											</td>
+											<td width="5%" align="center">:</td>
+
+											<td align="left">
+												<span><i class="material-icons text-success" style="font-size: 12px;">fiber_manual_record</i> {{ ucs_info.status }} Clear</span>
+											</td>       
+										</tr>
+
+										<tr>
+											<td width="30%" align="left">
+												<span>IP Address</span>
+											</td>
+											<td width="5%" align="center">:</td>
+
+											<td align="left">
+												<span> {{ ucs_info.address }}</span>
+											</td>       
+										</tr>
+
+										<tr>
+											<td width="30%" align="left">
+												<span>System up time</span>
+											</td>
+											<td width="5%" align="center">:</td>
+
+											<td align="left">
+												<span> {{ ucs_info.system_up_time }}</span>
+											</td>       
+										</tr>
+
+										<tr>
+											<td width="30%" align="left">
+												<span>Mode</span>
+											</td>
+											<td width="5%" align="center">:</td>
+
+											<td align="left">
+												<span> {{ ucs_info.mode }}</span>
+											</td>       
+										</tr>
+									</tbody>
+
+								</table>
 							</div>
-						</div>
 
-						<div class="col-xs-9">
-							<h2 class="sub-header">UCS FAULTS</h2>
-							
-							<div class="table-responsive">
-								<table class="table">
-									<thead>
-										<tr><td>Warning</td>
-											<td>10</td>
-										</tr></thead>
-										<tbody>
+							<div class="widget" style="margin-left: 0px; padding: 0px;">
 
-										</tbody>
-									</table>
-								</div>
+								<div class="title" style="background: #e4e4e4">UCS Faults</div>
 
-								<h2 class="sub-header">Critical</h2>
-								<div class="table-responsive">
-									<table class="table">
-										<thead>
-											<tr><td>Major</td>
-												<td>5</td>
-											</tr></thead>
-											<tbody>
-
-											</tbody>
-										</table>
-									</div>
-
-								</div>
-
+								<ul class="list list-group">
+									<li class=" list-group-item text-success">General information</li>
+									<li class=" list-group-item">Number of faults per type</li>
+									<li class=" list-group-item">Power consumption</li>
+									<li class=" list-group-item">Num of blades</li>
+									<li class=" list-group-item" >Num of Chassis</li>
+									<li class=" list-group-item">Availabity</li>
+									<li class=" list-group-item">Network ports</li>
+									<li class=" list-group-item">Packets</li>
+									<li class=" list-group-item">Service Profiles</li>
+								</ul> 
 							</div>
-						</div>
 
-					</div>
-				</div>
+						</td>
 
-				<div class="table-responsive">
-					<table class="table">
-						<tbody>
-							<tr>				
-								<td width="30%">
+						<td width="1%"></td>
 
-									<div class="widget" style="margin-left: 0px; padding: 0px;">
+						<td width="69%">
 
-										<div class="title">UCS information</div>
+							<div class="widget" style="margin-left: 0px; padding: 0px;">
 
-										<table class="table table-borderless">                       
+								<div class="title">UCS Statistics</div>                       
 
-											<tbody>
-												<tr>
-													<td width="30%" align="left">
-														<span>Name</span>
-													</td>
-													<td width="5%" align="center">:</td>
-
-													<td align="left">
-														<span> {{ ucs_info.name }} </span>
-													</td>       
-												</tr>
-
-												<tr>
-													<td width="30%" align="left">
-														<span>Status</span>
-													</td>
-													<td width="5%" align="center">:</td>
-
-													<td align="left">
-														<span><i class="material-icons text-success" style="font-size: 12px;">fiber_manual_record</i> {{ ucs_info.status }} Clear</span>
-													</td>       
-												</tr>
-
-												<tr>
-													<td width="30%" align="left">
-														<span>IP Address</span>
-													</td>
-													<td width="5%" align="center">:</td>
-
-													<td align="left">
-														<span> {{ ucs_info.address }}</span>
-													</td>       
-												</tr>
-
-												<tr>
-													<td width="30%" align="left">
-														<span>System up time</span>
-													</td>
-													<td width="5%" align="center">:</td>
-
-													<td align="left">
-														<span> {{ ucs_info.system_up_time }}</span>
-													</td>       
-												</tr>
-
-												<tr>
-													<td width="30%" align="left">
-														<span>Mode</span>
-													</td>
-													<td width="5%" align="center">:</td>
-
-													<td align="left">
-														<span> {{ ucs_info.mode }}</span>
-													</td>       
-												</tr>
-											</tbody>
-
-										</table>
-									</div>
-
-									<div class="widget" style="margin-left: 0px; padding: 0px;">
-
-										<div class="title" style="background: #e4e4e4">UCS Faults</div>
-
-										<ul class="list list-group">
-											<li class=" list-group-item text-success">General information</li>
-											<li class=" list-group-item">Number of faults per type</li>
-											<li class=" list-group-item">Power consumption</li>
-											<li class=" list-group-item">Num of blades</li>
-											<li class=" list-group-item" >Num of Chassis</li>
-											<li class=" list-group-item">Availabity</li>
-											<li class=" list-group-item">Network ports</li>
-											<li class=" list-group-item">Packets</li>
-											<li class=" list-group-item">Service Profiles</li>
-										</ul> 
-									</div>
-
-								</td>
-
-								<td width="1%"></td>
-
-								<td width="69%">
-
-									<div class="widget" style="margin-left: 0px; padding: 0px;">
-
-										<div class="title">UCS Statistics</div>                       
-
-										<div class="chart">
+								<div class="chart">
 											<!-- <span id="powerGaugeContainer"></span>
 											<span id="memoryGaugeContainer"></span>
 											<span id="cpuGaugeContainer"></span>

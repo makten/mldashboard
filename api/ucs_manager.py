@@ -59,8 +59,10 @@ def get_chassis(handle):
 def getChassisStats(handle, dn):
     
     flt_str = '(dn, "sys/'+ str(dn) +'")'
-    chas_stats = handle.query_classid(class_id='EquipmentChassisStats', filter_str=flt_str)
-
+    chas_stats = handle.query_classid(class_id='EquipmentChassis', filter_str=flt_str)
+    
+    for t in chas_stats:
+        print(t)
     chassis_stats = {
         # 'dn': chas_stats.dn,
         'input_power': 123343,
@@ -246,7 +248,8 @@ def get_bladefaults(handle, chs, bld):
             'severity': fl.severity,
             'rule': fl.rule,
             'status': fl.status,
-            'type': fl.type
+            'type': fl.type,
+            'dn': fl.dn
         }
 
         faults.append(x) 

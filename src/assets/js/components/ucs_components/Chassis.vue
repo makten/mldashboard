@@ -52,7 +52,7 @@
         		let chs = str_dn[1]
         		this.single_chassis = chassis
 
-        		axios.get(`/api/getChassisStats/${chs}`)
+        		axios.get(`/api/getChassisStats/${chs}/`)
         		.then(response => {
 
         			this.chassis_stats = [];

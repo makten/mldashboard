@@ -10,6 +10,8 @@ require('bootstrap-material-design/dist/js/material.js');
 require('bootstrap-material-design/dist/js/ripples.js');
 require('../mixins/dropdown.js');
 
+import ChartJs from 'chart.js';
+window.Chartjs = ChartJs;
 window.axios = require('axios');
 import VueCharts from 'vue-chartjs';
 window.VueCharts = VueCharts;
@@ -36,14 +38,10 @@ require('vue-resource');
 
 import Form from '../core/Form.js';
 import Errors from '../core/Errors.js';
-// import tabs from '../core/tabs.js';
-// import tab from '../core/tab.js';
 import Bar from '../charts/Bar.js';
 import LineChart from '../charts/Line.js';
 import Gauge from '../charts/Guage.js';
 import Moment from 'moment';
-import ChartJs from 'chart.js';
-window.Chartjs = ChartJs;
 
 
 window.Form = Form;

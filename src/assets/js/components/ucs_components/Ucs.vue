@@ -199,7 +199,7 @@
 		</v-client-table>
 
 
-		<modal modalname='modal-add-ucs' v-if='setUcsModal' @closeModal="setUcsModal = false"> 
+		<modal isDashboard="false" modalname='modal-add-ucs' v-if='setUcsModal' @closeModal="setUcsModal = false"> 
 			
 			<template slot='title'>Add UCS System</template>
 
@@ -364,7 +364,6 @@
 
 				</form>
 			</template>
-
 
 		</modal>
 

@@ -10,7 +10,7 @@ from ucsmsdk.mometa.equipment import EquipmentChassisStats
 import json
 
 # Connection
-handle = UcsHandle("192.168.202.168", "ucspe", "ucspe")
+handle = UcsHandle("192.168.202.171", "ucspe", "ucspe")
 
 #Login
 handle.login()
@@ -25,10 +25,10 @@ handle.login()
 
 
 ##-----Switch stats Status --
-sw_envs = handle.query_classid(class_id='ComputeRackUnit')
-print(len(sw_envs))
+sw_envs = handle.query_classid(class_id='computeBlade')
+
 for sw in sw_envs:
-    print(sw.dn)
+    print(sw)
 
 # flt_str = '(dn, "sys/chassis-5")'
 # chas_stats = handle.query_classid(class_id='EquipmentChassis', filter_str=flt_str)
@@ -43,10 +43,10 @@ for sw in sw_envs:
 # print(handle.session_id, handle.cookie, handle.ip, handle.domains)
 
 
-eq = handle.query_classid(class_id="EquipmentCapModSpec")
+# eq = handle.query_classid(class_id="EquipmentCapModSpec")
 
-for i in eq:
-    print(i)
+# for i in eq:
+#     print(i)
 
 
 ##----Switch System status -----
@@ -70,8 +70,8 @@ for i in eq:
 # for chas in chassis:
 #     print(chas)
 
-fault = handle.query_dn("sys/switch-A/fault-F1465")
-event = handle.query_dn("sys/switch-A")
+# fault = handle.query_dn("sys/switch-A/fault-F1465")
+# event = handle.query_dn("sys/switch-A")
 
 # flt = '(dn, "org-root/ls-FirstVMEver.*")'
 # chassis = handle.query_classid(class_id="FaultAckFaultsMeta")
@@ -82,10 +82,10 @@ event = handle.query_dn("sys/switch-A")
 # for c in chassis:
 #     print(c)
 
-chasses = []
+# chasses = []
 
 
-compute_blade = handle.query_classid(class_id="computeBlade")
+# compute_blade = handle.query_classid(class_id="computeBlade")
 # for blade in compute_blade:
         # print(blade)
 

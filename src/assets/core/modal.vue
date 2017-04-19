@@ -2,7 +2,10 @@
 <script>
 	export default {
 
-		props: { modalname: {required: true, default: 'default-modal'}},
+		props: { 
+			modalname: { required: true, default: 'default-modal' },
+			isDashboard: { required: false, default: false }
+	},
 
 		data() {
 			return {
@@ -12,8 +15,8 @@
 
 
 		mounted() {
-			this.$nextTick(function(){				
-
+			this.$nextTick(function(){		
+			
 				$(`#${this.modalname}`).modal('show'); 
 
 				$(`#${this.modalname}`).modal({
@@ -47,18 +50,16 @@
 		<div class="modal fade" :id="modalname" tabindex="-1" role="dialog" data-backdrop="static" 
 		data-keyboard="false">
 
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg" style="width: 90%; background: #24303a;">
 
-			<div class="modal-content">
+			<div class="modal-content" :class="{'mini-dashboard': isDashboard}">
 
 				<div class="modal-header">
-					<button @click="$emit('closeModal')" type="button " class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<button @click="$emit('closeModal')" type="button" class="close btn-danger" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-					<h4 class="modal-title"> 
-
+					<h5 class="modal-title"> 
 						<slot name='title'></slot>
-
-					</h4>
+					</h5>
 
 				</div>
 
@@ -83,6 +84,35 @@
 </div>
 </template>
 
-<style>
-	
+<style lang='sass'>
+
+	.mini-dashboard {
+		background: #24303a;
+
+	}
+
+	.smallchart {
+		color: #4a667a !important;
+    /*text-align: left;
+    position: relative;
+    height: auto;*/
+    background-color: #1e2730 !important;
+    /*display: inline-block;
+    float: left;
+    position: relative;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 10px;
+    padding: 15px 20px 65px 20px;*/
+}
+
+
+/*@media screen and (min-width: 700px)*/
+/*.chart {
+    width: calc(50% - 20px);
+}*/
+
+
+
 </style>
