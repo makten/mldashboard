@@ -1,58 +1,52 @@
-
-
-
 export default {
 
+    mounted() {
 
-	
-	mounted () {
-
-		this.$nextTick(function(){
+        this.$nextTick(function() {
 
 
-		})
-	},
+        })
+    },
 
 
-	methods: {
+    methods: {
 
 
-		/**
-		 * Form validator		
-		 */
+        /**
+         * Form validator		
+         */
 
-		 makeSearch(uri, query){			 	
+        makeSearch(uri, query) {
 
-		 	this.$http.post(uri, query).then((response) => {
-		 		
-		 		this.setCompanySearchData(response.data);
-		 	})		 	
+            this.$http.post(uri, query).then((response) => {
 
-		 },
+                this.setCompanySearchData(response.data);
+            })
 
-		  // This is where the debounce actually belongs.
-		  // expensiveOperation: _.debounce(function () {
-		  // 	this.isCalculating = true
-		  // 	setTimeout(function () {
-		  // 		this.isCalculating = false
-		  // 		this.searchQueryIsDirty = false
-		  // 	}.bind(this), 1000)
-		  // }, 500)
-		  
-		  persistCompanydetails (method, uri, form) {
+        },
 
-		  		this.$http[method](uri, form).then( response => {
+        // This is where the debounce actually belongs.
+        // expensiveOperation: _.debounce(function () {
+        // 	this.isCalculating = true
+        // 	setTimeout(function () {
+        // 		this.isCalculating = false
+        // 		this.searchQueryIsDirty = false
+        // 	}.bind(this), 1000)
+        // }, 500)
 
-		  			this.companies.push(response.data);
-		  		})
-		  }
-		   
-		  
+        persistCompanydetails(method, uri, form) {
+
+            this.$http[method](uri, form).then(response => {
+
+                this.companies.push(response.data);
+            })
+        }
 
 
 
-		}
 
 
-	}
+    }
 
+
+}

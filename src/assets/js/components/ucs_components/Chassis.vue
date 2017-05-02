@@ -10,6 +10,7 @@
 				chassis: [],
 				single_chassis: {},
 				chassis_stats: [],
+				ucsActive: true,
 
 				chassisColumns: ['name', 'model', 'status'],
 				chassisOptions: {
@@ -28,7 +29,13 @@
         mounted() {
         	this.$nextTick(function(){
 
-        		this.getChassis();
+        		
+				if(this.ucs){
+					this.getChassis();
+				}
+				else {
+					this.ucsActive = false
+				}
 
         	});
         },
@@ -85,7 +92,7 @@
 <template>
 	<div>
 
-		<div id="Chassis">
+		<div id="Chassis" v-if='ucsActive'>
 
 			<v-client-table :data="chassis" :columns="chassisColumns" :options="chassisOptions">
 				<template slot="name" scope="props">
@@ -99,6 +106,14 @@
 				</template>
 			</v-client-table>
 
+		</div>
+
+		<div class='col-md-6 col-md-offset-3' v-else>
+			<div class="alert alert-dismissible alert-warning">
+				<button type="button" class="close" data-dismiss="alert">&times</button>
+				<strong>Oh snap!!</strong>
+				Please select a UCS system from the UCS tab or Add a new UCS sytem
+			</div>
 		</div>
 
 	</div>

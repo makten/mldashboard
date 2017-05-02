@@ -10,7 +10,7 @@ from ucsmsdk.mometa.equipment import EquipmentChassisStats
 import json
 
 # Connection
-handle = UcsHandle("192.168.202.171", "ucspe", "ucspe")
+handle = UcsHandle("192.168.93.128", "ucspe", "ucspe")
 
 #Login
 handle.login()
@@ -22,17 +22,24 @@ handle.login()
 
 # for temp in comp_temp:
 #     print(temp)
+# x = handle.version
+# print(x)
+
+info = handle.query_classid(class_id='EquipmentChassis')
+for ucs in info:
+    print(ucs)
 
 
+# flt_str = '(dn, "sys/chassis-*")'
 ##-----Switch stats Status --
-sw_envs = handle.query_classid(class_id='computeBlade')
+# sw_envs = handle.query_classid(class_id='faultInst', filter_str=flt_str, hierarchy=True)
 
-for sw in sw_envs:
-    print(sw)
+# for sw in sw_envs:
+#     print(sw)
 
 # flt_str = '(dn, "sys/chassis-5")'
-# chas_stats = handle.query_classid(class_id='EquipmentChassis', filter_str=flt_str)
-# print(len(chas_stats))
+# chas_stats = handle.query_classid(class_id='EquipmentChassisStats', filter_str=flt_str)
+# print(chas_stats)
 
 # for c in chas_stats:
 #     print(c)
@@ -65,7 +72,7 @@ for sw in sw_envs:
 # handle.commit()
 
 
-# chassis = handle.query_classid(class_id="computeBlade")
+# chassis = handle.query_classid(class_id="ProcessorErrorStats")
 
 # for chas in chassis:
 #     print(chas)

@@ -1,10 +1,10 @@
 <script>
 	import vSelect from 'vue-select';    
 	import { Validator } from 'vee-validate';
+	// import UcsQueries from '../../../mixins/UcsQueries';
 
 	export default {
-		props: ['ucs'],
-
+		
 		components: {            
 			vSelect,
 			Bar,
@@ -15,6 +15,7 @@
 		data() {
 			return {				
 				ucs_info: [],
+				ucsActive: true,
 			}
 		},
 
@@ -24,17 +25,36 @@
 
 				// Get blade, rackmounts count,
 				// Faults and events
+				// Get General Statistics about UCS System
+				// Reject tab if ucs is not set
 
 				// console.log(this.ucs, 'got it')
 
-				this.getUcsInfo();
+				/** 
+				*	Check if UCS-IP is set, if so proceed to get to all queries
+				* 	else, reject and exit back to UCS List
+				*/				
 				
+				// if (this.ucs) {
+					
+					this.getUcsInfo();
+					
+				// }
+				// else {
+				// 	this.ucsActive = false
+				// }				
+			
 
 			});
 		},
 
 
 		methods: {
+
+			setUcsSystem(ucs) {
+                // this.ucsSystem = ucs
+                
+            }, 
 
 			getUcsInfo() {
 
@@ -62,7 +82,7 @@
 <template>
 	<div>
 		
-		<div class="table-responsive">
+		<div class="table-responsive" v-if='ucsActive'>
 			<table class="table">
 				<tbody>
 					<tr>				
@@ -190,6 +210,14 @@
 							</tr>
 						</tbody>
 					</table>
+				</div>
+
+				<div class='col-md-6 col-md-offset-3' v-else>
+					<div class="alert alert-dismissible alert-warning">
+						<button type="button" class="close" data-dismiss="alert">&times</button>
+						<strong>Oh snap!!</strong>
+						Please select a UCS system from the UCS tab or Add a new UCS sytem
+					</div>
 				</div>
 
 

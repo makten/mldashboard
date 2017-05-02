@@ -29,15 +29,11 @@
 
             return {    
 
-                // errors: null, 
-
+                // errors: null,                 
                 
+                ucsSystem: {},               
                 
-                ipAddress: '',
-
-                
-                
-                rackunits: [],                
+                rackunits: [],              
                 
 
                 savedSearches: '',
@@ -91,9 +87,7 @@
 
                     }]
 
-                },
-
-                
+                },             
 
 
                 api_response: [],
@@ -116,9 +110,13 @@
                 
                 // Broadcast the currently selected tab id to tabs.vue
 
-                if(window.location.hash){
-                    eventBroadcaster.$emit('setTab', window.location.hash)
-                }
+                // console.log(window.location.hash)
+
+                // if(window.location.hash){
+                //     eventBroadcaster.$emit('setTab', window.location.hash)
+                // }
+
+                eventBroadcaster.$on('setUcs', this.setUcsSystem)
                 
 
 
@@ -142,47 +140,13 @@
                 
 
             //this.getBladeFaults();
-
-            var ctx = $("#myChart");
-
-            // this.plotChart(ctx);
-            // setInterval(function() {
-            //     let a = Math.floor((Math.random() * 50) + 1)
-            //     let i = Moment().format()
-
-            //         // add(Math.floor((Math.random() * 6) + 1), 'days').
-            //     // this.forecasted = _.drop(this.forecasted, 1)
-            //     this.forecasted.push({
-            //         y: a,
-            //         x: i
-            //     })
-            //     this.plotChart(ctx)
-            //     // this.chartLine.update()
-            // }.bind(this), 3000);
-            // this.getSavedSearches();
-            // axios.get('api/departments')
-            // .then(response => {
-            // 	this.departments = JSON.parse(response.data)
-            // })
-
+            
         });
 
         },
 
 
-        methods: {  
-
-            
-
-         
-
-            
-
-
-            
-
-            
-
+        methods: {     
 
             /**
             * Show the form for creating new contact person.
@@ -245,7 +209,7 @@
                     this.savedSearches = response.data
                     console.log(response.data)
 
-                        //this.onSuccess(response);
+                        // this.onSuccess(response);
 
                     })
                 .catch(errors => { })
@@ -402,7 +366,6 @@
 
         },
 
-
         beforeDestroy: function () {
             clearInterval(this.interval);
         }
@@ -415,13 +378,7 @@
 
     <div class="main">
 
-
-
-
         <div class="widget">
-
-
-
 
             <!-- <div class="chart" style="background: #004080;">
     
@@ -453,14 +410,14 @@
                     <tab name="UCS" :selected="true" >
                         <h3>UCS Systems</h3>
                         
-                        <ucs></ucs>
+                        <ucs ></ucs>
                         
                     </tab>
 
                     <tab name="UCS Overview">
                         <h3>UCS overview</h3>
                         
-                        <ucs-system :ucs="ipAddress"></ucs-system>
+                        <ucs-system></ucs-system>
                         
                     </tab>
 
@@ -472,13 +429,13 @@
                     </tab>
 
                     <tab name="Chassis Servers">
-                        <h1>Chassis Servers List</h1>
+                        <h3>Chassis Servers List</h3>
                         <chassis-server></chassis-server>
                     </tab>
 
                     <tab name="RackMounts">
-                        <h1>RackMount Servers</h1>
-                        <rack-mount ucs=''></rack-mount>
+                        <h3>RackMount Servers</h3>
+                        <rack-mount></rack-mount>
                     </tab>
                 </tabs>                
 

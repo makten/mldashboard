@@ -94,7 +94,6 @@
     mounted() {
 
       this.$nextTick(function(){
-
         
          //Get the context of the canvas element we want to select
          var ctx = document.getElementById(`${this.chartid}`).getContext("2d");
@@ -121,23 +120,7 @@
           options: vm.options
         });
 
-      },
-
-      // updateData(oldData) {
-      //   var labels = oldData["labels"];
-      //   var dataSetA = oldData["datasets"][0]["data"];
-      //   var dataSetB = oldData["datasets"][1]["data"];
-
-      //   labels.shift();
-      //   this.count++;
-      //   labels.push(this.count.toString());
-      //   var newDataA = dataSetA[9] + (20 - Math.floor(Math.random() * (41)));
-      //   var newDataB = dataSetB[9] + (20 - Math.floor(Math.random() * (41)));
-      //   dataSetA.push(newDataA);
-      //   dataSetB.push(newDataB);
-      //   dataSetA.shift();
-      //   dataSetB.shift();
-      // }
+      }      
 
     },
 

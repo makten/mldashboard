@@ -10,9 +10,10 @@
 	import modal from '../../../core/modal.vue';
 	import FormHelper from '../../../mixins/FormHelper';	
 	import UcsValidation from '../../../mixins/validationRules';
+	import UcsQueries from '../../../mixins/UcsQueries';
 
 	export default {
-		mixins: [FormHelper, UcsValidation],
+		mixins: [FormHelper, UcsValidation, UcsQueries],
 		props: ['ucs'],
 
 		components: {            
@@ -64,10 +65,16 @@
         mounted() {
         	this.$nextTick(function(){
 
+				/**
+				*	Add option to deny tab when ucs is not set
+				*	Add option to assign ucs to client
+				* 
+				*/
+
 				// Get blade, rackmounts count,
 				// Faults and events
 
-				this.getUcsList();
+				this.getUcsList();				
 				
 			});
         },
@@ -76,26 +83,33 @@
         methods: {
 
         	getUcsList() {
-        		axios.get(`/api/getUcsSystems/`)
-        		.then(response => {                 
 
-        			this.ucs_systems = response.data 
+				NProgress.start();
+
+        		axios.get(`/api/getUcsSystems/`)
+        		.then(response => {
+					
+					this.ucs_systems = response.data
 
         			if (this.ucs_systems.length <= 0) {
 
         				$('#modal-ucs-list').modal('show');
         			}
 
+					NProgress.done();
+
         		})
-        		.catch(errors => { })
+        		.catch(errors => { 
+					NProgress.done();
+				})
         	}, 
 
 
         	selectUCS(ucs) {    
 
         		// Broadcast the currently selected tab id to tabs.vue
-        		eventBroadcaster.$emit('setTab', '#ucs-overview')            
-        		// this.ipAddress = ucs.ipAddress
+        		eventBroadcaster.$emit('setTab', '#ucs-overview')
+				eventBroadcaster.$emit('setUcs', ucs)        		
         	},  
 
 
@@ -149,7 +163,9 @@
 
         	storeUcsCredentials () {	
 
-        		let validationData = this.ucsValidationRules();				
+        		let validationData = this.ucsValidationRules();	
+
+				console.log(validationData)			
 
         		let validation = this.validateForm(this.ucs_credentials_form, validationData.rules, validationData.messages);
 
@@ -165,14 +181,20 @@
         			this.persistForm('post', '/api/createUcsCredentials/', this.ucs_credentials_form, this.ucs_credentials);
         		}
 
-        	}
+        	},
 
+
+
+// 			function validateEmail(email) {
+//     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//     return re.test(email);
+// }
 
         },
 
 
         computed: {
-
+			
         }
     }
 
@@ -199,12 +221,9 @@
 		</v-client-table>
 
 
-		<modal isDashboard="false" modalname='modal-add-ucs' v-if='setUcsModal' @closeModal="setUcsModal = false"> 
+		<modal width="50" :isDashboard="false" modalname='modal-add-ucs' v-if='setUcsModal' @closeModal="setUcsModal = false"> 
 			
 			<template slot='title'>Add UCS System</template>
-
-
-
 			
 			<template slot='body'>
 				
@@ -350,7 +369,7 @@
 
 										<td colspan="3">
 											<center>
-												<button @click.prevent="storeUcsCredentials()" type="submit" class="btn btn-primary btn-xs">Discover</button>
+												<button @click.prevent="storeUcsCredentials" type="submit" class="btn btn-primary btn-xs">Discover</button>
 											</center>
 										</td>
 

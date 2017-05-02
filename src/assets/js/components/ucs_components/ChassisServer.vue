@@ -10,6 +10,8 @@
 	import linechart from '../../../core/linechart.vue';
 
 	export default {
+
+		propos: ['ucs'],
 		
 		components: {            
 			vSelect,
@@ -24,8 +26,9 @@
 		data() {
 
 			return {
-
+				count: 0,
 				showStats: false,
+				ucsActive: true,
 				gauges: [],
 				chassis_servers: [],
 				blade_cpustats: [],
@@ -168,8 +171,22 @@
 mounted() {
 	this.$nextTick(function(){
 
-				// this.getBlades();
-			})
+		
+		if (typeof this.ucs) {
+			
+			this.getBlades();
+		}
+		else {
+			this.ucsActive = false
+		}
+
+		
+
+		setInterval(() => {
+			this.updateData(this.chartdata)
+		}, 5000);
+
+	})
 },
 
 
@@ -180,15 +197,15 @@ methods: {
 		var dataSetA = oldData["datasets"][0]["data"];
 		var dataSetB = oldData["datasets"][1]["data"];
 
-		labels.shift();
-		this.count++;
-		labels.push(this.count.toString());
-		var newDataA = dataSetA[9] + (20 - Math.floor(Math.random() * (41)));
-		var newDataB = dataSetB[9] + (20 - Math.floor(Math.random() * (41)));
-		dataSetA.push(newDataA);
-		dataSetB.push(newDataB);
-		dataSetA.shift();
-		dataSetB.shift();
+		// labels.shift();
+		// this.count++;
+		// labels.push(this.count.toString());
+		// var newDataA = dataSetA[9] + (20 - Math.floor(Math.random() * (41)));
+		// var newDataB = dataSetB[9] + (20 - Math.floor(Math.random() * (41)));
+		// dataSetA.push(newDataA);
+		// dataSetB.push(newDataB);
+		// dataSetA.shift();
+		// dataSetB.shift();
 	},   	
 
 	getBlades() {
@@ -205,11 +222,8 @@ methods: {
 
 	loadStats(blade) {
 
-
 		this.blade_cpustats = blade.cpu_stats
-
-
-
+		
 		this.loadedStats = blade   
 
 		if (Object.keys(this.gauges).length > 0){
@@ -328,174 +342,13 @@ methods: {
 
 <template>
 
-	<div>
-		<div class="well" style="border: 1px solid #DBDBDB; width: 600px !important; height: 350px !important;">
-
-			<linechart chartid="cpu_charts" :dataset="chartdata" :options="chartOption" :width='600' :height='250' ></linechart>
-		</div>
-
-		<div id="ChassisServers">			
+	<div>		
+		
+		<div id="ChassisServers" v-if='ucsActive'>			
 
 			<v-client-table :data="chassis_servers" :columns="chassisServerColumns" :options="chassisServerOptions">
 
-				<template slot="stats" scope="props">
-					<div>
-						<a href="javascript:void(0)" @click="loadStats(props.row)">
-							<span class="material-icons text-success icon-small">poll</span>
-						</a>
-					</div>
-				</template>
-
-				<template slot="faults" scope="props">
-					<div>
-						<a href="javascript:void(0)" @click="getBladeFaults(props.row.dn)">
-							<span class="material-icons text-danger icon-small">error</span>
-						</a>
-
-					</div>
-				</template>
-
-			</v-client-table>
-			
-
-		</div>
-
-		<modal :isDashboard="true" modalname='modal-stats-data' v-if='showStats' @closeModal="showStats = false"> 
-			
-			<template slot="title">
-				<h3>Blade Statistics</h3>
-			</template>
-
-			<template slot="body">			
-				<!-- <div class="widget"> -->
-				<!-- <div class="chart"> -->
-				<div class="row">
-
-
-					<div class="col-xs-3">                        
-
-						<div class="well smallchart">
-							<h3 class="well-center boldered text-primary" > {{ blade_cpustats.length }} <i class="fa fa-tachometer"></i></h3>
-							<h3 class="text-muted">Total CPUs</h3>
-						</div> 
-
-						<div class="well smallchart">
-							<h3 class="well-center boldered text-info" > {{ loadedStats.num_cpu_cores }} <i class="fa fa-tachometer"></i></h3>
-							<h3 class="text-muted">CPUs Cores</h3>
-						</div>
-
-						<div class="well smallchart">
-							<h3 class="well-center boldered text-success" > {{ loadedStats.NICs }} <i class="fa fa-sitemap"></i></h3>
-							<h3 class="text-muted">NICs</h3>
-						</div> 
-
-					</div>
-
-
-					<div class="col-xs-9">
-
-						<div class="table-responsive">
-
-							<table class="table table-borderless">                                    
-
-								<tbody>
-									<tr>
-										<td width="2%">
-											<div class="well smallchart">
-												<a href="javascript:void(0)" style="text-decoration: none;" @click="showFaults(warnings)">
-													<h3 class="well-center-small boldered-small text-info"> {{warnings.length}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></h3>
-													<h4 class="text-muted">Warnings</h4>
-												</a>
-											</div> 
-
-										</td>
-
-										<td width="2%">
-
-											<div class="well smallchart">
-												<a href="javascript:void(0)" style="text-decoration: none;" @click="showFaults(minors)">
-													<h3 class="well-center-small boldered-small text-muted" > {{minors.length}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></h3>
-													<h4 class="text-muted">Minor</h4>
-												</a>
-											</div> 
-
-										</td>
-
-										<td width="2%">
-
-											<div class="well smallchart">
-												<a href="javascript:void(0)" style="text-decoration: none;" @click="showFaults(majors)">
-													<h3 class="well-center boldered-small text-warning" > {{majors.length}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></h3>
-													<h4 class="text-muted">Major</h4>
-												</a>
-											</div>
-
-										</td>
-
-										<td width="2%">
-
-											<div class="well smallchart">
-												<a href="javascript:void(0)" style="text-decoration: none;" @click="showFaults(criticals)">
-													<h3 class="well-center boldered-small" style="color: #F01212;" > {{criticals.length}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></h3>
-													<h4 class="text-muted">Critical</h4>
-												</a>
-											</div>
-
-										</td>
-										<td width="15%"></td>
-
-									</tr>
-
-									<tr>
-										<td>
-											<span id="memoryGaugeContainer"></span>
-										</td>
-
-										<td>
-											<span id="cpu1GaugeContainer"></span>
-										</td>
-
-										<td>
-											<span id="cpu2GaugeContainer"></span>
-										</td>
-									</tr>
-
-									<tr>
-										<td width="50%" colspan="3">
-
-											<div class="well smallchart" style="border: 1px solid #DBDBDB; width: 600px !important; height: 250px !important;">
-
-												<linechart chartid="cpu_charts" :dataset="chartdata" :options="chartOption" :width='600' :height='250' ></linechart>													
-												<!-- <line-chart :chart-data="chartdata" :width='600' :height='250'></line-chart>	 -->
-
-											</div>
-										</td>
-									</tr>
-
-								</tbody>
-							</table>
-						</div> 
-
-					</div>
-
-				</div>
-
-				<!-- </div> -->
-				<!-- </div> -->
-			</template>
-
-		</modal>
-
-		<modal modalname='modal-fault-details' v-if='modalset' @closeModal="modalset = false"> 
-			<template slot="title">
-				<h3>Faults Details</h3>
-			</template>
-
-			<template slot="body">
-				
-				<v-client-table :data="faultDetails" :columns="faultDetailsColumns" :options="faultDetailsOptions">
-
-					<!-- <template slot="stats" scope="props">
+					<template slot="stats" scope="props">
 						<div>
 							<a href="javascript:void(0)" @click="loadStats(props.row)">
 								<span class="material-icons text-success icon-small">poll</span>
@@ -510,14 +363,185 @@ methods: {
 							</a>
 
 						</div>
-					</template> -->
+					</template>
 
 				</v-client-table>
-			</template>
+				
 
-		</modal>
-		
-	</div>
+			
+
+			<modal width="90" :isDashboard="true" modalname='modal-stats-data' v-if='showStats' @closeModal="showStats = false"> 
+				
+				<template slot="title">
+					<h3>Blade Statistics</h3>
+				</template>
+
+				<template slot="body">			
+					<!-- <div class="widget"> -->
+					<!-- <div class="chart"> -->
+					<div class="row">
+
+
+						<div class="col-xs-3">                        
+
+							<div class="well smallchart">
+								<h3 class="well-center boldered text-primary" > {{ blade_cpustats.length }} <i class="fa fa-tachometer"></i></h3>
+								<h3 class="text-muted">Total CPUs</h3>
+							</div> 
+
+							<div class="well smallchart">
+								<h3 class="well-center boldered text-info" > {{ loadedStats.num_cpu_cores }} <i class="fa fa-tachometer"></i></h3>
+								<h3 class="text-muted">CPUs Cores</h3>
+							</div>
+
+							<div class="well smallchart">
+								<h3 class="well-center boldered text-success" > {{ loadedStats.NICs }} <i class="fa fa-sitemap"></i></h3>
+								<h3 class="text-muted">NICs</h3>
+							</div> 
+
+						</div>
+
+
+						<div class="col-xs-9">
+
+							<div class="table-responsive">
+
+								<table class="table table-borderless">                                    
+
+									<tbody>
+										<tr>
+											<td width="2%">
+												<div class="well smallchart">
+													<a href="javascript:void(0)" style="text-decoration: none;" @click="showFaults(warnings)">
+														<h3 class="well-center-small boldered-small text-info"> {{warnings.length}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></h3>
+														<h4 class="text-muted">Warnings</h4>
+													</a>
+												</div> 
+
+											</td>
+
+											<td width="2%">
+
+												<div class="well smallchart">
+													<a href="javascript:void(0)" style="text-decoration: none;" @click="showFaults(minors)">
+														<h3 class="well-center-small boldered-small text-muted" > {{minors.length}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></h3>
+														<h4 class="text-muted">Minor</h4>
+													</a>
+												</div> 
+
+											</td>
+
+											<td width="2%">
+
+												<div class="well smallchart">
+													<a href="javascript:void(0)" style="text-decoration: none;" @click="showFaults(majors)">
+														<h3 class="well-center boldered-small text-warning" > {{majors.length}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></h3>
+														<h4 class="text-muted">Major</h4>
+													</a>
+												</div>
+
+											</td>
+
+											<td width="2%">
+
+												<div class="well smallchart">
+													<a href="javascript:void(0)" style="text-decoration: none;" @click="showFaults(criticals)">
+														<h3 class="well-center boldered-small" style="color: #F01212;" > {{criticals.length}} <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></h3>
+														<h4 class="text-muted">Critical</h4>
+													</a>
+												</div>
+
+											</td>
+											<td width="15%"></td>
+
+										</tr>
+
+										<tr>
+											<td>
+												<span id="memoryGaugeContainer"></span>
+											</td>
+
+											<td>
+												<span id="cpu1GaugeContainer"></span>
+											</td>
+
+											<td>
+												<span id="cpu2GaugeContainer"></span>
+											</td>
+										</tr>
+
+										<tr>
+											<td width="50%" colspan="3">
+
+												<div class="well smallchart" style="border: 1px solid #DBDBDB; width: 600px !important; height: 350px !important;">
+
+													<linechart chartid="cpu_charts" :dataset="chartdata" :options="chartOption" :width='600' :height='250' ></linechart>
+												</div>
+
+												<!-- <div class="well smallchart" style="border: 1px solid #DBDBDB; width: 600px !important; height: 250px !important;"> -->
+
+												<!-- <linechart chartid="cpu_charts" :dataset="chartdata" :options="chartOption" :width='600' :height='250' ></linechart>													 -->
+												<!-- <line-chart :chart-data="chartdata" :width='600' :height='250'></line-chart>	 -->
+
+												<!-- </div> -->
+											</td>
+										</tr>
+
+									</tbody>
+								</table>
+							</div> 
+
+						</div>
+
+					</div>
+
+					<!-- </div> -->
+					<!-- </div> -->
+				</template>
+
+			</modal>
+
+			<modal width="50" modalname='modal-fault-details' v-if='modalset' @closeModal="modalset = false"> 
+				<template slot="title">
+					<h3>Faults Details</h3>
+				</template>
+
+				<template slot="body">
+					
+					<v-client-table :data="faultDetails" :columns="faultDetailsColumns" :options="faultDetailsOptions">
+
+						<!-- <template slot="stats" scope="props">
+							<div>
+								<a href="javascript:void(0)" @click="loadStats(props.row)">
+									<span class="material-icons text-success icon-small">poll</span>
+								</a>
+							</div>
+						</template>
+
+						<template slot="faults" scope="props">
+							<div>
+								<a href="javascript:void(0)" @click="getBladeFaults(props.row.dn)">
+									<span class="material-icons text-danger icon-small">error</span>
+								</a>
+
+							</div>
+						</template> -->
+
+					</v-client-table>
+				</template>
+
+			</modal>
+			
+		</div>
+	
+	
+	<div class='col-md-6 col-md-offset-3' v-else>
+		<div class="alert alert-dismissible alert-warning">
+			<button type="button" class="close" data-dismiss="alert">&times</button>
+			<strong>Oh snap!!</strong>
+			Please select a UCS system from the UCS tab or Add a new UCS sytem
+		</div>		
+	</div>			
 	
 
 

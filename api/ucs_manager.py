@@ -15,8 +15,7 @@ handle = None
 def getUcsInfo(handle):
     """ 
         Get General UCS Information 
-    """
-    
+    """    
     info = handle.query_classid(class_id='TopSystem')
     for ucs in info:
         ucs_info = {
@@ -26,8 +25,11 @@ def getUcsInfo(handle):
             'mode': ucs.mode,
             'owner': ucs.owner,
             'site': ucs.site,
-            'system_up_time': ucs.system_up_time,            
-        }
+            'system_up_time': ucs.system_up_time,
+            # 'version': handle.version,
+            # 'uri': handle.uri,
+            # 'username': handle.username          
+        }   
 
     return ucs_info
 
@@ -59,26 +61,43 @@ def get_chassis(handle):
 def getChassisStats(handle, dn):
     
     flt_str = '(dn, "sys/'+ str(dn) +'")'
-    chas_stats = handle.query_classid(class_id='EquipmentChassis', filter_str=flt_str)
+    chas_stats = handle.query_classid(class_id='EquipmentChassisStats', filter_str=flt_str)
     
-    for t in chas_stats:
-        print(t)
-    chassis_stats = {
-        # 'dn': chas_stats.dn,
-        'input_power': 123343,
-        'input_power_avg': 744,
-        'input_power_max': 238,
-        'input_power_min': 250,
-        'output_power': 250,
-    }
-
+    chassis_stats = {}
+    for chass in chas_stats:
+        
+        chassis_stats = {
+            "ChassisI2CErrors": chass.chassis_i2_c_errors, 
+            "ChassisI2CErrorsAvg": chass.chassis_i2_c_errors_avg, 
+            "ChassisI2CErrorsMax": chass.chassis_i2_c_errors_max, 
+            "ChassisI2CErrorsMin": chass.chassis_i2_c_errors_min, 
+            "childAction": chass.child_action, 
+            "dn": chass.dn, 
+            "inputPower": chass.input_power, 
+            "inputPowerAvg": chass.input_power_avg, 
+            "inputPowerMax": chass.input_power_max, 
+            "inputPowerMin": chass.input_power_min, 
+            "intervals": chass.intervals, 
+            "outputPower": chass.output_power, 
+            "outputPowerAvg": chass.output_power_avg, 
+            "outputPowerMax": chass.output_power_max, 
+            "outputPowerMin": chass.output_power_min, 
+            "rn": chass.rn, 
+            "sacl": chass.sacl, 
+            "status": chass.status, 
+            "suspect": chass.suspect, 
+            "thresholded": chass.thresholded, 
+            "timeCollected": chass.time_collected, 
+            "update": chass.update, 
+        }
+   
     return chassis_stats
 
 
 
 def get_blades(handle):
-    ## Get all blades from UCS    
-
+    ## Get all blades from UCS   
+    
     compute_blade = handle.query_classid(class_id="computeBlade")
     
     blades = []

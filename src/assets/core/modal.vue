@@ -4,17 +4,25 @@
 
 		props: { 
 			modalname: { required: true, default: 'default-modal' },
-			isDashboard: { required: false, default: false }
+			isDashboard: { required: false, default: false },
+			width: {required: false, default: 50}
 	},
 
 		data() {
 			return {
+
+				styleObject: {
+					 width: this.width + '%',
+					 background: '#24303a',
+
+				}
 
 			}
 		},
 
 
 		mounted() {
+			
 			this.$nextTick(function(){		
 			
 				$(`#${this.modalname}`).modal('show'); 
@@ -50,7 +58,7 @@
 		<div class="modal fade" :id="modalname" tabindex="-1" role="dialog" data-backdrop="static" 
 		data-keyboard="false">
 
-		<div class="modal-dialog modal-lg" style="width: 90%; background: #24303a;">
+		<div class="modal-dialog modal-lg" :style="styleObject">
 
 			<div class="modal-content" :class="{'mini-dashboard': isDashboard}">
 

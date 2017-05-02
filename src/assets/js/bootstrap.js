@@ -10,6 +10,8 @@ require('bootstrap-material-design/dist/js/material.js');
 require('bootstrap-material-design/dist/js/ripples.js');
 require('../mixins/dropdown.js');
 
+import NProgress from 'nprogress';
+window.NProgress = NProgress;
 import ChartJs from 'chart.js';
 window.Chartjs = ChartJs;
 window.axios = require('axios');
@@ -18,19 +20,18 @@ window.VueCharts = VueCharts;
 import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 import VeeValidate from 'vee-validate';
 
+NProgress.configure({ parent: '.tab-content' });
+
 
 window.Vue = require('vue');
 Vue.use(ClientTable, {}, false, require('./template.js')('client'))
 Vue.use(VeeValidate)
 
-import NProgress from 'nprogress';
-
-
 
 window.Validator = require('validatorjs');
 
-Validator.register('multi_required', function(value, requirement, attr){
-	console.log(attr)
+Validator.register('multi_required', function(value, requirement, attr) {
+    console.log(attr)
 }, 'test');
 
 
@@ -61,8 +62,8 @@ require('selectize');
 
 axios.interceptors.request.use((request) => {
 
-	request.headers['X-CSRF-TOKEN'] = csrfToken;
-	return request;
+    request.headers['X-CSRF-TOKEN'] = csrfToken;
+    return request;
 
 });
 

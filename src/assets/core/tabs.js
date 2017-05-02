@@ -1,8 +1,6 @@
-
-
 export default {
 
-	template: `
+    template: `
 
 	<div>
 
@@ -25,33 +23,33 @@ export default {
 	`,
 
 
-	data() {
+    data() {
 
-		return {
+        return {
 
-			tabs: []
-		};
-	},
+            tabs: []
+        };
+    },
 
-	created() {
-		this.tabs = this.$children;
+    created() {
+        this.tabs = this.$children;
 
-		// Listen to currently selected tab from Dashboard.vue
-		eventBroadcaster.$on('setTab', this.selectTab)
-	},
+        // Listen to currently selected tab from Dashboard.vue
+        eventBroadcaster.$on('setTab', this.selectTab)
+    },
 
 
-	methods: {
+    methods: {
 
-		selectTab(selectTab) {
-			
-			this.tabs.forEach(tab => {
-				tab.isActive = ( tab.href == selectTab );
+        selectTab(selectTab) {
 
-			});
-			
-			window.location.hash = selectTab;
-			
-		}
-	}
+            this.tabs.forEach(tab => {
+                tab.isActive = (tab.href == selectTab);
+
+            });
+
+            // window.location.hash = selectTab;
+
+        }
+    }
 }
