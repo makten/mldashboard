@@ -55726,7 +55726,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       // Broadcast the currently selected tab id to tabs.vue
       eventBroadcaster.$emit('setTab', '#ucs-overview');
-      eventBroadcaster.$emit('setUcs', ucs);
+      // eventBroadcaster.$emit('setUcs', ucs)        		
     },
     showAddUcsForm: function showAddUcsForm() {
 
@@ -55764,8 +55764,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     storeUcsCredentials: function storeUcsCredentials() {
 
       var validationData = this.ucsValidationRules();
-
-      console.log(validationData);
 
       var validation = this.validateForm(this.ucs_credentials_form, validationData.rules, validationData.messages);
 
@@ -56371,6 +56369,7 @@ var Form = function () {
 
     methods: {
         selectTab: function selectTab(_selectTab) {
+            // console.log(selectTab.tab, selectTab.ucs)
 
             this.tabs.forEach(function (tab) {
                 tab.isActive = tab.href == _selectTab;

@@ -109,7 +109,7 @@
 
         		// Broadcast the currently selected tab id to tabs.vue
         		eventBroadcaster.$emit('setTab', '#ucs-overview')
-				eventBroadcaster.$emit('setUcs', ucs)        		
+				// eventBroadcaster.$emit('setUcs', ucs)        		
         	},  
 
 
@@ -163,12 +163,9 @@
 
         	storeUcsCredentials () {	
 
-        		let validationData = this.ucsValidationRules();	
-
-				console.log(validationData)			
+        		let validationData = this.ucsValidationRules();				
 
         		let validation = this.validateForm(this.ucs_credentials_form, validationData.rules, validationData.messages);
-
 
         		if(validation.fails()){
         			this.validations = [];
@@ -182,13 +179,6 @@
         		}
 
         	},
-
-
-
-// 			function validateEmail(email) {
-//     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//     return re.test(email);
-// }
 
         },
 

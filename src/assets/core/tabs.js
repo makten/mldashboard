@@ -42,6 +42,7 @@ export default {
     methods: {
 
         selectTab(selectTab) {
+            // console.log(selectTab.tab, selectTab.ucs)
 
             this.tabs.forEach(tab => {
                 tab.isActive = (tab.href == selectTab);
