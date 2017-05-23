@@ -17,13 +17,22 @@ from api import ucs_manager as ucs
 import json
 from ucs_manager.connection import ucs_login, ucs_logout
 from django.contrib.auth.decorators import login_required
-
+from .ml_operations.modelcreator import ModelOperations as mloperations
+from .ml_operations.modelcreator import Predictor as predictor
 
 
 from ucsmsdk.ucshandle import UcsHandle
+from .ml_operations import modelserver
+from .ml_operations import settings
+import sys
+sys.path.append(".")
+
+modelserver.initialize_models(json_path=settings.path_model_json,
+                              weights_path=settings.path_model_weight,
+                              normalized_x=settings.path_x_normalizer,
+                              normalized_y=settings.path_y_normalizer)
 
 handle = None
-
 
 # def make_password(password, secret_key='2222'):
 #     assert password        
