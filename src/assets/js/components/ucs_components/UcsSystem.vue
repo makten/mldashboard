@@ -16,6 +16,11 @@
 			return {				
 				ucs_info: [],
 				ucsActive: true,
+				predicted_faults: [],
+				minors:[],
+				warnings:[],
+				criticals:[],
+				majors:[],
 			}
 		},
 
@@ -38,12 +43,13 @@
 				// if (this.ucs) {
 					
 					this.getUcsInfo();
+					this.predictFaults();
 					
 				// }
 				// else {
 				// 	this.ucsActive = false
 				// }				
-			
+
 
 			});
 		},
@@ -56,26 +62,46 @@
                 
             }, 
 
-			getUcsInfo() {
+            getUcsInfo() {
 
-				axios.get('/api/get_ucsinfo')
-				.then(response => {
+            	axios.get('/api/get_ucsinfo')
+            	.then(response => {
 
-					this.ucs_info = JSON.parse(response.data)
+            		this.ucs_info = JSON.parse(response.data)
 
-				})
-				.catch(errors => { })
+            	})
+            	.catch(errors => { })
 
-			},
-
-
-		},
+            },
 
 
-		computed: {
+            predictFaults() {
 
-		}
-	}
+            	axios.get('/api/predictfaults')
+            	.then(response => {
+            		
+            		this.predicted_faults = JSON.parse(response.data)
+
+            		// this.minors = _.reject(this.predicted_faults, (f)=>{return f != 'F0185'})
+            		
+            		this.warnings = _.filter(this.predicted_faults, (f)=>{return f != 'F0185'})//F0185
+            		this.criticals = _.filter(this.predicted_faults, (f)=>{return f != 'F0184'})//F0184
+            		this.majors = _.filter(this.predicted_faults, (f)=>{return f != 'F0844'})//F0844 disabled 
+            		
+
+            	})
+            	.catch(errors => { })
+
+            },
+
+
+        },
+
+
+        computed: {
+
+        }
+    }
 
 </script>
 
@@ -83,6 +109,9 @@
 	<div>
 		
 		<div class="table-responsive" v-if='ucsActive'>
+
+					
+			
 			<table class="table">
 				<tbody>
 					<tr>				

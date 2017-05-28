@@ -21,6 +21,7 @@ urlpatterns = {
 	url(r'^api/get_ucsinfo/$', views.getUcsInfo, name='ucs_info'),
 	url(r'^api/createUcsCredentials/$', views.createUcsCredentials, name='ucs_create_credentials'),
 	url(r'^api/getUcsCredentials/$', views.getUcsCredentials, name='ucs_credentials'),
+    url(r'^api/predictfaults/$', views.faultPredictor, name='fault_predictor'),
 
 
 	url(r'^get-token/', obtain_auth_token),
