@@ -26,6 +26,7 @@
 		data() {
 
 			return {
+				filtered: false,
 				count: 0,
 				showStats: false,
 				ucsActive: true,
@@ -53,8 +54,22 @@
 					templates: {
 
 
-					}
+					},
+
+					
 				},
+
+				customFilters: [
+					{
+						name:'alphabet',
+						callback: function(row, query) {
+							alert(row)
+							return row.name[0] == query;
+						}
+					}
+				],
+
+				
 
 				faultDetailsColumns: ['created', 'code', 'type', 'severity', 'descr', 'rule'],
 				faultDetailsOptions: {
@@ -172,13 +187,15 @@ mounted() {
 	this.$nextTick(function(){
 
 		
-		if (typeof this.ucs) {
+		// if (typeof this.ucs) {
 			
 			this.getBlades();
-		}
-		else {
-			this.ucsActive = false
-		}
+		// }
+		// else {
+		// 	this.ucsActive = false
+		// }
+
+		eventBroadcaster.$on('chassisFilter', this.setQuery)
 
 		
 
@@ -190,7 +207,16 @@ mounted() {
 },
 
 
-methods: {     
+methods: {    
+
+	setQuery(chassis) {
+
+		let chas_id = chassis.split('-')
+				
+		this.chassis_servers = _.reject(this.chassis_servers, (chas) => {return chas.chassis_id != chas_id[1] })
+		this.filtered = true;
+
+	}, 
 
 	updateData(oldData) {
 		var labels = oldData["labels"];
@@ -209,11 +235,12 @@ methods: {
 	},   	
 
 	getBlades() {
-
+		
 		axios.get('/api/get_blades')
 		.then(response => {
 
 			this.chassis_servers = JSON.parse(response.data)
+			this.filtered = false
 
 		})
 		.catch(errors => { })
@@ -278,8 +305,7 @@ methods: {
 
 		})
 		.catch(errors => { })
-	},         
-
+	}, 
 
 	createGauge(name, label, min, max) {
 
@@ -344,11 +370,17 @@ methods: {
 
 	<div>		
 		
-		<div id="ChassisServers" v-if='ucsActive'>			
+		<div id="ChassisServers" v-if='ucsActive'>
+
+		<a  v-if="filtered" @click="getBlades" href='javascript:void(0)'>
+			<span ><i class='fa fa-refresh'></i></span>	
+		</a>
+				
 
 			<v-client-table :data="chassis_servers" :columns="chassisServerColumns" :options="chassisServerOptions">
-
+					
 					<template slot="stats" scope="props">
+						
 						<div>
 							<a href="javascript:void(0)" @click="loadStats(props.row)">
 								<span class="material-icons text-success icon-small">poll</span>

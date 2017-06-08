@@ -42,11 +42,11 @@
 		
 		</div>
 		
-		<div class='col-md-6 col-md-offset-3' v-else>
+		<div class='col-md-6 col-md-offset-3'>
 			<div class="alert alert-dismissible alert-warning">
 				<button type="button" class="close" data-dismiss="alert">&times</button>
 				<strong>Oh snap!!</strong>
-				Please select a UCS system from the UCS tab or Add a new UCS sytem
+				There are currently no rack units available
 			</div>		
 		</div>
 

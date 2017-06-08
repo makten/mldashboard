@@ -141,20 +141,8 @@ export default {
 	
 				</li>
 	
-			</ul>
-	
-			<ul>					
-				<ul class="nav nav-list">
-					<li>
-						<label class="tree-toggler nav-header" style="color: white !important;">Components</label>
-						<ul class="nav nav-list tree">
-							<li><a href="#">Chassis</a></li>
-							<li><a href="#">Chassis Server</a></li>							
-							<li><a href="#">RackMount Server</a></li>							
-						</ul>
-					</li>										
-				</ul>
-			</ul>
+			</ul>	
+			
 	
 			<ul v-if="loggedinUser.is_admin"
 			    v-for="adminlinks in forAdmin">

@@ -30,12 +30,12 @@
         	this.$nextTick(function(){
 
         		
-				if(this.ucs){
+				// if(this.ucs){
 					this.getChassis();
-				}
-				else {
-					this.ucsActive = false
-				}
+				// }
+				// else {
+				// 	this.ucsActive = false
+				// }
 
         	});
         },
@@ -54,28 +54,33 @@
         	},
 
         	getChassisStats(dn, chassis) {
+								
+        		// Broadcast the currently selected tab id to tabs.vue
+        		eventBroadcaster.$emit('setTab', '#chassis-servers')
+				eventBroadcaster.$emit('chassisFilter', chassis.rn)
 
-        		let str_dn = dn.split('/')
-        		let chs = str_dn[1]
-        		this.single_chassis = chassis
+        		// let str_dn = dn.split('/')
+        		// let chs = str_dn[1]
+        		// this.single_chassis = chassis
 
-        		axios.get(`/api/getChassisStats/${chs}/`)
-        		.then(response => {
+        		// axios.get(`/api/getChassisStats/${chs}/`)
+        		// .then(response => {
 
-        			this.chassis_stats = [];
-        			this.chassis_stats = JSON.parse(response.data);
+        		// 	this.chassis_stats = [];
+        		// 	this.chassis_stats = JSON.parse(response.data);
+				// 	console.log(response)
 
-                    // this.createGauge('power', 'power', parseInt(this.chassis_stats.input_power_min), parseInt(this.chassis_stats.input_power))
+                //     // this.createGauge('power', 'power', parseInt(this.chassis_stats.input_power_min), parseInt(this.chassis_stats.input_power))
 
-                    // this.editForm.id = client.id;
-                    // this.editForm.name = client.name;
-                    // this.editForm.redirect = client.redirect;
-                    // $('#modal-edit-client').modal('show');
+                //     // this.editForm.id = client.id;
+                //     // this.editForm.name = client.name;
+                //     // this.editForm.redirect = client.redirect;
+                //     // $('#modal-edit-client').modal('show');
 
-                    this.showStats = true;
+                //     this.showStats = true;
 
-                })
-        		.catch(errors => { })
+                // })
+        		// .catch(errors => { })
         	},
 
         },
@@ -92,7 +97,9 @@
 <template>
 	<div>
 
-		<div id="Chassis" v-if='ucsActive'>
+		<div id="Chassis">
+
+	
 
 			<v-client-table :data="chassis" :columns="chassisColumns" :options="chassisOptions">
 				<template slot="name" scope="props">
@@ -106,14 +113,6 @@
 				</template>
 			</v-client-table>
 
-		</div>
-
-		<div class='col-md-6 col-md-offset-3' v-else>
-			<div class="alert alert-dismissible alert-warning">
-				<button type="button" class="close" data-dismiss="alert">&times</button>
-				<strong>Oh snap!!</strong>
-				Please select a UCS system from the UCS tab or Add a new UCS sytem
-			</div>
 		</div>
 
 	</div>

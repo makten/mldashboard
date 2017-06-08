@@ -110,7 +110,7 @@
 		
 		<div class="table-responsive" v-if='ucsActive'>
 
-					
+					{{ warnings }}
 			
 			<table class="table">
 				<tbody>
@@ -183,21 +183,52 @@
 								</table>
 							</div>
 
+
+
 							<div class="widget" style="margin-left: 0px; padding: 0px;">
 
-								<div class="title" style="background: #e4e4e4">UCS Faults</div>
+								<div class="title">UCS Faults</div>
 
-								<ul class="list list-group">
-									<li class=" list-group-item text-success">General information</li>
-									<li class=" list-group-item">Number of faults per type</li>
-									<li class=" list-group-item">Power consumption</li>
-									<li class=" list-group-item">Num of blades</li>
-									<li class=" list-group-item" >Num of Chassis</li>
-									<li class=" list-group-item">Availabity</li>
-									<li class=" list-group-item">Network ports</li>
-									<li class=" list-group-item">Packets</li>
-									<li class=" list-group-item">Service Profiles</li>
-								</ul> 
+								<table class="table table-borderless">                       
+
+									<tbody>
+										<tr>
+											<td width="30%" align="left">
+												<span># Chassis</span>
+											</td>
+											<td width="5%" align="center">:</td>
+
+											<td align="left">
+												<span> 4 </span>
+											</td>       
+										</tr>
+
+										<tr>
+											<td width="30%" align="left">
+												<span># Blades</span>
+											</td>
+											<td width="5%" align="center">:</td>
+
+											<td align="left">
+												<span> 10 </span>
+											</td>       
+										</tr>
+
+										<tr>
+											<td width="30%" align="left">
+												<span># RackUnits</span>
+											</td>
+											<td width="5%" align="center">:</td>
+
+											<td align="left">
+												<span> 0</span>
+											</td>       
+										</tr>
+
+										
+									</tbody>
+
+								</table> 
 							</div>
 
 						</td>
@@ -289,6 +320,10 @@
 				line-height: 1.1px;
 				vertical-align: text-bottom;
 				overflow: hidden;				
+			}
+
+			.title {
+				background: #e4e4e4 !important;
 			}
 
 		</style>

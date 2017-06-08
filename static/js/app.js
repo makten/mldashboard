@@ -45884,11 +45884,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {
         this.$nextTick(function () {
 
-            if (this.ucs) {
-                this.getChassis();
-            } else {
-                this.ucsActive = false;
-            }
+            // if(this.ucs){
+            this.getChassis();
+            // }
+            // else {
+            // 	this.ucsActive = false
+            // }
         });
     },
 
@@ -45904,26 +45905,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (errors) {});
         },
         getChassisStats: function getChassisStats(dn, chassis) {
-            var _this2 = this;
 
-            var str_dn = dn.split('/');
-            var chs = str_dn[1];
-            this.single_chassis = chassis;
+            // Broadcast the currently selected tab id to tabs.vue
+            eventBroadcaster.$emit('setTab', '#chassis-servers');
+            eventBroadcaster.$emit('chassisFilter', chassis.rn);
 
-            axios.get('/api/getChassisStats/' + chs + '/').then(function (response) {
+            // let str_dn = dn.split('/')
+            // let chs = str_dn[1]
+            // this.single_chassis = chassis
 
-                _this2.chassis_stats = [];
-                _this2.chassis_stats = JSON.parse(response.data);
+            // axios.get(`/api/getChassisStats/${chs}/`)
+            // .then(response => {
 
-                // this.createGauge('power', 'power', parseInt(this.chassis_stats.input_power_min), parseInt(this.chassis_stats.input_power))
+            // 	this.chassis_stats = [];
+            // 	this.chassis_stats = JSON.parse(response.data);
+            // 	console.log(response)
 
-                // this.editForm.id = client.id;
-                // this.editForm.name = client.name;
-                // this.editForm.redirect = client.redirect;
-                // $('#modal-edit-client').modal('show');
+            //     // this.createGauge('power', 'power', parseInt(this.chassis_stats.input_power_min), parseInt(this.chassis_stats.input_power))
 
-                _this2.showStats = true;
-            }).catch(function (errors) {});
+            //     // this.editForm.id = client.id;
+            //     // this.editForm.name = client.name;
+            //     // this.editForm.redirect = client.redirect;
+            //     // $('#modal-edit-client').modal('show');
+
+            //     this.showStats = true;
+
+            // })
+            // .catch(errors => { })
         }
     },
 
@@ -45945,8 +45953,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_modal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__core_modal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_linechart_vue__ = __webpack_require__(604);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__core_linechart_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__core_linechart_vue__);
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 //
 //
 //
@@ -45974,6 +45980,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	data: function data() {
 
 		return {
+			filtered: false,
 			count: 0,
 			showStats: false,
 			ucsActive: true,
@@ -45995,7 +46002,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			chassisServerOptions: {
 
 				templates: {}
+
 			},
+
+			customFilters: [{
+				name: 'alphabet',
+				callback: function callback(row, query) {
+					alert(row);
+					return row.name[0] == query;
+				}
+			}],
 
 			faultDetailsColumns: ['created', 'code', 'type', 'severity', 'descr', 'rule'],
 			faultDetailsOptions: {},
@@ -46105,12 +46121,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		this.$nextTick(function () {
 			var _this = this;
 
-			if (_typeof(this.ucs)) {
+			// if (typeof this.ucs) {
 
-				this.getBlades();
-			} else {
-				this.ucsActive = false;
-			}
+			this.getBlades();
+			// }
+			// else {
+			// 	this.ucsActive = false
+			// }
+
+			eventBroadcaster.$on('chassisFilter', this.setQuery);
 
 			setInterval(function () {
 				_this.updateData(_this.chartdata);
@@ -46120,6 +46139,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 	methods: {
+		setQuery: function setQuery(chassis) {
+
+			var chas_id = chassis.split('-');
+
+			this.chassis_servers = _.reject(this.chassis_servers, function (chas) {
+				return chas.chassis_id != chas_id[1];
+			});
+			this.filtered = true;
+		},
 		updateData: function updateData(oldData) {
 			var labels = oldData["labels"];
 			var dataSetA = oldData["datasets"][0]["data"];
@@ -46141,6 +46169,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			axios.get('/api/get_blades').then(function (response) {
 
 				_this2.chassis_servers = JSON.parse(response.data);
+				_this2.filtered = false;
 			}).catch(function (errors) {});
 		},
 		loadStats: function loadStats(blade) {
@@ -66204,7 +66233,7 @@ exports = module.exports = __webpack_require__(7)();
 
 
 // module
-exports.push([module.i, "\n#exTab3 .nav-pills > li > a {\n  border-radius: 4px 4px 0 0;\n}\n#exTab3 .tab-content {\n  color: #3a3a3a;\n  background-color: #f0f5fb;\n  padding: 5px 15px;\n}\n.well-center {\n  font-weight: 600;\n}\nh3.boldered {\n  font-family: 'Arvo', serif;\n  font-size: 45px;\n  line-height: 1.1px;\n  vertical-align: text-bottom;\n  overflow: hidden;\n}\nh3.boldered-small {\n  font-family: 'Arvo', serif;\n  font-size: 20px;\n  line-height: 1.1px;\n  vertical-align: text-bottom;\n  overflow: hidden;\n}\n", ""]);
+exports.push([module.i, "\n#exTab3 .nav-pills > li > a {\n  border-radius: 4px 4px 0 0;\n}\n#exTab3 .tab-content {\n  color: #3a3a3a;\n  background-color: #f0f5fb;\n  padding: 5px 15px;\n}\n.well-center {\n  font-weight: 600;\n}\nh3.boldered {\n  font-family: 'Arvo', serif;\n  font-size: 45px;\n  line-height: 1.1px;\n  vertical-align: text-bottom;\n  overflow: hidden;\n}\nh3.boldered-small {\n  font-family: 'Arvo', serif;\n  font-size: 20px;\n  line-height: 1.1px;\n  vertical-align: text-bottom;\n  overflow: hidden;\n}\n.title {\n  background: #e4e4e4 !important;\n}\n", ""]);
 
 // exports
 
@@ -66232,7 +66261,7 @@ exports = module.exports = __webpack_require__(7)();
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -81458,7 +81487,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "Rackmount"
     }
-  }) : _c('div', {
+  }) : _vm._e(), _vm._v(" "), _vm._m(0)])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
     staticClass: "col-md-6 col-md-offset-3"
   }, [_c('div', {
     staticClass: "alert alert-dismissible alert-warning"
@@ -81468,8 +81499,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "type": "button",
       "data-dismiss": "alert"
     }
-  }, [_vm._v("×")]), _vm._v(" "), _c('strong', [_vm._v("Oh snap!!")]), _vm._v("\n\t\t\tPlease select a UCS system from the UCS tab or Add a new UCS sytem\n\t\t")])])])
-},staticRenderFns: []}
+  }, [_vm._v("×")]), _vm._v(" "), _c('strong', [_vm._v("Oh snap!!")]), _vm._v("\n\t\t\tThere are currently no rack units available\n\t\t")])])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
@@ -81487,7 +81518,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "ChassisServers"
     }
-  }, [_c('v-client-table', {
+  }, [(_vm.filtered) ? _c('a', {
+    attrs: {
+      "href": "javascript:void(0)"
+    },
+    on: {
+      "click": _vm.getBlades
+    }
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), _c('v-client-table', {
     attrs: {
       "data": _vm.chassis_servers,
       "columns": _vm.chassisServerColumns,
@@ -81750,7 +81788,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "data-dismiss": "alert"
     }
   }, [_vm._v("×")]), _vm._v(" "), _c('strong', [_vm._v("Oh snap!!")]), _vm._v("\n\t\t\tPlease select a UCS system from the UCS tab or Add a new UCS sytem\n\t\t")])])])
-},staticRenderFns: []}
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', [_c('i', {
+    staticClass: "fa fa-refresh"
+  })])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
@@ -82354,7 +82396,7 @@ if (false) {
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [(_vm.ucsActive) ? _c('div', {
     staticClass: "table-responsive"
-  }, [_c('table', {
+  }, [_vm._v("\n\n\t\t\t\t" + _vm._s(_vm.warnings) + "\n\t\t\n\t\t"), _c('table', {
     staticClass: "table"
   }, [_c('tbody', [_c('tr', [_c('td', {
     attrs: {
@@ -82478,31 +82520,52 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "padding": "0px"
     }
   }, [_c('div', {
-    staticClass: "title",
-    staticStyle: {
-      "background": "#e4e4e4"
+    staticClass: "title"
+  }, [_vm._v("UCS Faults")]), _vm._v(" "), _c('table', {
+    staticClass: "table table-borderless"
+  }, [_c('tbody', [_c('tr', [_c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
     }
-  }, [_vm._v("UCS Faults")]), _vm._v(" "), _c('ul', {
-    staticClass: "list list-group"
-  }, [_c('li', {
-    staticClass: " list-group-item text-success"
-  }, [_vm._v("General information")]), _vm._v(" "), _c('li', {
-    staticClass: " list-group-item"
-  }, [_vm._v("Number of faults per type")]), _vm._v(" "), _c('li', {
-    staticClass: " list-group-item"
-  }, [_vm._v("Power consumption")]), _vm._v(" "), _c('li', {
-    staticClass: " list-group-item"
-  }, [_vm._v("Num of blades")]), _vm._v(" "), _c('li', {
-    staticClass: " list-group-item"
-  }, [_vm._v("Num of Chassis")]), _vm._v(" "), _c('li', {
-    staticClass: " list-group-item"
-  }, [_vm._v("Availabity")]), _vm._v(" "), _c('li', {
-    staticClass: " list-group-item"
-  }, [_vm._v("Network ports")]), _vm._v(" "), _c('li', {
-    staticClass: " list-group-item"
-  }, [_vm._v("Packets")]), _vm._v(" "), _c('li', {
-    staticClass: " list-group-item"
-  }, [_vm._v("Service Profiles")])])])
+  }, [_c('span', [_vm._v("# Chassis")])]), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v(" 4 ")])])]), _vm._v(" "), _c('tr', [_c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("# Blades")])]), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v(" 10 ")])])]), _vm._v(" "), _c('tr', [_c('td', {
+    attrs: {
+      "width": "30%",
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v("# RackUnits")])]), _vm._v(" "), _c('td', {
+    attrs: {
+      "width": "5%",
+      "align": "center"
+    }
+  }, [_vm._v(":")]), _vm._v(" "), _c('td', {
+    attrs: {
+      "align": "left"
+    }
+  }, [_c('span', [_vm._v(" 0")])])])])])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('td', {
     attrs: {
@@ -82604,7 +82667,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "innerHTML": _vm._s(item.icon)
       }
     }), _vm._v(" "), _c('span', [_vm._v(" " + _vm._s(item.title) + " ")])])])])
-  }), _vm._v(" "), _vm._m(0), _vm._v(" "), _vm._l((_vm.forAdmin), function(adminlinks) {
+  }), _vm._v(" "), _vm._l((_vm.forAdmin), function(adminlinks) {
     return (_vm.loggedinUser.is_admin) ? _c('ul', [_c('li', {
       class: {
         active: adminlinks.active
@@ -82624,30 +82687,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     }), _vm._v(" "), _c('span', [_vm._v(" " + _vm._s(adminlinks.title) + " ")])])])]) : _vm._e()
   })], 2)])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('ul', [_c('ul', {
-    staticClass: "nav nav-list"
-  }, [_c('li', [_c('label', {
-    staticClass: "tree-toggler nav-header",
-    staticStyle: {
-      "color": "white !important"
-    }
-  }, [_vm._v("Components")]), _vm._v(" "), _c('ul', {
-    staticClass: "nav nav-list tree"
-  }, [_c('li', [_c('a', {
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("Chassis")])]), _vm._v(" "), _c('li', [_c('a', {
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("Chassis Server")])]), _vm._v(" "), _c('li', [_c('a', {
-    attrs: {
-      "href": "#"
-    }
-  }, [_vm._v("RackMount Server")])])])])])])
-}]}
+},staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
@@ -82661,7 +82701,7 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [(_vm.ucsActive) ? _c('div', {
+  return _c('div', [_c('div', {
     attrs: {
       "id": "Chassis"
     }
@@ -82685,17 +82725,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(props.row.name) + "\n\t\t\t\t\t")])])]
       }]
     ])
-  })], 1) : _c('div', {
-    staticClass: "col-md-6 col-md-offset-3"
-  }, [_c('div', {
-    staticClass: "alert alert-dismissible alert-warning"
-  }, [_c('button', {
-    staticClass: "close",
-    attrs: {
-      "type": "button",
-      "data-dismiss": "alert"
-    }
-  }, [_vm._v("×")]), _vm._v(" "), _c('strong', [_vm._v("Oh snap!!")]), _vm._v("\n\t\t\tPlease select a UCS system from the UCS tab or Add a new UCS sytem\n\t\t")])])])
+  })], 1)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
