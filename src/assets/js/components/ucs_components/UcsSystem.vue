@@ -31,8 +31,10 @@
 				criticals:[],
 				majors:[],
 				gauges_container: [
+				{id: 'ucs_availability', label: 'Availability', minVal: 0, maxVal: 100},
 				{id: 'ucs_network', label: 'Network', minVal: 0, maxVal: 200},
 				{id: 'ucs_memory', label: 'Memory', minVal: 0, maxVal: 7000},
+				
 				],
 
 			}
@@ -228,11 +230,16 @@
 											<div class="panel-body">												
 
 												<div class="col-xs-3">
-													<span id="ucs_memoryGaugeContainer"></span>
+													<span id="ucs_availabilityGaugeContainer"></span>
 
 												</div>
+
 												<div class="col-xs-3">
 													<span id="ucs_networkGaugeContainer"></span>
+												</div>
+
+												<div class="col-xs-3">
+													<span id="ucs_memoryGaugeContainer"></span>
 												</div>
 
 											</div>
