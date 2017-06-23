@@ -20,10 +20,9 @@ from django.contrib.auth.decorators import login_required
 import sys
 sys.path.append(".")
 from ucsmsdk.ucshandle import UcsHandle
-
 from .ml_operations import settings
 
-#from .ml_operations.modelcreator import ModelOperations as mloperations
+from .ml_operations.model_server import faultPredictor
 #from .ml_operations.model_operations import Predictor
 
 
@@ -38,68 +37,14 @@ try:
     import cPickle as pickle
 except:
     import pickle
-    
-
-
-
-
-
-
 
 
 predictor = None
 handle = None
 
 def getModel(model_path):
-    
+        
     return load_model(model_path)
-
-
-
-#def initialize_models(model_path, normalized_x, normalized_y):
-#    global predictor
-#    predictor = getModel(model_path, normalized_x, normalized_y)
-#    
-#
-#   
-#initialize_models(model_path=settings.model_path, 
-#                      normalized_x=settings.path_x_normalizer, 
-#                      normalized_y=settings.path_y_normalizer)
-
-
-
-def load_scalar(scaler_path):
-    try:
-        f = open(scaler_path, 'rb')
-        scalar = pickle.load(f)
-        f.close()            
-        return scalar
-        
-    except:
-        raise Exception('Failed to load normalizer')
-
-
-
-def normalize_input(X_input, scalar_path):
-            
-            scalar_x = load_scalar(scalar_path)
-            X_input = scalar_x.fit_transform(X_input)
-            
-            return X_input
-
-
-def denormalize_prediction(x_pred, scalar_path):
-        
-        scalar_y = load_scalar(scalar_path)
-        value = scalar_y.inverse_transform(x_pred)
-        return value
-    
-
-
-
-
-
-
 
 
 class CreateView(generics.ListCreateAPIView):
@@ -121,13 +66,9 @@ class DetailsView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UcsSystemSerializer
     permission_classes = (permissions.IsAuthenticated, IsOwner)
 
-
-
-
 class UserProfile(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
 
 class UserDetailsView(generics.RetrieveUpdateDestroyAPIView):
 
@@ -313,33 +254,34 @@ class BladeFaults(TemplateView):
     
     
 
-def faultPredictor(request):      
+def getPredictions(request):      
     
-    try:
+    # try:
     
-        from random import randint
+    #     from random import randint
         
-        dataframe = pd.read_csv("./api/ml_operations/pickles/random_cutout_test.csv")
-        dataset = dataframe.values
+    #     dataframe = pd.read_csv("./api/ml_operations/pickles/random_cutout_test.csv")
+    #     dataset = dataframe.values
         
-        X = dataset[:randint(1, len(dataset)),0:200].astype(float)
+    #     X = dataset[:randint(1, len(dataset)),0:200].astype(float)
         
-        model = getModel(settings.model_path)
-        x_normed = normalize_input(X, settings.path_x_normalizer)
+    #     model = getModel(settings.model_path)
+    #     x_normed = normalize_input(X, settings.path_x_normalizer)
             
-        y_pred = model.predict_classes(x_normed)
+    #     y_pred = model.predict_classes(x_normed)
         
-        predictions = json.dumps(list(denormalize_prediction(y_pred, settings.path_y_normalizer)))
+    #     predictions = json.dumps(list(denormalize_prediction(y_pred, settings.path_y_normalizer)))
                
         
-    except:
+    # except:
         
-        return Exception('Something went wrong')
+    #     return Exception('Something went wrong')
     
-    from keras.backend.tensorflow_backend import clear_session
+    # from keras.backend.tensorflow_backend import clear_session
     
-    clear_session()    
-    
+    # clear_session()    
+    predictions = faultPredictor()
+        
     return JsonResponse(predictions, safe=False )
 
 

@@ -15,8 +15,24 @@ handle = None
 def getUcsInfo(handle):
     """ 
         Get General UCS Information 
-    """    
+    """   
+    equipment = []
+
     info = handle.query_classid(class_id='TopSystem')
+    devices = handle.query_classid(class_id='EquipmentPhysDevicesPerBoard')
+
+    equ_physical_devices = []
+    for device in devices:        
+        equip = {
+            "num_of_cpu": device.num_of_cpu,
+            "num_of_dimm": device.num_of_dimm,
+            "num_of_local_disk": device.num_of_local_disk,
+            "num_of_storage_controller": device.num_of_storage_controller,
+            "num_of_adaptor": device.num_ofadaptor
+        }
+
+        equ_physical_devices.append(equip)
+
     for ucs in info:
         ucs_info = {
             'address': ucs.address,
@@ -29,9 +45,15 @@ def getUcsInfo(handle):
             # 'version': handle.version,
             # 'uri': handle.uri,
             # 'username': handle.username          
-        }   
+        } 
 
-    return ucs_info
+
+
+    equipment.append(equ_physical_devices)
+    equipment.append(ucs_info)
+    
+    
+    return equipment
 
 
 def get_chassis(handle):

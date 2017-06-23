@@ -10,7 +10,7 @@ from ucsmsdk.mometa.equipment import EquipmentChassisStats
 import json
 
 # Connection
-handle = UcsHandle("192.168.145.140", "ucspe", "ucspe")
+handle = UcsHandle("192.168.93.141", "ucspe", "ucspe")
 
 #Login
 handle.login()
@@ -25,9 +25,29 @@ handle.login()
 # x = handle.version
 # print(x)
 
-info = handle.query_classid(class_id='FeatureDefinition')
-for ucs in info:
-    print(ucs)
+# info = handle.query_classid(class_id='ComputeMbPowerStats')
+# for ucs in info:
+#     print(ucs)
+
+# info = handle.query_classid(class_id='EquipmentPsuInputStats')
+# for ucs in info:
+#     print(ucs)
+
+
+# info = handle.query_classid(class_id='EquipmentPhysDevicesPerBoard')
+# print(info)
+# for ucs in info:
+#     print(ucs)
+
+
+# info = handle.query_classid(class_id='EquipmentPhysicalDef')
+# for ucs in info:
+#     print(ucs)
+
+# info = handle.query_classid(class_id='EquipmentSwitchCap')
+# print(info)
+# for ucs in info:
+#     print(ucs)
 
 
 # flt_str = '(dn, "sys/chassis-*")'

@@ -13,11 +13,11 @@ Vue.component('dashboard-component', require('./components/Dashboard.vue'));
 Vue.component('header-section', require('./components/Header.vue'));
 Vue.component('sidebar', require('./components/Sidebar.vue'));
 
-
+import { store } from "./store.js";
 
 window.eventBroadcaster = new Vue();
 
-// Vue.prototype.$http = axios;
+
 
 window.papa_config = {
     delimiter: ",", // auto-detect
@@ -45,6 +45,7 @@ window.papa_config = {
 const app = new Vue({
 
     el: "#app",
+    store: store,
 
     mounted() {
         this.$nextTick(function() {

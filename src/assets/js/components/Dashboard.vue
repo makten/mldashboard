@@ -8,6 +8,7 @@
     import ChassisServer from './ucs_components/ChassisServer.vue';
     import RackMount from './ucs_components/RackMounts.vue';
     import { Validator } from 'vee-validate';
+    import { mapGetters } from 'vuex';
 
     export default {
 
@@ -31,8 +32,8 @@
 
                 // errors: null,                 
                 
-                ucsSystem: {},               
-                
+                ucsSystem: {},   
+                               
                 rackunits: [],              
                 
 
@@ -52,43 +53,14 @@
                 barData: {
                     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                     datasets: [{
-                        label: 'Test Data Hafiz',
-                        backgroundColor: '#ff8040',
+                        label: 'Power Usage Per Month kW',
+                        backgroundColor: '#ffff',
 
                         color: '#ffffff',
 
-                        data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+                        data: [800, 1300, 900, 800, 1400, 1000, 0, 0, 0, 0, 0, 0]
                     }]
                 },
-
-                barData2: {
-
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-
-                    datasets: [{
-
-                        label: 'Test Data 2',
-
-                        backgroundColor: '#ff0000',
-
-                        color: '#ffffff',
-
-                        fillColor: "rgba(220,220,220,0.5)",
-
-                        strokeColor: "rgba(220,220,220,0.8)",
-
-                        highlightFill: "rgba(220,220,220,0.75)",
-
-                        highlightStroke: "rgba(220,220,220,1)",
-
-                        borderColor: "#14B214",
-
-                        data: [100, 60, 12, 100, 10, 40, 1, 80, 2, 20, 12, 11]
-
-                    }]
-
-                },             
-
 
                 api_response: [],
                 uploadedFile: '',
@@ -107,37 +79,19 @@
         mounted() {
 
             this.$nextTick(function () {
+
                 
-                // Broadcast the currently selected tab id to tabs.vue
-
-                // console.log(window.location.hash)
-
                 // if(window.location.hash){
                 //     eventBroadcaster.$emit('setTab', window.location.hash)
                 // }
 
                 eventBroadcaster.$on('setUcs', this.setUcsSystem)
                 
-
-
-
-                /** Query UCS System
-                // If none popup modal to add
-                    /**
-                    * 1. IP and subnet
-                    * 2. Add credentials
-                    * 3 Discover and show overview
-                    *
-                // ELSE show a list of ucs to select from
-                * If online one, show it
-                */ 
-
                 // this.initialize();
                 // this.getUcsInfo();
                 // this.fillData();
                 
-                // this.getRackUnits();
-                
+                // this.getRackUnits();              
 
             //this.getBladeFaults();
             
@@ -366,6 +320,14 @@
 
         },
 
+        computed: {
+            //Install - --save-dev babel-preset-stage-2
+            ...mapGetters({
+            ucs: 'uscsystems'
+        }),
+       
+        },                   
+
         beforeDestroy: function () {
             clearInterval(this.interval);
         }
@@ -380,30 +342,7 @@
 
         <div class="widget">
 
-            <!-- <div class="chart" style="background: #004080;">
-    
-                <bar :data="barData"
-                     :options="{responsive: false, maintainAspectRatio: false}"
-                     :width="400"
-                     :height="200">
-    
-                </bar>
-    
-            </div> -->
-
-            <!-- <div class="chart">
-    
-                <bar :data="barData2"
-                     :options="{responsive: false, maintainAspectRatio: false}"
-                     :width="400"
-                     :height="200">
-    
-                </bar>
-    
-            </div> -->
-
-
-            <div class="chart">
+           <div class="chart">
 
                 <tabs>
 
@@ -443,18 +382,18 @@
         </div>
 
 
-        <!-- <div class="widget">
+      <div class="widget">
 
-        <div class="title">Chassis List</div>
-
-        <div class="chart" style="background: #004080;">
-            <bar :data="barData" :options="{responsive: false, maintainAspectRatio: false}" :width="400" :height="200"> </bar>
-        </div>
+        <div class="title">Power Usage</div>
 
         <div class="chart">
-            <bar :data="barData2" :options="{responsive: false, maintainAspectRatio: false}" :width="400" :height="200"></bar>
+            <bar :data="barData" :options="{responsive: false, maintainAspectRatio: false}" :width="450" :height="300"> </bar>
         </div>
-    </div> -->
+
+        <!--<div class="chart">
+            <bar :data="barData2" :options="{responsive: false, maintainAspectRatio: false}" :width="400" :height="200"></bar>
+        </div>-->
+    </div>
 
 
     
