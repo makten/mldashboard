@@ -19,6 +19,7 @@ urlpatterns = {
 	url(r'^api/get_bladefaults/(?P<chs>[a-zA-Z0-9_-]+)/(?P<bld>[a-zA-Z0-9_-]+)/$', views.BladeFaults.as_view()),
 	url(r'^api/getChassisStats/(?P<dn>[a-zA-Z0-9_-]+)/$', views.ChassisStats.as_view()),
 	url(r'^api/get_ucsinfo/$', views.getUcsInfo, name='ucs_info'),
+	url(r'^api/getPowerStats/$', views.getPowerStats, name='getPowerStats'),
 	url(r'^api/createUcsCredentials/$', views.createUcsCredentials, name='ucs_create_credentials'),
 	url(r'^api/getUcsCredentials/$', views.getUcsCredentials, name='ucs_credentials'),
     url(r'^api/predictfaults/$', views.getPredictions, name='fault_predictor'),

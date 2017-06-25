@@ -56,6 +56,42 @@ def getUcsInfo(handle):
     return equipment
 
 
+def getEquipmentPsuInputStats(handle):
+    """ 
+        Get Equipment PSU input stats 
+    """       
+    pstats = handle.query_classid(class_id='EquipmentPsuInputStats')
+
+    powerstats = []
+
+    for stat in pstats:        
+        equip = {
+            "current_avg": stat.current_avg,
+            "current_avg": stat.current_avg,
+            "current_max": stat.current_max,
+            "current_min": stat.current_min,
+            "input_status": stat.input_status,
+            "intervals": stat.intervals,
+            "dn": stat.dn,
+            "power": stat.power,
+            "power_avg": stat.power_avg,
+            "power_max": stat.power_max,
+            "power_min": stat.power_min,
+            "time_collected": stat.time_collected,
+            "update": stat.update,
+            "voltage": stat.voltage,
+            "voltage_avg": stat.voltage_avg,
+            "voltage_max": stat.voltage_max,
+            "voltage_min": stat.voltage_min,
+            "num_ports": 80,
+        }
+
+        powerstats.append(equip)
+
+    return powerstats
+
+    
+
 def get_chassis(handle):
     # Get all EquipmentChassis
 

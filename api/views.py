@@ -108,6 +108,25 @@ def getUcsInfo(request):
     return JsonResponse(ucs_info, safe=False)
 
 
+def getPowerStats(request):
+    try:
+        global handle
+        global ucs_powerstat
+        handle = ucs_login()
+
+        ucs_powerstat = json.dumps(ucs.getEquipmentPsuInputStats(handle), ensure_ascii=False)
+
+        ucs_logout(handle)
+
+    except:
+        ucs_logout(handle)
+        raise
+
+    ucs_logout(handle)
+
+    return JsonResponse(ucs_powerstat, safe=False)
+
+
 
 @login_required(login_url='/auth/login/')
 @api_view(['GET'])

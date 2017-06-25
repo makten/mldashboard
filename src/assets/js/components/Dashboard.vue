@@ -33,7 +33,7 @@
                 // errors: null,                 
                 
                 ucsSystem: {},   
-                               
+
                 rackunits: [],              
                 
 
@@ -45,23 +45,8 @@
                 modifiedFeatures: [],
                 rowCount: 0,
                 syncedVal: '',
-                chartLine: null,              
-                
-
-                gauges: [],
-
-                barData: {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    datasets: [{
-                        label: 'Power Usage Per Month kW',
-                        backgroundColor: '#ffff',
-
-                        color: '#ffffff',
-
-                        data: [800, 1300, 900, 800, 1400, 1000, 0, 0, 0, 0, 0, 0]
-                    }]
-                },
-
+                chartLine: null, 
+                gauges: [],  
                 api_response: [],
                 uploadedFile: '',
 
@@ -80,21 +65,13 @@
 
             this.$nextTick(function () {
 
-                
                 // if(window.location.hash){
                 //     eventBroadcaster.$emit('setTab', window.location.hash)
                 // }
 
                 eventBroadcaster.$on('setUcs', this.setUcsSystem)
                 
-                // this.initialize();
-                // this.getUcsInfo();
-                // this.fillData();
-                
-                // this.getRackUnits();              
-
-            //this.getBladeFaults();
-            
+                            
         });
 
         },
@@ -149,7 +126,7 @@
 
                     this.this.rackunits = []
                     this.rackunits = JSON.parse(response.data)
-                    // console.log(this.rackunits)
+                  
                     
                 })
                 .catch(errors => { })
@@ -250,7 +227,6 @@
 
                 Papa.parse(files[0], {
 
-                    // header: true,
                     dynamicTyping: true,
 
                     complete: function (results) {
@@ -270,35 +246,11 @@
                             vm.createFeatureTypes()
 
                         }
-
-
-
-                        // console.log(typeof results.data[0][0])
-
-                        // vm.uploading = False;									
+									
                     },
-
-                    // step: function(results, parser) {
-
-                    // 	vm.rowCount += 1					
-
-                    // 	console.log("Row data:", results.data);
-                    // 	// console.log("Row errors:", results.errors);
-                    // }
+                    
                 })
-
-                // var extension = filename.replace(/^.*\./, '');
-
-                //        // Iff there is no dot anywhere in filename, we would have extension == filename,
-                //        // so we account for this possibility now
-                //        if (extension == filename) {
-                //        	extension = '';
-                //        } else {
-                //            // if there is an extension, we convert to lower case
-                //            // (N.B. this conversion will not effect the value of the extension
-                //            // on the file upload.)
-                //            extension = extension.toLowerCase();
-                //        }		
+             
             },
 
 
@@ -323,9 +275,9 @@
         computed: {
             //Install - --save-dev babel-preset-stage-2
             ...mapGetters({
-            ucs: 'uscsystems'
-        }),
-       
+                ucs: 'uscsystems'
+            }),
+
         },                   
 
         beforeDestroy: function () {
@@ -342,38 +294,36 @@
 
         <div class="widget">
 
-           <div class="chart">
+             <div class="chart">
 
                 <tabs>
 
                     <tab name="UCS" :selected="true" >
-                        <h3>UCS Systems</h3>
-                        
-                        <ucs ></ucs>
-                        
+                        <h4>UCS Systems</h4>
+                        <ucs></ucs>
+
                     </tab>
 
                     <tab name="UCS Overview">
-                        <h3>UCS overview</h3>
-                        
+                        <h4>UCS overview</h4>
                         <ucs-system></ucs-system>
-                        
+
                     </tab>
 
 
                     <tab name="Chassis">
-                        <h3>Chassis list</h3>
+                        <h4>Chassis list</h4>
                         <chassis></chassis>
 
                     </tab>
 
                     <tab name="Chassis Servers">
-                        <h3>Chassis Servers List</h3>
+                        <h4>Chassis Servers List</h4>
                         <chassis-server></chassis-server>
                     </tab>
 
                     <tab name="RackMounts">
-                        <h3>RackMount Servers</h3>
+                        <h4>RackMount Servers</h4>
                         <rack-mount></rack-mount>
                     </tab>
                 </tabs>                
@@ -382,24 +332,7 @@
         </div>
 
 
-      <div class="widget">
-
-        <div class="title">Power Usage</div>
-
-        <div class="chart">
-            <bar :data="barData" :options="{responsive: false, maintainAspectRatio: false}" :width="450" :height="300"> </bar>
-        </div>
-
-        <!--<div class="chart">
-            <bar :data="barData2" :options="{responsive: false, maintainAspectRatio: false}" :width="400" :height="200"></bar>
-        </div>-->
     </div>
-
-
-    
-
-
-</div>
 
 </template>
 

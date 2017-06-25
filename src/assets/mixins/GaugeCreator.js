@@ -15,9 +15,9 @@ export default {
 		this.$nextTick(function(){
 			// this.initialize();
 
-			setInterval(() => {
-				this.updateGauges()
-			}, 5000);
+			// setInterval(() => {
+			// 	this.updateGauges()
+			// }, 5000);
 		});
 	},
 
@@ -54,12 +54,13 @@ export default {
 			_.each(gaugesContainer, (c) => {this.createGauge(c.id, c.label, c.minVal, c.maxVal)})						
 		},
 
-		updateGauges() {
+		updateGauges(id, val, total) {
 
 			for (var key in this.gauges) {
 
-				if(key == 'ucs_memory') {
-					this.gauges[key].redraw( 800 * Math.random() * 5);
+				if(key == id) {
+					// this.gauges[key].redraw( val * 1 * 2);
+					this.gauges[key].redraw( 100 - (val / total * 100));
 						// this.gauges[key].redraw( 100 - (41000 /  this.loadedStats.total_memory * 100));
 			    		// this.gauges[key].redraw( 100 - (this.loadedStats.available_memory /  this.loadedStats.total_memory * 100));
 			    	}
