@@ -17,13 +17,7 @@
 		mounted() {
 			this.$nextTick(function(){
 
-				// if(this.ucs != ''){
-				// 	// this.getChassis();
-				// }
-				// else {
-				// 	this.ucsActive = false
-				// }
-
+				this.getRackUnits();
 			});
 		},
 
@@ -33,7 +27,7 @@
 
 				axios.get('/api/get_rackunits')
 				.then(response => {
-									
+
 					this.rackunits = JSON.parse(response.data)
 
 				})
@@ -51,8 +45,8 @@
 <template>
 
 	<div>
-		<div id='Rackmount' v-if="ucsActive">
-
+		<div id='Rackmount' v-if="rackunits.length > 0">
+			{{ rackunits }}
 		</div>
 		
 		<div class='col-md-6 col-md-offset-3'>

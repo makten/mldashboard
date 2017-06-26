@@ -56454,13 +56454,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	mounted: function mounted() {
 		this.$nextTick(function () {
 
-			// if(this.ucs != ''){
-			// 	// this.getChassis();
-			// }
-			// else {
-			// 	this.ucsActive = false
-			// }
-
+			this.getRackUnits();
 		});
 	},
 
@@ -76478,7 +76472,7 @@ exports = module.exports = __webpack_require__(6)();
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -91796,11 +91790,11 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [(_vm.ucsActive) ? _c('div', {
+  return _c('div', [(_vm.rackunits.length > 0) ? _c('div', {
     attrs: {
       "id": "Rackmount"
     }
-  }) : _vm._e(), _vm._v(" "), _vm._m(0)])
+  }, [_vm._v("\n\t\t" + _vm._s(_vm.rackunits) + "\n\t")]) : _vm._e(), _vm._v(" "), _vm._m(0)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-md-6 col-md-offset-3"
