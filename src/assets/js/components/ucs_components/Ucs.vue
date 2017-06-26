@@ -33,7 +33,7 @@
 				validations: [],
 				ucs_credentials: [],
 
-				UcsSystemsColumns: ['id', 'ipAddress', 'subnet', 'owner', 'num_of_cores', 'date_created'],
+				UcsSystemsColumns: ['id', 'ipAddress', 'subnet', 'owner', 'date_created'],
 				UcsSystemsOptions: {
 
 					templates: {
@@ -84,24 +84,24 @@
 
         	getUcsList() {
 
-				NProgress.start();
+        		NProgress.start();
 
         		axios.get(`/api/getUcsSystems/`)
         		.then(response => {
-					
-					this.ucs_systems = response.data
+        			
+        			this.ucs_systems = response.data
 
         			if (this.ucs_systems.length <= 0) {
 
         				$('#modal-ucs-list').modal('show');
         			}
 
-					NProgress.done();
+        			NProgress.done();
 
         		})
         		.catch(errors => { 
-					NProgress.done();
-				})
+        			NProgress.done();
+        		})
         	}, 
 
 
@@ -110,83 +110,83 @@
         		// Broadcast the currently selected tab id to tabs.vue
         		eventBroadcaster.$emit('setTab', '#ucs-overview')
 				// eventBroadcaster.$emit('setUcs', ucs)        		
-        	},  
+			},  
 
 
-        	showAddUcsForm() {
+			showAddUcsForm() {
 
-        		this.getUcsCredentials()
-        		this.setUcsModal = true;
-        	},
-
-
-        	getUcsCredentials() {
-        		axios.get(`/api/getUcsCredentials`)
-        		.then(response => {
-        			this.ucs_credentials = response.data
-
-        		})
-        		.catch( errors => {})
-        	},
+				this.getUcsCredentials()
+				this.setUcsModal = true;
+			},
 
 
-        	showCredentialForm() {
+			getUcsCredentials() {
+				axios.get(`/api/getUcsCredentials`)
+				.then(response => {
+					this.ucs_credentials = response.data
 
-        		this.ucs_credentials_form.cred_name = '';
-        		this.ucs_credentials_form.cred_username = '';
-        		this.ucs_credentials_form.cred_password = '';
-        		this.ucs_credentials_form.cred_port = '';
-        		this.ucs_credentials_form.cred_protocol = '';
-
-        		this.showCredForm = true;
-        	},
-
-        	useCredentials(credential) {
-        		
-        		this.ucs_credentials_form.cred_name = '',
-        		this.ucs_credentials_form.cred_username = '',
-        		this.ucs_credentials_form.cred_password = '',
-        		this.ucs_credentials_form.cred_port = '',
-        		this.ucs_credentials_form.cred_protocol = '',
-        		this.ucs_credentials_form.cred_timeout = '',
-
-        		this.ucs_credentials_form.cred_name = credential.cred_name
-        		this.ucs_credentials_form.cred_username = credential.cred_username
-        		this.ucs_credentials_form.cred_password = credential.cred_password
-        		this.ucs_credentials_form.cred_port = credential.cred_port
-        		this.ucs_credentials_form.cred_protocol = credential.cred_protocol
-        		this.ucs_credentials_form.cred_timeout = credential.cred_timeout  
-
-        		this.showCredForm = true;      		
-        	},
+				})
+				.catch( errors => {})
+			},
 
 
-        	storeUcsCredentials () {	
+			showCredentialForm() {
 
-        		let validationData = this.ucsValidationRules();				
+				this.ucs_credentials_form.cred_name = '';
+				this.ucs_credentials_form.cred_username = '';
+				this.ucs_credentials_form.cred_password = '';
+				this.ucs_credentials_form.cred_port = '';
+				this.ucs_credentials_form.cred_protocol = '';
 
-        		let validation = this.validateForm(this.ucs_credentials_form, validationData.rules, validationData.messages);
+				this.showCredForm = true;
+			},
 
-        		if(validation.fails()){
-        			this.validations = [];
-        			this.validations.push(validation.errors.errors);
-        		}
+			useCredentials(credential) {
+				
+				this.ucs_credentials_form.cred_name = '',
+				this.ucs_credentials_form.cred_username = '',
+				this.ucs_credentials_form.cred_password = '',
+				this.ucs_credentials_form.cred_port = '',
+				this.ucs_credentials_form.cred_protocol = '',
+				this.ucs_credentials_form.cred_timeout = '',
 
-        		if (validation.passes()){
-        			
-        			this.validations = [];
-        			this.persistForm('post', '/api/createUcsCredentials/', this.ucs_credentials_form, this.ucs_credentials);
-        		}
+				this.ucs_credentials_form.cred_name = credential.cred_name
+				this.ucs_credentials_form.cred_username = credential.cred_username
+				this.ucs_credentials_form.cred_password = credential.cred_password
+				this.ucs_credentials_form.cred_port = credential.cred_port
+				this.ucs_credentials_form.cred_protocol = credential.cred_protocol
+				this.ucs_credentials_form.cred_timeout = credential.cred_timeout  
 
-        	},
+				this.showCredForm = true;      		
+			},
 
-        },
+
+			storeUcsCredentials () {	
+
+				let validationData = this.ucsValidationRules();				
+
+				let validation = this.validateForm(this.ucs_credentials_form, validationData.rules, validationData.messages);
+
+				if(validation.fails()){
+					this.validations = [];
+					this.validations.push(validation.errors.errors);
+				}
+
+				if (validation.passes()){
+					
+					this.validations = [];
+					this.persistForm('post', '/api/createUcsCredentials/', this.ucs_credentials_form, this.ucs_credentials);
+				}
+
+			},
+
+		},
 
 
-        computed: {
+		computed: {
 			
-        }
-    }
+		}
+	}
 
 </script>
 
@@ -215,19 +215,8 @@
 			
 			<template slot='title'>Add UCS System</template>
 			
-			<template slot='body'>
+			<template slot='body'>				
 				
-				<!-- <div class="alert alert-dismissible alert-danger" v-if="ucs_credentials_form.errors.length > 0" style="background-color: #F15959;">
-					<p><strong>Whoops!</strong> Iets is mis gegaan!</p>
-					<br>
-					<ul>
-						<li v-for="error in ucs_credentials_form.errors">
-							{{ error }}
-						</li>
-					</ul>
-				</div> -->
-
-
 				<form @submit.prevent="store" class="form-horizontal"> 
 					
 					
@@ -429,5 +418,4 @@
 		padding-left: 8px !important;
 		maring-bottom: -20px !important;		
 	}	
-
 </style>

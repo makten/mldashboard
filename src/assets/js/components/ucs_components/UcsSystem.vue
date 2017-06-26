@@ -36,8 +36,8 @@
 				{id: 'ucs_availability', label: 'Availability', minVal: 0, maxVal: 100},
 				{id: 'ucs_network', label: 'Network', minVal: 0, maxVal: 200},
 				{id: 'ucs_memory', label: 'Memory', minVal: 0, maxVal: 7000},
-				{id: 'swtapus1', label: 'SwA-PSU-1', minVal: 0, maxVal: 300},
-				{id: 'swtapus2', label: 'Fex-A-PSU-2', minVal: 0, maxVal: 300},
+				{id: 'swtapus1', label: 'SwA-P-1', minVal: 0, maxVal: 300},
+				{id: 'swtapus2', label: 'SwA-P-2', minVal: 0, maxVal: 300},
 
 				],
 
@@ -323,9 +323,30 @@
 											</div>	
 
 											<hr/>
+
 											<div class="row">
 												<div class="col-md-12">
 													<bar :chart-data="barData" :options="{responsive: false, maintainAspectRatio: true}" :width="450" :height="250"> </bar>
+												</div>
+											</div>	
+
+											<div class="row">
+
+												<div class="col-md-12">
+													
+													<div class="col-xs-3">
+														<!-- <span id="ucs_availabilityGaugeContainer"></span> -->
+
+													</div>
+
+													<div class="col-xs-3">
+														<span id="swtapus1GaugeContainer"></span>
+													</div>
+
+													<div class="col-xs-3">
+														<span id="swtapus2GaugeContainer"></span>
+													</div>
+													
 												</div>
 											</div>																	
 
@@ -349,6 +370,7 @@
 				Please select a UCS system from the UCS tab or Add a new UCS sytem
 			</div>
 		</div> -->
+		
 
 	</div>
 </template>

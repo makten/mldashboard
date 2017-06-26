@@ -7,7 +7,9 @@
 
 		data() {
 			return {
-				ucsActive: true
+				ucsActive: true,
+				rackunits: null,
+
 			};
 		},
 
@@ -27,6 +29,17 @@
 
 		methods: {
 
+			getRackUnits() {
+
+				axios.get('/api/get_rackunits')
+				.then(response => {
+									
+					this.rackunits = JSON.parse(response.data)
+
+				})
+				.catch(errors => { })
+			},  
+
 		},
 
 		computed: {
@@ -39,7 +52,7 @@
 
 	<div>
 		<div id='Rackmount' v-if="ucsActive">
-		
+
 		</div>
 		
 		<div class='col-md-6 col-md-offset-3'>

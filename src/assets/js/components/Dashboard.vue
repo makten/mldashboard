@@ -28,17 +28,11 @@
 
         data() {
 
-            return {    
-
-                // errors: null,                 
+            return {                             
                 
-                ucsSystem: {},   
-
-                rackunits: [],              
-                
-
+                ucsSystem: {},
+                rackunits: [],
                 savedSearches: '',
-
                 tableData: {},
                 features: [],
                 coltypes: [],
@@ -49,14 +43,95 @@
                 gauges: [],  
                 api_response: [],
                 uploadedFile: '',
-
                 departments: [],
-
                 predictions: [],
                 predicted: '',
-
                 monthsBag: [],
                 interval: null,
+
+                barData: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    datasets: [{
+                        label: 'Power Usage Per Month kW',
+                        backgroundColor: '#FD442B',
+
+                        color: '#A11D1D',
+
+                        data: [800, 1300, 900, 800, 1400, 1000, 0, 0, 0, 0, 0, 0]
+                    }]
+                },
+
+                chartdata: {
+                    labels: [Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a'), Moment().add(Math.random(1, 10), 'hours').format('HH:mm:ss a')],
+
+                    datasets : [
+                    {
+                        label: "Temp Srv. Closet",
+                        fill: true,
+                        lineTension: 0.11,
+                        backgroundColor: "#34DCFA",
+                        borderColor: "#1344FC",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        borderDashOffset: 0.9,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(75,192,192,1)",
+                        pointBackgroundColor: "#fff",
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 1,
+                        pointHitRadius: 1,
+                        data : [26,25,23,27,25,26,27,26,25,25]
+                    },
+                    {
+                        label: "Temp Datacenter",
+                        fill: true,
+                        lineTension: 0.11,
+                        backgroundColor: "#FB6161",
+                        borderColor: "#FF0000",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        borderDashOffset: 0.9,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(75,192,192,1)",
+                        pointBackgroundColor: "#ffffff",
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 1,
+                        pointHitRadius: 1,                      
+                        data : [35,33,34,35,36,36,35,37,40,39]
+                    }
+                    ]
+                },
+
+                chartOption: {
+
+                    animation: {
+                        duration: 0,              
+                        scaleOverride : true,             
+                        scaleSteps : 10,             
+                        scaleStepWidth : 10,              
+                        scaleStartValue : 0
+                    },
+
+                    elements: {
+                        line: {
+                            borderWidth: 1,
+                        },
+                        point: {
+                            radius: 2,
+                        },
+                    },
+
+                    scales: {                        
+                    }
+                }
 
             }
         },
@@ -68,16 +143,13 @@
                 // if(window.location.hash){
                 //     eventBroadcaster.$emit('setTab', window.location.hash)
                 // }
+                eventBroadcaster.$on('setUcs', this.setUcsSystem)               
 
-                eventBroadcaster.$on('setUcs', this.setUcsSystem)
-                
-                            
-        });
-
+            });
         },
 
 
-        methods: {     
+        methods: {    
 
             /**
             * Show the form for creating new contact person.
@@ -113,11 +185,9 @@
                 }
             },
 
-
             getRandomInt() {
                 return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-            },          
-
+            },
 
             getRackUnits() {
 
@@ -126,7 +196,6 @@
 
                     this.this.rackunits = []
                     this.rackunits = JSON.parse(response.data)
-                  
                     
                 })
                 .catch(errors => { })
@@ -139,7 +208,6 @@
 
                     this.savedSearches = response.data
                     console.log(response.data)
-
                         // this.onSuccess(response);
 
                     })
@@ -246,11 +314,11 @@
                             vm.createFeatureTypes()
 
                         }
-									
+
                     },
                     
                 })
-             
+
             },
 
 
@@ -292,29 +360,25 @@
 
     <div class="main">
 
-        <div class="widget">
+        <div class="widget col-md-9">
 
-             <div class="chart">
+            <div class="chart">
 
                 <tabs>
-
                     <tab name="UCS" :selected="true" >
                         <h4>UCS Systems</h4>
                         <ucs></ucs>
-
                     </tab>
 
                     <tab name="UCS Overview">
                         <h4>UCS overview</h4>
                         <ucs-system></ucs-system>
-
                     </tab>
 
 
                     <tab name="Chassis">
                         <h4>Chassis list</h4>
                         <chassis></chassis>
-
                     </tab>
 
                     <tab name="Chassis Servers">
@@ -326,10 +390,26 @@
                         <h4>RackMount Servers</h4>
                         <rack-mount></rack-mount>
                     </tab>
-                </tabs>                
-
+                </tabs>
             </div>
-        </div>
+        </div> 
+
+        <div class="widget col-md-3" style="margin-left: 0px; padding: 0px;">
+            <div class="chart">
+                <div class="title">Data Center Statistics</div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <bar :chart-data="barData" :options="{responsive: false, maintainAspectRatio: true}" :width="400" :height="250"> </bar>
+
+                        <hr/>
+
+                        <line-chart :chart-data="chartdata" :options="{responsive: false, maintainAspectRatio: true}" :width="400" :height="250"></line-chart>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>      
 
 
     </div>

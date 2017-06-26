@@ -17,8 +17,7 @@
 			Bar,			           
 			Validator,
 			modal,
-			LineChart, 
-			// linechart
+			LineChart			
 		},
 
 
@@ -176,16 +175,14 @@
 				
 				this.getBlades();			
 				this.initialize();
-				eventBroadcaster.$on('chassisFilter', this.setQuery)	
+				eventBroadcaster.$on('chassisFilter', this.setQuery)
 
-
-
-				setInterval(() => {
-					this.updateData(this.chartdata)
-				}, 5000);
+				// setInterval(() => {
+				// 	this.updateData(this.chartdata)
+				// }, 5000);
 
 				setInterval(() => {
-					this.updateGauges('ucs_memory', 400);
+					// this.updateGauges('ucs_memory', 400);
 
 					this.chartdata.datasets[0].data = _.drop(this.chartdata.datasets[0].data)
 					this.chartdata.datasets[0].data.push(Math.floor(Math.random() * (50 - 5 + 1)) + 5)					
@@ -376,7 +373,7 @@
 			</v-client-table>					
 		</div>
 
-		<line-chart :chart-data="chartdata" :options="{responsive: false, maintainAspectRatio: true}" :width="350" :height="200"></line-chart>
+		
 
 		<modal width="90" :isDashboard="true" modalname='modal-stats-data' v-if='showStats' @closeModal="showStats = false"> 				
 			<template slot="title">
