@@ -184,7 +184,7 @@ class RackDetails(TemplateView):
             global handle
             global rackunits
             handle = ucs_login()
-            # rackunits = json.dumps(ucs.get_blades(handle), ensure_ascii=False)
+            # rackunits = json.dumps(ucs.get_rackcomputes(handle), ensure_ascii=False)
 
             ucs_logout(handle)
 

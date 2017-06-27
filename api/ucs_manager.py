@@ -189,7 +189,8 @@ def get_blades(handle):
             cpu_stats.append(cp)
             
                      
-        i = {       "cpu_stats": cpu_stats, 
+        i = {     
+                    "cpu_stats": cpu_stats, 
                     "equipment": 'Chassis '+blade.chassis_id,
                     "num_cpu_cores": blade.num_of_cores_enabled,
                     "enabled_cpu_cores": blade.num_of_cores_enabled,
@@ -244,10 +245,6 @@ def get_blades(handle):
     
     return blades
 
-
-def get_rackcomputes(handle):
-    r_units = handle.query_classid(class_id='ComputeRackUnit')
-    pass
 
 
 

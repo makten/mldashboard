@@ -32,7 +32,7 @@
 
 				axios.get(`/api/user/${this.user}`).
 				then(response => {		
-					console.log(response.data)			
+					
 					this.loggedinUser = response.data
 				})
 			}

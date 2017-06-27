@@ -155,9 +155,9 @@
 	<div>		 
 
 		<div class="table-responsive">					
-			{{equipment}}
+			<!-- {{equipment}} -->
 
-			{{eq_powerstats}}
+			<!-- {{eq_powerstats}} -->
 			<table class="table">
 				<tbody>
 					<tr>				

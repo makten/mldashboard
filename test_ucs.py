@@ -10,7 +10,7 @@ from ucsmsdk.mometa.equipment import EquipmentChassisStats
 import json
 
 # Connection
-handle = UcsHandle("192.168.93.128", "ucspe", "ucspe")
+handle = UcsHandle("192.168.93.131", "ucspe", "ucspe")
 
 #Login
 handle.login()
@@ -97,7 +97,7 @@ handle.login()
 # chassis = handle.query_classid(class_id="EquipmentPsuInputStats")--------------
 # chassis = handle.query_classid(class_id="EquipmentPsuOutputStats")
 # chassis = handle.query_classid(class_id="EquipmentSwitchCard")----------------
-chassis = handle.query_classid(class_id="EquipmentSwitchCard")
+chassis = handle.query_classid(class_id="ComputeRackUnit")
 
 for chas in chassis:
     print(chas)

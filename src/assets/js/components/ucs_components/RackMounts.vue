@@ -8,7 +8,7 @@
 		data() {
 			return {
 				ucsActive: true,
-				rackunits: null,
+				rackunits: [],
 
 			};
 		},
@@ -17,7 +17,7 @@
 		mounted() {
 			this.$nextTick(function(){
 
-				this.getRackUnits();
+				// this.getRackUnits();
 			});
 		},
 

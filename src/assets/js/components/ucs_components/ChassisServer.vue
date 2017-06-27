@@ -177,16 +177,16 @@
 				this.initialize();
 				eventBroadcaster.$on('chassisFilter', this.setQuery)
 
-				// setInterval(() => {
-				// 	this.updateData(this.chartdata)
-				// }, 5000);
+				setInterval(() => {
+					this.updateData(this.chartdata)
+				}, 5000);
 
 				setInterval(() => {
 					// this.updateGauges('ucs_memory', 400);
 
-					this.chartdata.datasets[0].data = _.drop(this.chartdata.datasets[0].data)
-					this.chartdata.datasets[0].data.push(Math.floor(Math.random() * (50 - 5 + 1)) + 5)					
-					this.chartdata.datasets[0].data = this.chartdata.datasets[0].data;					
+					// this.chartdata.datasets[0].data = _.drop(this.chartdata.datasets[0].data)
+					// this.chartdata.datasets[0].data.push(Math.floor(Math.random() * (50 - 5 + 1)) + 5)					
+					// this.chartdata.datasets[0].data = this.chartdata.datasets[0].data;					
 
 				}, 1000);
 
@@ -290,57 +290,9 @@
 			})
 			.catch(errors => { })
 		}, 
-
-		createGauge(name, label, min, max) {
-
-			var config = {
-				size: 150,
-				label: label,
-				min: undefined != min ? min : 0,
-				max: undefined != max ? max : 100,
-				minorTicks: 5
-			}
-
-			var range = config.max - config.min;
-			config.yellowZones = [{
-				from: config.min + range * 0.75,
-				to: config.min + range * 0.9
-			}];
-
-			config.redZones = [{
-				from: config.min + range * 0.9,
-				to: config.max
-			}];
-
-			this.gauges[name] = new Gauge(name + "GaugeContainer", config);
-			this.gauges[name].render();
-		},
-
-		createGauges() {
-
-			this.createGauge("memory", "Memory", 0, 8400);
-			this.createGauge("cpu", "CPU", 0, 100);
-			this.createGauge("network", "Network");
-			this.createGauge("test", "Test", 1254, 3200);
-		},
-
-		updateGauges() {
-
-			for (var key in this.gauges) {
-
-				if(key == 'memory') {
-					this.gauges[key].redraw( 60 * Math.random());
-						// this.gauges[key].redraw( 100 - (41000 /  this.loadedStats.total_memory * 100));
-			    		// this.gauges[key].redraw( 100 - (this.loadedStats.available_memory /  this.loadedStats.total_memory * 100));
-			    	}
-			    }
-			},
-
-			initialize() {
-				this.createGauges();	
-			}
-		}
+		
 	}
+}
 
 </script>
 
