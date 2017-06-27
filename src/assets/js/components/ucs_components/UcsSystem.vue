@@ -25,19 +25,16 @@
 				disks: 0,
 				adaptors: 0,
 				storage: 0,
-
-				ucsActive: true,
-				predicted_faults: [],
-				minors:[],
-				warnings:[],
-				criticals:[],
-				majors:[],
+				ucsActive: true,			
+				
 				gauges_container: [
 				{id: 'ucs_availability', label: 'Availability', minVal: 0, maxVal: 100},
 				{id: 'ucs_network', label: 'Network', minVal: 0, maxVal: 200},
 				{id: 'ucs_memory', label: 'Memory', minVal: 0, maxVal: 7000},
-				{id: 'swtapus1', label: 'SwA-P-1', minVal: 0, maxVal: 300},
+				{id: 'swtapus1', label: 'SwA-P-1', minVal: 0, maxVal: 270},
 				{id: 'swtapus2', label: 'SwA-P-2', minVal: 0, maxVal: 300},
+				{id: 'swtbpus1', label: 'SwB-P-1', minVal: 0, maxVal: 300},
+				{id: 'swtbpus2', label: 'SwB-P-2', minVal: 0, maxVal: 300},
 
 				],
 
@@ -61,8 +58,7 @@
 			this.$nextTick(function(){
 
 				this.getUcsInfo();
-				this.getPowerStats();
-				this.predictFaults();
+				
 				this.createGauges(this.gauges_container);
 
 
@@ -86,8 +82,10 @@
 				}, 90000);
 
 				setInterval(()=>{
-					this.getPowerStats();
-				}, 10000)
+
+					// this.getPowerStats();				
+
+				}, 5000)
 
 
 			});
@@ -120,32 +118,18 @@
 				axios.get('/api/getPowerStats')
 				.then(response => {
 
-					this.eq_powerstats = JSON.parse(response.data);
-					console.log(this.eq_powerstats[0])
-
-					this.updateGauges('swtapus1', this.eq_powerstats[3].current, this.eq_powerstats[3].power)
-					this.updateGauges('swtapus2', this.eq_powerstats[2].current, this.eq_powerstats[2].power)
-					// this.updateGauges('pus2', )
-					// this.updateGauges('pus3', )
-					// this.updateGauges('pus4', )
+					this.eq_powerstats = JSON.parse(response.data);	
+					this.updateGauges('swtbpus1', 10, parseInt(this.eq_powerstats[1].power))
+					this.updateGauges('swtbpus2', 16, parseInt(this.eq_powerstats[0].power))	
+					console.log(this.eq_powerstats)
+					// this.updateGauges('swtapus1', this.eq_powerstats[3].current, this.eq_powerstats[3].power)
+					// this.updateGauges('swtapus2', this.eq_powerstats[2].current, this.eq_powerstats[2].power)
 
 
 				})
 				.catch(errors => { });
-			},
-
-
-			predictFaults() {
-
-				axios.get('/api/predictfaults')
-				.then(response => {
-					this.predicted_faults = JSON.parse(response.data)
-            		this.warnings = _.filter(this.predicted_faults, (f)=>{return f != 'F0185'})//F0185
-            		this.criticals = _.filter(this.predicted_faults, (f)=>{return f != 'F0184'})//F0184
-            		this.majors = _.filter(this.predicted_faults, (f)=>{return f != 'F0844'})//F0844 disabled
-            	})
-				.catch(errors => { })
-			}					
+			}
+								
 		}
 
 	}
@@ -155,9 +139,9 @@
 	<div>		 
 
 		<div class="table-responsive">					
-			<!-- {{equipment}} -->
+			{{equipment}}
 
-			<!-- {{eq_powerstats}} -->
+			{{eq_powerstats}}
 			<table class="table">
 				<tbody>
 					<tr>				
@@ -231,30 +215,27 @@
 
 							<div class="widget" style="margin-left: 0px; padding: 0px;">
 
-								<div class="title">Alerts</div>									
-
+								<div class="title">Admin TO DOs</div>		
 								<ul class="list list-group faults">
-									<li class=" list-group-item">
+									<!-- <li class=" list-group-item">
 										<span class="text-info"><i class="fa fa-exclamation-circle"></i></span> 
-										{{ warnings.length }}  <span class="label label-info"> Warning</span> faults affecting 2 devices
+										There are {{ warnings.length }} faults with severity <span class="label label-info"> Warning</span> affecting 2 devices
 									</li>
 									<li class=" list-group-item">
 										<span class="text-warning"><i class="fa fa-exclamation-triangle"></i></span>
-										{{ majors.length }} <span class="label label-warning">Major</span> faults affecting 6 devices  
+										There are {{ majors.length }} faults with severity <span class="label label-warning">Major</span> affecting 6 devices  
 									</li>
 
 									<li class=" list-group-item">
 										<span>
 											<i class="fa fa-warning text-danger"></i>
-											{{ criticals.length }} <span class="label label-danger">Critical</span> faults affecting 3 devices
+											There are {{ criticals.length }} faults with severity <span class="label label-danger">Critical</span> faults affecting 3 devices
 										</span>  
-									</li>
+									</li> -->
 
-									<li class=" list-group-item">Power consumption</li>										
-									<li class=" list-group-item">Availabity</li>										
-									<li class=" list-group-item">Packets</li>
-									<li class=" list-group-item">Service Profiles</li>
-								</ul>
+								</ul>							
+
+
 
 							</div>
 
@@ -271,106 +252,86 @@
 								<div class="chart">
 									<div class="chart">
 
-											<!-- <div class="panel panel-default">
-											<div class="panel-heading">Statistics</div>
-											<div class="panel-body"> -->												
-												<div class="row">
-													<div class="col-xs-4">
-														<span id="ucs_availabilityGaugeContainer"></span>
 
-													</div>
+										<div class="row">
+											<div class="col-xs-4">
+												<span id="ucs_availabilityGaugeContainer"></span>
 
-													<div class="col-xs-4">
-														<span id="ucs_networkGaugeContainer"></span>
-													</div>
+											</div>
 
-													<div class="col-xs-4">
-														<span id="ucs_memoryGaugeContainer"></span>
-													</div>
+											<div class="col-xs-4">
+												<span id="ucs_networkGaugeContainer"></span>
+											</div>
+
+											<div class="col-xs-4">
+												<span id="ucs_memoryGaugeContainer"></span>
+											</div>
+										</div>
+
+										<hr/>
+
+										<div class="row">
+											<div class="col-md-3">
+												<div class="well usc_components">
+													<h3 class="well-center boldered text-primary" > 9 <i class="fa fa-server"></i></h3>
+													<h4 class="text-muted">R-Mount</h4>
+												</div> 
+											</div>
+											<div class="col-md-3">
+												<div class="well usc_components">
+													<h3 class="well-center boldered text-primary" > 13 <i class="fa fa-server"></i></h3>
+													<h4 class="text-muted">Chassis</h4>
+												</div> 
+											</div>
+											<div class="col-md-3">
+												<div class="well usc_components">
+													<h3 class="well-center boldered text-primary" > 9 <i class="fa fa-tasks"></i></h3>
+													<h4 class="text-muted">Ch-Server</h4>
+												</div> 
+											</div>
+											<div class="col-md-3">
+												<div class="well usc_components">
+													<h3 class="well-center boldered text-primary" > 48 <i class="fa fa-sitemap"></i></h3>
+													<h4 class="text-muted">Net Ports</h4>
+												</div> 
+											</div>
+										</div>	
+
+										<hr/>										
+
+										<div class="row">
+
+											<div class="col-md-12">
+
+												<div class="col-xs-3">
+													<span id="swtapus1GaugeContainer"></span>
 												</div>
 
-												<!-- </div>
-											</div> -->
-
-											<hr/>
-
-
-											<div class="row">
-												<div class="col-md-3">
-													<div class="well usc_components">
-														<h3 class="well-center boldered text-primary" > 9 <i class="fa fa-server"></i></h3>
-														<h4 class="text-muted">R-Mount</h4>
-													</div> 
+												<div class="col-xs-3">
+													<span id="swtapus2GaugeContainer"></span>
 												</div>
-												<div class="col-md-3">
-													<div class="well usc_components">
-														<h3 class="well-center boldered text-primary" > 13 <i class="fa fa-server"></i></h3>
-														<h4 class="text-muted">Chassis</h4>
-													</div> 
+
+												<div class="col-xs-3">
+													<span id="swtbpus1GaugeContainer"></span>
 												</div>
-												<div class="col-md-3">
-													<div class="well usc_components">
-														<h3 class="well-center boldered text-primary" > 9 <i class="fa fa-tasks"></i></h3>
-														<h4 class="text-muted">Ch-Server</h4>
-													</div> 
+
+												<div class="col-xs-3">
+													<span id="swtbpus2GaugeContainer"></span>
 												</div>
-												<div class="col-md-3">
-													<div class="well usc_components">
-														<h3 class="well-center boldered text-primary" > 48 <i class="fa fa-sitemap"></i></h3>
-														<h4 class="text-muted">Net Ports</h4>
-													</div> 
-												</div>
-											</div>	
 
-											<hr/>
-
-											<div class="row">
-												<div class="col-md-12">
-													<bar :chart-data="barData" :options="{responsive: false, maintainAspectRatio: true}" :width="450" :height="250"> </bar>
-												</div>
-											</div>	
-
-											<div class="row">
-
-												<div class="col-md-12">
-													
-													<div class="col-xs-3">
-														<!-- <span id="ucs_availabilityGaugeContainer"></span> -->
-
-													</div>
-
-													<div class="col-xs-3">
-														<span id="swtapus1GaugeContainer"></span>
-													</div>
-
-													<div class="col-xs-3">
-														<span id="swtapus2GaugeContainer"></span>
-													</div>
-													
-												</div>
-											</div>																	
+											</div>
+										</div>																	
 
 
-										</div>										
+									</div>										
 
-									</div>
 								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-
-
-			<!-- <div class='col-md-6 col-md-offset-3'>
-			<div class="alert alert-dismissible alert-warning">
-				<button type="button" class="close" data-dismiss="alert">&times</button>
-				<strong>Oh snap!!</strong>
-				Please select a UCS system from the UCS tab or Add a new UCS sytem
-			</div>
-		</div> -->
-		
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 	</div>
 </template>
@@ -418,7 +379,7 @@
 	.faults li {
 		padding: 6px !important;
 		font-family: serif;
-		font-size: 12px; 
+		font-size: 15px; 
 	}
 
 	.usc_components {

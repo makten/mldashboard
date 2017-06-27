@@ -42,9 +42,9 @@ except:
 predictor = None
 handle = None
 
-def getModel(model_path):
+# def getModel(model_path):
         
-    return load_model(model_path)
+#     return load_model(model_path)
 
 
 class CreateView(generics.ListCreateAPIView):
@@ -299,7 +299,7 @@ def getPredictions(request):
     # from keras.backend.tensorflow_backend import clear_session
     
     # clear_session()    
-    predictions = faultPredictor()
+    predictions = faultPredictor()    
         
     return JsonResponse(predictions, safe=False )
 

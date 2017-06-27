@@ -66,6 +66,7 @@ def getEquipmentPsuInputStats(handle):
 
     for stat in pstats:        
         equip = {
+            "current": stat.current,
             "current_avg": stat.current_avg,
             "current_avg": stat.current_avg,
             "current_max": stat.current_max,

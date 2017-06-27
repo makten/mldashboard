@@ -173,8 +173,8 @@
 		mounted() {
 			this.$nextTick(function(){
 				
-				this.getBlades();			
-				this.initialize();
+				// this.getBlades();			
+				
 				eventBroadcaster.$on('chassisFilter', this.setQuery)
 
 				setInterval(() => {

@@ -40,11 +40,12 @@ def normalize_input(X_input, scalar_path):
             return X_input
 
 
-def denormalize_prediction(x_pred, scalar_path):
+def denormalize_prediction(y_pred, scalar_path):
         
         scalar_y = load_scalar(scalar_path)
-        value = scalar_y.inverse_transform(x_pred)
-        return value 
+        value0 = scalar_y.inverse_transform(y_pred[:, -1])
+        value1 = scalar_y.inverse_transform(y_pred[:, 0])
+        return value0, value1
 
 def faultPredictor():
 
@@ -54,26 +55,45 @@ def faultPredictor():
 
         dataframe = pd.read_csv("./api/ml_operations/pickles/random_cutout_test.csv")
         dataset = dataframe.values
-       
-        X = dataset[:randint(1, len(dataset)), 0:200].astype(float)
+
+        rand = randint(1, 32)
+        X = dataset[:rand, 0:200].astype(float)
+        y = dataset[:rand, -1].astype(int)
+        
 
         model = getModel(settings.model_path)
         x_normed = normalize_input(X, settings.path_x_normalizer)
 
-        y_pred = model.predict_classes(x_normed)
+        y_pred = model.predict_classes(x_normed)        
+
+        y_pred_actual = np.stack((y_pred, y), axis=1) 
+        # print(text[:, 1])      
         
-        predictions = json.dumps(list(denormalize_prediction(y_pred, settings.path_y_normalizer)))
+        predictions, actuals = denormalize_prediction(y_pred_actual, settings.path_y_normalizer)
+
+        combine_outputs = np.stack((predictions, actuals), axis =1)
+
+        # a = combine_outputs.tolist()
+        
+        
+        
+
+        output_vals = json.dumps(combine_outputs.tolist())
+        print(output_vals)
+        # # actuals = json.dumps(list(denormalize_prediction(y, settings.path_y_normalizer)))  
+        # # print(type(actuals))  
+
+        # print(output_vals) 
 
     except:
                 
         return Exception("Something Went Wrong")
 
-
     
     from keras.backend.tensorflow_backend import clear_session
-    clear_session()
+    clear_session()     
 
-    return predictions
+    return output_vals
 
  #     dataframe = pd.read_csv("./api/ml_operations/pickles/random_cutout_test.csv")
     #     dataset = dataframe.values

@@ -7,6 +7,7 @@
     import Chassis from './ucs_components/Chassis.vue';
     import ChassisServer from './ucs_components/ChassisServer.vue';
     import RackMount from './ucs_components/RackMounts.vue';
+    import FaultsDemo from './ucs_components/FaultDemo.vue';
     import { Validator } from 'vee-validate';
     import { mapGetters } from 'vuex';
 
@@ -18,6 +19,7 @@
             Chassis,
             ChassisServer,
             RackMount,
+            FaultsDemo,
             vSelect,
             Bar,
             LineChart,
@@ -29,7 +31,7 @@
         data() {
 
             return {                             
-                
+
                 ucsSystem: {},
                 rackunits: [],
                 savedSearches: '',
@@ -389,6 +391,11 @@
                     <tab name="RackMounts">
                         <h4>RackMount Servers</h4>
                         <rack-mount></rack-mount>
+                    </tab>
+
+                    <tab name="FaultDemo">
+                        <h4>Fault Prediction Demo</h4>
+                        <faults-demo></faults-demo>
                     </tab>
                 </tabs>
             </div>
