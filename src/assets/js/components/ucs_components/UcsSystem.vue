@@ -16,7 +16,10 @@
 		},
 
 		data() {
-			return {				
+			return {	
+				toggleToDo: false,	
+				newTODO: "",	
+				todoList: [],	
 				ucs_info: [],
 				eq_powerstats: null,
 				equipment: [],
@@ -25,7 +28,12 @@
 				disks: 0,
 				adaptors: 0,
 				storage: 0,
-				ucsActive: true,			
+				ucsActive: true,	
+				predicted_faults: [],				
+				minors:[],
+				warnings:[],
+				criticals:[],
+				majors:[],		
 				
 				gauges_container: [
 				{id: 'ucs_availability', label: 'Availability', minVal: 0, maxVal: 100},
@@ -113,6 +121,23 @@
 				.catch(errors => { });
 			},
 
+			predictFaults() {
+
+				axios.get('/api/predictfaults')
+				.then(response => {					
+
+					this.predicted_faults = JSON.parse(response.data);
+					// this.actual_faults = JSON.parse(response.data.actuals);
+					// console.log(this.predicted_faults)
+            		this.warnings = _.filter(this.predicted_faults, (f)=>{return f != 'F0185'})//F0185
+            		this.criticals = _.filter(this.predicted_faults, (f)=>{return f != 'F0184'})//F0184
+            		this.majors = _.filter(this.predicted_faults, (f)=>{return f != 'F0844'})//F0844 disabled     		
+
+
+            	})
+				.catch(errors => { })
+			},
+
 			getPowerStats() {
 
 				axios.get('/api/getPowerStats')
@@ -128,8 +153,24 @@
 
 				})
 				.catch(errors => { });
+			},
+
+			addNewToDo() {
+				
+				if(this.newTODO != "")
+				{
+					let item = {name: this.newTODO, completed: false};
+					this.todoList.push(item);
+					this.newTODO = "";
+				}
+			},
+			
+			removeItem(index) 
+			{
+				this.todoList.splice(index, 1)
+				// this.todoList = _.reject(this.todoList, (i) => { return i.name == item.name })
 			}
-								
+
 		}
 
 	}
@@ -139,9 +180,9 @@
 	<div>		 
 
 		<div class="table-responsive">					
-			{{equipment}}
+			<!-- {{equipment}} -->
 
-			{{eq_powerstats}}
+			<!-- {{eq_powerstats}} -->
 			<table class="table">
 				<tbody>
 					<tr>				
@@ -215,28 +256,23 @@
 
 							<div class="widget" style="margin-left: 0px; padding: 0px;">
 
-								<div class="title">Admin TO DOs</div>		
-								<ul class="list list-group faults">
-									<!-- <li class=" list-group-item">
-										<span class="text-info"><i class="fa fa-exclamation-circle"></i></span> 
-										There are {{ warnings.length }} faults with severity <span class="label label-info"> Warning</span> affecting 2 devices
-									</li>
-									<li class=" list-group-item">
-										<span class="text-warning"><i class="fa fa-exclamation-triangle"></i></span>
-										There are {{ majors.length }} faults with severity <span class="label label-warning">Major</span> affecting 6 devices  
-									</li>
+								<div class="title">Admin TO DOs</div>
+								<form @submit:prevent>
+									<div class="form-group">
+										<label style="padding: 5px;" for="addToDo" class="text-muted">Add New</label>
+										<input @keyup.enter="addNewToDo" v-model="newTODO" type="text" class="form-control" id="addToDo" placeholder="Clear warning faults">
+									</div>									
+								</form>		
 
-									<li class=" list-group-item">
-										<span>
-											<i class="fa fa-warning text-danger"></i>
-											There are {{ criticals.length }} faults with severity <span class="label label-danger">Critical</span> faults affecting 3 devices
-										</span>  
-									</li> -->
+								<div class="todo-list">	
 
-								</ul>							
-
-
-
+									<ul class="list list-group todolist" v-for="(item, index) in todoList" style="padding: 1px;">
+										<li class="list-group-item" style="padding:0px; margin: 1px;">	
+											<span @click="removeItem(index)"class="text-danger" style="padding: 4px; font-size: 15px; margin-left: 12px; color: #FF3C00;">&times</span>
+											<span :class="{'done': item.completed}" style="padding: 5px;" @click="item.completed = !item.completed">{{ item.name }}</span>
+										</li>
+									</ul>
+								</div>	
 							</div>
 
 						</td>
@@ -297,7 +333,32 @@
 											</div>
 										</div>	
 
-										<hr/>										
+										<hr/>	
+
+										<div class="row">
+											<div class="col-md-12">
+												<ul class="list list-group faults">
+													<li class=" list-group-item">
+														<span class="text-info"><i class="fa fa-exclamation-circle"></i></span> 
+														There are {{ warnings.length }} faults with severity <span class="label label-info"> Warning</span> affecting 2 devices
+													</li>
+													<li class=" list-group-item">
+														<span class="text-warning"><i class="fa fa-exclamation-triangle"></i></span>
+														There are {{ majors.length }} faults with severity <span class="label label-warning">Major</span> affecting 6 devices  
+													</li>
+
+													<li class=" list-group-item">
+														<span>
+															<i class="fa fa-warning text-danger"></i>
+															There are {{ criticals.length }} faults with severity <span class="label label-danger">Critical</span> faults affecting 3 devices
+														</span>  
+													</li>
+
+												</ul>
+
+											</div>
+										</div>		
+										<hr/>								
 
 										<div class="row">
 
@@ -320,7 +381,9 @@
 												</div>
 
 											</div>
-										</div>																	
+										</div>	
+
+
 
 
 									</div>										
@@ -394,8 +457,36 @@
 		font-size: 35px !important;		
 	}
 
+
+
 	.usc_components h4 {
 		color: #DAD7D7;
 		text-align: center;	
 	}
+
+	.todolist li span {
+		font-size: 15px;
+		background: #F6F6F6;
+		border-radius: 5px solid #F6F6F6;
+	}
+
+	.todolist li span:hover {
+		cursor: pointer;
+	}
+
+	.done:hover {
+		cursor: pointer;
+		color: #666;
+	}
+
+	.done {
+		background: #C9FAED;
+		text-decoration: line-through;
+		color: #09a;
+	}
+	.done:hover {
+		color: #008290;
+	}
+
+
 </style>

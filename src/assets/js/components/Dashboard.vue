@@ -31,7 +31,7 @@
         data() {
 
             return {                             
-
+                
                 ucsSystem: {},
                 rackunits: [],
                 savedSearches: '',

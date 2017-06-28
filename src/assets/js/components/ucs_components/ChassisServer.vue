@@ -7,9 +7,11 @@
 	import vSelect from 'vue-select';    
 	import { Validator } from 'vee-validate';
 	import modal from '../../../core/modal.vue';
-	import linechart from '../../../core/linechart.vue';
+	// import linechart from '../../../core/linechart.vue';
+	import GaugeCreator from '../../../mixins/GaugeCreator';
 
-	export default {		
+	export default {	
+		mixins: [GaugeCreator],
 		propos: ['ucs'],
 
 		components: {            
@@ -102,7 +104,7 @@
 						pointHoverBorderWidth: 2,
 						pointRadius: 1,
 						pointHitRadius: 1,
-						data : [65,59,90,81,56,45,30,20,3,99]
+						data : [65,59,90,81,56,45,30,20,83,99]
 					},
 					{
 						label: "CPU 2",
@@ -148,32 +150,23 @@
 					},
 
 					scales: {
-						// xAxes: [{
-						// 	type: "time",
-						// 	time: {
-						// 		format: "HH:mm:s a",
-						// 		tooltipFormat: "HH:mm:ss a",
-						// 	},
-						// 	scaleLabel: {
-						// 		display: true,
-						// 		labelString: "Date",
-						// 	},
-						// }],
-						// yAxes: [{
-						// 	stacked: true,
-						// 	scaleLabel: {
-						// 		display: true,
-						// 	},
-						// }],
+						
 					}
-				}
+				},
+
+				gauges_container: [
+				{id: 'memory', label: 'Memory', minVal: 0, maxVal: 100},
+				{id: 'cpu1', label: 'CPU 1', minVal: 0, maxVal: 200}			
+
+				]
 			}
 		},
 
 		mounted() {
 			this.$nextTick(function(){
 				
-				// this.getBlades();			
+				this.getBlades();	
+				this.createGauges(this.gauges_container);		
 				
 				eventBroadcaster.$on('chassisFilter', this.setQuery)
 
@@ -237,24 +230,7 @@
 			console.log(blade)
 			this.blade_cpustats = blade.cpu_stats
 
-			this.loadedStats = blade   
-
-			if (Object.keys(this.gauges).length > 0){
-
-
-				for (var key in this.gauges) {  
-
-					if(key == 'memory') {    			
-						this.updateGauges()
-					}
-				}
-
-			}
-			else {
-				this.createGauge("memory", "Memory", 0, 100);
-
-				this.updateGauges();
-			}    
+			this.loadedStats = blade  						   
 
 			this.getBladeFaults(blade.dn)
 			this.showStats = true;
@@ -415,7 +391,7 @@
 										<td width="50%" colspan="3">
 
 											<div class="well smallchart" style="border: 1px solid #DBDBDB; width: 600px !important; height: 350px !important;">
-												<linechart chartid="cpu_charts" :chart-data="chartdata" :options="chartOption" :width='600' :height='250' ></linechart>
+												<line-chart chartid="cpu_charts" :chart-data="chartdata" :options="chartOption" :width='600' :height='250' ></line-chart>
 											</div>
 											
 										</td>
