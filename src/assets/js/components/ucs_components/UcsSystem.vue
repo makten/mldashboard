@@ -19,7 +19,12 @@
 			return {	
 				toggleToDo: false,	
 				newTODO: "",	
-				todoList: [],	
+				todoList: [
+				{name: "Clear all Warning faults on Friday", completed: false},
+				{name: "Add Move Gemeente Amsterdam CBS to VM 12", completed:false},
+				{name: "Configure Call Home for Blade9", completed:false},
+				{name: "Add Service Profile for NS Call center", completed:false},
+				],	
 				ucs_info: [],
 				eq_powerstats: null,
 				equipment: [],
@@ -66,6 +71,7 @@
 			this.$nextTick(function(){
 
 				this.getUcsInfo();
+				this.predictFaults();
 				
 				this.createGauges(this.gauges_container);
 
@@ -126,13 +132,11 @@
 				axios.get('/api/predictfaults')
 				.then(response => {					
 
-					this.predicted_faults = JSON.parse(response.data);
-					// this.actual_faults = JSON.parse(response.data.actuals);
-					// console.log(this.predicted_faults)
-            		this.warnings = _.filter(this.predicted_faults, (f)=>{return f != 'F0185'})//F0185
-            		this.criticals = _.filter(this.predicted_faults, (f)=>{return f != 'F0184'})//F0184
-            		this.majors = _.filter(this.predicted_faults, (f)=>{return f != 'F0844'})//F0844 disabled     		
-
+					this.predicted_faults = JSON.parse(response.data);					
+					
+					this.warnings = _.filter(this.predicted_faults, (f)=>{return f[0] == 'F0185'})//F0185
+            		this.criticals = _.filter(this.predicted_faults, (f)=>{return f[0] == 'F0184'})//F0184
+            		this.majors = _.filter(this.predicted_faults, (f)=>{return f[0] == 'F0844'})//F0844 disabled  
 
             	})
 				.catch(errors => { })
@@ -465,7 +469,7 @@
 	}
 
 	.todolist li span {
-		font-size: 15px;
+		font-size: 12px;		
 		background: #F6F6F6;
 		border-radius: 5px solid #F6F6F6;
 	}
@@ -480,7 +484,7 @@
 	}
 
 	.done {
-		background: #C9FAED;
+		background: #B0F6E3;
 		text-decoration: line-through;
 		color: #09a;
 	}

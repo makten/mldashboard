@@ -66,24 +66,12 @@ def faultPredictor():
 
         y_pred = model.predict_classes(x_normed)        
 
-        y_pred_actual = np.stack((y_pred, y), axis=1) 
-        # print(text[:, 1])      
+        y_pred_actual = np.stack((y_pred, y), axis=1)             
         
         predictions, actuals = denormalize_prediction(y_pred_actual, settings.path_y_normalizer)
 
         combine_outputs = np.stack((predictions, actuals), axis =1)
-
-        # a = combine_outputs.tolist()
-        
-        
-        
-
-        output_vals = json.dumps(combine_outputs.tolist())
-        print(output_vals)
-        # # actuals = json.dumps(list(denormalize_prediction(y, settings.path_y_normalizer)))  
-        # # print(type(actuals))  
-
-        # print(output_vals) 
+        output_vals = json.dumps(combine_outputs.tolist())        
 
     except:
                 
@@ -94,16 +82,3 @@ def faultPredictor():
     clear_session()     
 
     return output_vals
-
- #     dataframe = pd.read_csv("./api/ml_operations/pickles/random_cutout_test.csv")
-    #     dataset = dataframe.values
-        
-    #     X = dataset[:randint(1, len(dataset)),0:200].astype(float)
-        
-    #     model = getModel(settings.model_path)
-    #     x_normed = normalize_input(X, settings.path_x_normalizer)
-            
-    #     y_pred = model.predict_classes(x_normed)
-        
-    #     predictions = json.dumps(list(denormalize_prediction(y_pred, settings.path_y_normalizer)))
-               
